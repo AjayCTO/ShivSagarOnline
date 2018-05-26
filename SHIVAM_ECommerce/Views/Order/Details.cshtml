@@ -1,0 +1,126 @@
+﻿@model SHIVAM_ECommerce.Models.Orders
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="printarea">
+
+
+    <table style="display:none" class="printheader">
+        <tr>
+            <td>
+                <img style="height:75px;" src="/Content/logo.png" alt="SHIVAM ITCS">
+            </td>
+            <td> <h3> &nbsp;&nbsp;&nbsp; SHIVAM MART</h3>
+                <p>&nbsp;&nbsp;&nbsp; Sub Kuuch milata hai !!!!!</p> </td>
+        </tr>
+    </table>
+
+    <h4 style="display:none;" class="d-print-block">   <br /></h4>
+
+    <h4 class="d-print-none">
+        Invoice details <a style="font-size: 15px;
+    color: #069;
+    text-decoration: underline;
+    float: right;" onclick="window.print();return false" href="#">Print Invoice</a>
+    </h4>   
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Customer Details
+                    </h3>
+                </div>
+
+                <div class="card-body">
+
+                    <h4 style="display:none;" class="d-print-block">  Customer Details </h4>
+
+                    <p><b>@Model.customer.FirstName @Model.customer.LastName</b></p>
+                    <p>Contact :  @Model.customer.Phone</p>
+                    <p>Email : @Model.customer.Email</p>
+                    <p>313301, Nathdwara Raj INDIA</p>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-md-6">
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        Order Details
+                    </h3>
+                </div>
+
+                <div class="card-body">
+
+                    <h4 style="display:none;" class="d-print-block">   Order Details </h4>
+
+                    <p> <b> Order No : @Model.OrderNumber </b></p>
+                    <p>Date : @Model.OrderDate.ToString("MMM dd yyyy HH:MM:ss")</p>
+                    <p>Status : @Model.status.Status</p>
+                    <p>DISPATCHED</p>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+    <h4 style="display:none;" class="d-print-block">   <br /></h4>
+
+    <h4 style="display:none;" class="d-print-block">   Ordered Items </h4>
+
+    <div class="row row-cards row-deck">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3 class="card-title"> Ordered Items </h3>
+                </div>
+
+                <div class="table-responsive">
+                    <div id="OrderItems"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<script>
+    $.get("/Order/GetOrderItems?orderID=" + @Model.Id, function (data) {
+
+
+        $("#OrderItems").html(data);
+
+    });
+</script>
+
+
+<style>
+    .page-content
+    {
+        margin-top:12px;
+    }
+</style>

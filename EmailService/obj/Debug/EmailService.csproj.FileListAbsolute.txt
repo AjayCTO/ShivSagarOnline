@@ -1,0 +1,84 @@
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\EmailService.dll.config
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\EmailService.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\EmailService.pdb
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Helpers.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Mvc.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Razor.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Deployment.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Razor.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Razor.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Deployment.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Razor.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Helpers.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\bin\System.Web.Mvc.xml
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.csprojResolveAssemblyReference.cache
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.dll
+D:\ECommerce\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.pdb
+E:\SHIVAMECommerce_28April\EmailService\bin\EmailService.dll.config
+E:\SHIVAMECommerce_28April\EmailService\bin\EmailService.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\EmailService.pdb
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Helpers.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Razor.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Deployment.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Razor.dll
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Razor.xml
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.xml
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Deployment.xml
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Webpages.Razor.xml
+E:\SHIVAMECommerce_28April\EmailService\bin\System.Web.Helpers.xml
+E:\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.csprojResolveAssemblyReference.cache
+E:\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.dll
+E:\SHIVAMECommerce_28April\EmailService\obj\Debug\EmailService.pdb
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll.config
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.pdb
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.xml
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.xml
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.xml
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.xml
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.xml
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.csprojResolveAssemblyReference.cache
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.dll
+E:\ShivamEcommerce_15May\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.pdb
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll.config
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.pdb
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Mvc.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Mvc.xml
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.csprojResolveAssemblyReference.cache
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.dll
+C:\Users\SHIVAMITCS03\Desktop\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.pdb
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll.config
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\EmailService.pdb
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Razor.xml
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.xml
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Deployment.xml
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Webpages.Razor.xml
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\bin\System.Web.Helpers.xml
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.csprojResolveAssemblyReference.cache
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.dll
+D:\Gautam Paliwal\Projects\ShivamEcommerce_15May\ShivamEcommerce_15May\EmailService\obj\Debug\EmailService.pdb

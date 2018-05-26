@@ -1,0 +1,357 @@
+﻿@{
+    ViewBag.Title = "Products";
+}
+
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li class="active">Shop Sidebar Left</li>
+                </ul><!-- end breadcrumb -->
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
+</div><!-- end breadcrumbs -->
+<!-- start section -->
+<section class="section white-backgorund" ng-app="MyApp" ng-controller="PaginationCtrl">
+
+    @Html.Partial("shoppingcart")
+    <div class="container">
+        <div class="row">
+            <!-- start sidebar -->
+            <div class="col-sm-3">
+                <div class="widget">
+                    <h6 class="subtitle">Search</h6>
+
+                    <form>
+                        <input type="text" id="lastname" class="form-control input-sm" placeholder="Search">
+                    </form>
+                </div><!-- end widget -->
+                <div class="widget">
+                    <div class="panel-group accordion" id="newCollectionFilter">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#newCollectionFilter" href="#newCollectionFilterCollapseOne">
+                                        Categories
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="newCollectionFilterCollapseOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <ul class="nav nav-stacked">
+                                        <li ng-repeat="parentCategory in categories"
+                                            ng-include="'categoryTree'"
+                                            ng-init="category=parentCategory">
+                                        </li>
+
+                                    </ul>
+
+                                    <script type="text/ng-template" id="categoryTree">
+                                        <div class="checkbox-input">
+                                            <input type="checkbox" id="name{{ category.CategoryName }}" name="name{{ category.CategoryName }}" class="styled" value=" " /><label for="name{{ category.CategoryName }}">
+                                                {{ category.CategoryName }}
+                                            </label>
+                                        </div>
+                                        <ul ng-if="category.Categories1" class="list list-unstyled">
+                                            <li ng-repeat="category in category.Categories1" class="dropdown-submenu" ng-include="'categoryTree'">
+                                            </li>
+                                        </ul>
+                                    </script>
+                                </div><!-- end panel-body -->
+                            </div><!-- end panel-collapse -->
+                        </div><!-- end panel -->
+                    </div><!-- end accordion -->
+                </div>
+              
+                <div class="widget">
+                    <h6 class="subtitle">Prices</h6>
+                    <form method="post" class="price-range" data-start-min="250" data-start-max="650" data-min="0" data-max="1000" data-step="1">
+                        <div class="ui-range-values">
+                            <div class="ui-range-value-min">
+                                $<span></span>
+                                <input type="hidden">
+                            </div> -
+                            <div class="ui-range-value-max">
+                                $<span></span>
+                                <input type="hidden">
+                            </div>
+                        </div>
+                        <div class="ui-range-slider"></div>
+
+                    </form>
+
+
+                </div><!-- end widget -->
+
+                <div class="widget" ng-repeat="item in Attributes">
+                    <h6 class="subtitle">{{item.AttributeName}}</h6>
+
+                    <ul class="list list-unstyled">
+                        <li ng-repeat="itemvalue in AttributesValue | filter:{AttributeId:item.Id}|unique:AttributeValue">
+                            <div class="checkbox-input">
+
+                                <input id="red-color{{itemvalue.AttributeValue}}" ng-model="selectedAttribute" ng-true-value="1" ng-false-value="0" ng-change="AddAttrToFilter(selectedAttribute,item.AttributeName,itemvalue.AttributeValue)" class="styled" type="checkbox">
+                                <label for="red-color{{itemvalue.AttributeValue}}">
+
+                                    {{itemvalue.AttributeValue}}
+
+                                </label>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <button type="submit" class="btn btn-default btn-block btn-md">Filter</button>
+                <hr />
+                <div class="widget">
+                    <h6 class="subtitle">My Cart</h6>
+
+                    <p>There are 2 items in your cart.</p>
+                    <hr class="spacer-10">
+                    <ul class="items">
+                        <li>
+                            <a href="javascript:void(0);" class="product-image">
+                                <img src="img/products/men_06.jpg" alt="Sample Product ">
+                            </a>
+                            <div class="product-details">
+                                <div class="close-icon">
+                                    <a href="javascript:void(0);"><i class="fa fa-close"></i></a>
+                                </div>
+                                <p class="product-name">
+                                    <a href="javascript:void(0);">Lorem ipsum dolor sit amet Consectetur</a>
+                                </p>
+                                <strong class="text-dark">1</strong> x <span class="price text-primary">$19.99</span>
+                            </div>
+                        </li><!-- end item -->
+                        <li>
+                            <a href="javascript:void(0);" class="product-image">
+                                <img src="img/products/shoes_01.jpg" alt="Sample Product ">
+                            </a>
+                            <div class="product-details">
+                                <div class="close-icon">
+                                    <a href="javascript:void(0);"><i class="fa fa-close"></i></a>
+                                </div>
+                                <p class="product-name">
+                                    <a href="javascript:void(0);">Lorem ipsum dolor sit amet Consectetur</a>
+                                </p>
+                                <strong class="text-dark">1</strong> x <span class="price text-primary">$19.99</span>
+                            </div>
+                        </li><!-- end item -->
+                    </ul>
+
+                    <hr class="spacer-10">
+                    <strong class="text-dark">Cart Subtotal:<span class="pull-right text-primary">$19.99</span></strong>
+                    <hr class="spacer-10">
+                    <a href="checkout.html" class="btn btn-default semi-circle btn-block btn-md"><i class="fa fa-shopping-basket mr-10"></i>Checkout</a>
+                </div><!-- end widget -->
+
+            </div><!-- end col -->
+            <!-- end sidebar -->
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-sm-12 text-left">
+                        <h2 class="title">Products</h2>
+                    </div><!-- end col -->
+
+                </div><!-- end row -->
+
+                <hr class="spacer-5"><hr class="spacer-20 no-border">
+
+                <section class="white-backgorund">
+                    <div class="container-fluid">
+
+
+                         
+
+                        <div class="row column-3">
+                            <div class="col-sm-6 col-md-4" ng-repeat="x in pagedItems">
+                                <div class="thumbnail store style2">
+                                    <div class="header">
+                                        <div class="badges">
+                                            <span class="product-badge top left white-backgorund text-primary semi-circle">{{x[3]}}</span>
+                                            <span class="product-badge top right text-warning">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star-half-o"></i>
+                                            </span>
+                                        </div>
+                                        <figure class="layer">
+                                            <a href="javascript:void(0);">
+                                                <img src="http://localhost:14988/ProductImages/{{x[2]}}" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" alt="">
+
+                                            </a>
+                                        </figure>
+                                        <div class="icons">
+                                            <a class="icon" href="javascript:void(0);"><i class="fa fa-heart-o"></i></a>
+                                            @*<a class="icon" href="javascript:void(0);"><i class="fa fa-gift"></i></a>*@
+                                            <a class="icon" href="/home/productdetail/?productId={{x[8]}}"><i class="fa fa-search"></i></a>
+                                            <a class="icon" href="javascript:void(0);" id="pid{{x[3]}}" ng-click="AddToCart(x[3],this)"><i class="fa fa-cart-plus mr-5"></i>Add to cart</a>
+                                        </div>
+                                    </div>
+                                    <div class="caption">
+                                        <h6 class="regular"><a href="shop-single-product-v1.html">{{x[3]}}</a></h6>
+                                        <div class="price">
+                                            <small class="amount off">$68.99</small>
+                                            <span class="amount text-primary">${{x[4]}}</span>
+                                        </div>
+                                    </div><!-- end caption -->
+                                </div><!-- end thumbnail -->
+                            </div><!-- end col -->
+
+                        </div><!-- end row -->
+
+                        <hr class="spacer-10 no-border" />
+                        <div class="card-footer text-muted">
+                            <button class="btn btn-success" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
+                        </div>
+
+
+
+                    </div><!-- end container -->
+                </section>
+            </div><!-- end col -->
+        </div><!-- end row -->
+        <!-- Modal Product Quick View -->
+        <div class="modal fade productQuickView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>Lorem ipsum dolar sit amet</h5>
+                    </div><!-- end modal-header -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class='carousel slide product-slider' data-ride='carousel' data-interval="false">
+                                    <div class='carousel-inner'>
+                                        <div class='item active'>
+                                            <figure>
+                                                <img src='img/products/men_01.jpg' alt='' />
+                                            </figure>
+                                        </div><!-- end item -->
+                                        <div class='item'>
+                                            <div class="embed-responsive embed-responsive-16by9">
+                                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/NrmMk1Myrxc"></iframe>
+                                            </div>
+                                        </div><!-- end item -->
+                                        <div class='item'>
+                                            <figure>
+                                                <img src='img/products/men_03.jpg' alt='' />
+                                            </figure>
+                                        </div><!-- end item -->
+                                        <div class='item'>
+                                            <figure>
+                                                <img src='img/products/men_04.jpg' alt='' />
+                                            </figure>
+                                        </div><!-- end item -->
+                                        <div class='item'>
+                                            <figure>
+                                                <img src='img/products/men_05.jpg' alt='' />
+                                            </figure>
+                                        </div><!-- end item -->
+                                        <!-- Arrows -->
+                                        <a class='left carousel-control' href='.product-slider' data-slide='prev'>
+                                            <span class='fa fa-angle-left'></span>
+                                        </a>
+                                        <a class='right carousel-control' href='.product-slider' data-slide='next'>
+                                            <span class='fa fa-angle-right'></span>
+                                        </a>
+                                    </div><!-- end carousel-inner -->
+                                    <!-- thumbs -->
+                                    <ol class='carousel-indicators mCustomScrollbar meartlab'>
+                                        <li data-target='.product-slider' data-slide-to='0' class='active'><img src='img/products/men_01.jpg' alt='' /></li>
+                                        <li data-target='.product-slider' data-slide-to='1'><img src='img/products/men_02.jpg' alt='' /></li>
+                                        <li data-target='.product-slider' data-slide-to='2'><img src='img/products/men_03.jpg' alt='' /></li>
+                                        <li data-target='.product-slider' data-slide-to='3'><img src='img/products/men_04.jpg' alt='' /></li>
+                                        <li data-target='.product-slider' data-slide-to='4'><img src='img/products/men_05.jpg' alt='' /></li>
+                                        <li data-target='.product-slider' data-slide-to='5'><img src='img/products/men_06.jpg' alt='' /></li>
+                                    </ol><!-- end carousel-indicators -->
+                                </div><!-- end carousel -->
+                            </div><!-- end col -->
+                            <div class="col-sm-7">
+                                <p class="text-gray alt-font">Product code: 1032446</p>
+
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star-half-o text-warning"></i>
+                                <span>(12 reviews)</span>
+                                <h4 class="text-primary">$79.00</h4>
+                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
+                                <hr class="spacer-10">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <select class="form-control" name="select">
+                                            <option value="" selected>Color</option>
+                                            <option value="red">Red</option>
+                                            <option value="green">Green</option>
+                                            <option value="blue">Blue</option>
+                                        </select>
+                                    </div><!-- end col -->
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <select class="form-control" name="select">
+                                            <option value="">Size</option>
+                                            <option value="">S</option>
+                                            <option value="">M</option>
+                                            <option value="">L</option>
+                                            <option value="">XL</option>
+                                            <option value="">XXL</option>
+                                        </select>
+                                    </div><!-- end col -->
+                                    <div class="col-md-4 col-sm-12">
+                                        <select class="form-control" name="select">
+                                            <option value="" selected>QTY</option>
+                                            <option value="">1</option>
+                                            <option value="">2</option>
+                                            <option value="">3</option>
+                                            <option value="">4</option>
+                                            <option value="">5</option>
+                                            <option value="">6</option>
+                                            <option value="">7</option>
+                                        </select>
+                                    </div><!-- end col -->
+                                </div><!-- end row -->
+                                <hr class="spacer-10">
+                                <ul class="list list-inline">
+                                    <li><button type="button" class="btn btn-default btn-md round"><i class="fa fa-shopping-basket mr-5"></i>Add to Cart</button></li>
+                                    <li><button type="button" class="btn btn-gray btn-md round"><i class="fa fa-heart mr-5"></i>Add to Wishlist</button></li>
+                                </ul>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end modal-body -->
+                </div><!-- end modal-content -->
+            </div><!-- end modal-dialog -->
+        </div><!-- end productRewiew -->
+
+    </div><!-- end container -->
+</section>
+<br />
+ 
+
+
+@section scripts
+{
+
+    <script src="~/Scripts/AngularData/Products.js"></script>
+}
+<style>
+    figure {
+        min-height: 338px;
+        max-height: 338px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9f4f1;
+    }
+</style>

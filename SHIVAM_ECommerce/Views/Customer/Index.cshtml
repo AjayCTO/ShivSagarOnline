@@ -1,0 +1,126 @@
+﻿@model IEnumerable<SHIVAM_ECommerce.Models.Customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Customer</a>
+    </li>
+    <li class="breadcrumb-item active">Customer List</li>
+</ol>
+
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fa fa-list"></i> Customers </h3>
+        <div class="flex-fill text-right">
+            <a href="/Customer/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Customer</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="myTable" class="table table-striped table-bordered dt-responsive">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+     
+        
+@section scripts{
+
+
+
+    <script>
+
+        var dataTableObj;
+
+    $(document).ready(function () {
+         dataTableObj = $("#myTable").DataTable({
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            "orderMulti": false, // for disable multiple column at once
+            "ajax": {
+                "url": "/Customer/LoadData",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [                 
+                    
+                     {
+
+                         "data": "UserName", "name": "UserName", "autoWidth": true
+                     },
+                      {
+
+                          "data": "FullName", "name": "FullName", "autoWidth": true
+                      },
+                       {
+
+                           "data": "Phone", "name": "Phone", "autoWidth": true
+                       },
+                       {
+
+                           "data": "Email", "name": "Email", "autoWidth": true
+                       },
+                     {
+                         "orderable": false,
+                         "mRender": function (data, type, row) {
+                             debugger;
+                             var _a = '<a onclick="DeleteCustomer(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+
+                             var _b = '<a href="/Customer/Details/' + row.Id + '"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i></a> ';
+                             return '<a href="/Customer/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _b + _a;
+                         }
+                     },
+            ]
+        });
+    });
+
+    function DeleteCustomer(Id) {       
+
+        var _confirm = confirm("Are you sure you want to delete this Customer ?");
+        if (_confirm) {
+
+            $.ajax({
+                url: "/Customer/Delete?id=" + Id,
+                //data: JSON.stringify({ id: Id }),
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {                    
+                    if (result.Success == true) 
+                    {                     
+                        dataTableObj.clear().draw();
+                        toastr.success("Customer Deleted Successfully");
+                        // $("#myTable").DataTable().fnDraw();
+                      
+                    } else {
+                        alert("error occurred during operation.");
+                    }
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    }
+
+
+    </script>
+
+
+}

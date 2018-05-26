@@ -1,0 +1,42 @@
+﻿@using SHIVAM_ECommerce.Models;
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Setting</a>
+    </li>
+    <li class="breadcrumb-item active">Manage Account</li>
+</ol>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Fill below form to update your account password</h3>
+    </div>
+    <div class="card-body">
+        <p class="text-success">@ViewBag.StatusMessage</p>
+
+        <div class="row">
+            <div class="col-md-12">
+                @if (ViewBag.HasLocalPassword)
+                {
+                    @Html.Partial("_ChangePasswordPartial")
+                }
+                else
+                {
+                    @Html.Partial("_SetPasswordPartial")
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

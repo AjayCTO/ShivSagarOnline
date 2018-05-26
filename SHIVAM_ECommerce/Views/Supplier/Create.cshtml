@@ -1,0 +1,376 @@
+﻿@model SHIVAM_ECommerce.Models.Supplier
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutTheme.cshtml";
+    var allplans = ViewBag.allplans as List<SHIVAM_ECommerce.Models.Plans>;
+}
+
+@*<h2>@ViewBag.Title.</h2>*@
+
+@using (Html.BeginForm("Create", "Supplier", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        @*<ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#selectplan">Select a Plan</a></li>
+                <li><a data-toggle="tab" href="#register">Registration Supplier</a></li>
+
+            </ul>*@
+        <div class="card">
+            <div class="card-body">
+
+
+
+                <div id="selectplan">
+
+                    <h1> Select Plan</h1>
+                    <div class="row">
+                        @foreach (var items in allplans)
+                        {
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="card">
+                                    <input type="hidden" class="getid_@items.Sort" value="@items.Id" />
+
+                                    <div id="plans_@items.Sort" class="status"></div>
+                                    <div class="card-body text-center">
+                                        <div class="card-category valueone getname_@items.Sort">@items.PlanName</div>
+                                        <div class="display-3 my-4">@items.Plancode</div>
+                                        <div>@items.Description</div>
+
+                                        <div class="text-center mt-6">
+                                            <input type="button" class="btn btn-green btn-block" btnname="@items.Sort" value="Choose plan" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                </div>
+
+                <div id="register" hidden="hidden">
+
+
+
+                    <div class="flex-fill text-right">
+                        <input type-="button" id="planhead" class="btn btn-primary" readonly />
+                        <input type="button" value="Change Plan" class="btn btn-info back" />
+                    </div>
+                    <h1> Fill Details</h1>
+                    <div class="container">
+                        <h3 class="card-title"><i class="fa fa-plus"></i> Personal Details</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label " })
+                                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.FirstName)
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.LastName, new { @class = "control-label " })
+
+                                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.LastName)
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, new { @class = "control-label " })
+                                    <div class="">
+
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Phone, new { @class = "control-label " })
+                                    <div class="">
+                                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Phone)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address2, new { @class = "control-label " })
+                                    <div class="">
+                                        @Html.TextAreaFor(model => model.Address2, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Address2)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+
+
+                            <h3 class="card-title"><i class="fa fa-plus"></i> Company Details</h3>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CompanyName, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.CompanyName)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.SupplierType, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.SupplierType, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.SupplierType)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.City, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.City)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.State, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.State)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label>Logo</label>
+                                            <div class="custom-file">
+                                                <input type="file" multiple class="custom-file-input form-control" name="file" id="file" accept="image/*">
+                                                <label class="custom-file-label">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PostalCode, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.PostalCode)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Country, new { @class = "control-label " })
+
+                                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Country)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Address1, new { @class = "control-label " })
+                                            <div class="">
+                                                @Html.TextBoxFor(model => model.Address1, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Address1)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col-md-4">
+
+
+                            <h3 class="card-title"><i class="fa fa-plus"></i> Login Details</h3>
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PlanID, new { @class = "control-label" })
+                                    <input type="text" id="PlanID" name="PlanID" class="form-control" readonly />
+                                    @Html.ValidationMessageFor(model => model.PlanID)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Plan, new { @class = "control-label" })
+                                    <input type="text" id="Plan" name="Plan" class="form-control" readonly />
+                                    @Html.ValidationMessageFor(model => model.Plan)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserName, new { @class = "control-label " })
+                                    <div class="">
+                                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control UniqueUserName" })
+                                        @Html.ValidationMessageFor(model => model.UserName)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Password, new { @class = "control-label " })
+                                    <div class="">
+                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control minPasswordLength" })
+                                        @Html.ValidationMessageFor(model => model.Password)
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group">
+                                        @Html.LabelFor(model => model.Password, new { @class = "control-label " })
+                                        <div class="">
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.Password)
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="form-group">
+
+                                <input type="submit" value="Submit" class="btn btn-primary" />
+                                <input type="button" value="back to plan" class="btn btn-info back" />
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+
+        $(document).ready(function () {
+            var _btnname;
+            var getid
+            var gid
+            var _value;
+            var _gname
+            $(".btn-green").click(function () {
+
+                $(".status").removeClass("card-status bg-green");
+                var _btnname = $(this).attr("btnname");
+                $("#plans_" + _btnname).addClass("card-status bg-green");
+                var _getid = $(".getid_" + _btnname).val();
+                var _getname = $(".getname_" + _btnname).html();
+                gid = _getid;
+                _gname = _getname;
+                $("#PlanID").val(gid);
+                $("#Plan").val(_gname);
+                $("#planhead").val("You Select " + _gname + "Plan");
+                $("#selectplan").attr("hidden", true);
+                $("#register").attr("hidden", false);
+
+
+            });
+
+            $(".back").click(function () {
+
+                $("#selectplan").attr("hidden", false);
+
+
+                $("#register").attr("hidden", true);
+
+            });
+
+
+            $.validator.addMethod('UniqueUserName', function (value) {
+
+
+                if ($.trim(value) != "") {
+                    return CheckUniqueUserName(value);
+                }
+                else {
+                    return true;
+                }
+
+            }, "Please enter a unique username value");
+            $.validator.addMethod('minPasswordLength', function (value) {
+
+
+                if ($.trim(value) != "") {
+                    return value.length >= 7 ? true : false;
+                }
+                else {
+                    return true;
+                }
+
+            }, "Please enter at least 7 characters for password");
+        });
+
+
+        function CheckUniqueUserName(value) {
+            var _x = true;
+            $.ajax({
+                url: "/Supplier/UniqueUserName",
+                data: JSON.stringify({ UserName: value }),
+                type: 'POST',
+                async: false,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    _x = !result.IsAlreadyExist;
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+
+            return _x;
+        }
+
+
+     
+
+
+
+
+    </script>
+
+
+}

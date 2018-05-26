@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNet.Identity
+@using System.Configuration;
+@using SHIVAM_ECommerce.ViewModels
+@{
+    var _CurrentUser = Session["CurrentUserContext"] as CurrentUserContext;
+}
+@if (Request.IsAuthenticated)
+{
+
+    <div class="dropdown">
+        <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+            <span class="avatar" style="background-image: url(./demo/faces/female/25.jpg)"></span>
+            <span class="ml-2 d-none d-lg-block">
+                <span class="text-default">Hello @User.Identity.GetUserName()</span>
+                <small class="text-muted d-block mt-1">@User.Identity.AuthenticationType</small>
+            </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+            <a class="dropdown-item" href="/Home/Profile/@_CurrentUser.SupplierID">
+                <i class="dropdown-icon fe fe-user"></i> Profile
+            </a>
+            <a class="dropdown-item" href="/Account/Manage">
+                <i class="dropdown-icon fe fe-settings"></i> Settings
+            </a>
+            @* <a class="dropdown-item" href="#">
+                    <span class="float-right"><span class="badge badge-primary">6</span></span>
+                    <i class="dropdown-icon fe fe-mail"></i> Inbox
+                </a>
+                <a class="dropdown-item" href="#">
+                    <i class="dropdown-icon fe fe-send"></i> Message
+                </a>*@
+            <div class="dropdown-divider"></div>
+            @*@Html.ActionLink("Manage", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "dropdown-item", title = "Manage" })*@
+            <a class="dropdown-item" href="/Account/logOff">
+                <i class="dropdown-icon fe fe-log-out"></i> Sign out
+            </a>
+        </div>
+    </div>
+
+
+
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+    </ul>
+}

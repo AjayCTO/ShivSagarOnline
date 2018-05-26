@@ -1,0 +1,136 @@
+﻿@model SHIVAM_ECommerce.Models.Plans
+
+
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/Plan">Plan</a>
+    </li>
+    <li class="breadcrumb-item active">Plan Create</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-plus"></i> Create New Plan</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "Plan", FormMethod.Post,
+                            new { }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"> Plan Name</label>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.PlanName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PlanName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"> Plan Code</label>
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Plancode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plancode)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Sort, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Sort, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Sort)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MonthlyPrice, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.MonthlyPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.MonthlyPrice)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.YearlyPrice, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.YearlyPrice, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.YearlyPrice)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ProductBucketCount, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.ProductBucketCount, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ProductBucketCount)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserBucketCount, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.UserBucketCount, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UserBucketCount)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PlanFrequency, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" name="PlanFrequency" id="PlanFrequency">
+                            <option value="">None</option>
+                            <option value="1">Monthly</option>
+                            <option value="2">Yearly</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.PlanFrequency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Notes, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Notes, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Notes)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+
+
+@section Scripts {
+
+
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

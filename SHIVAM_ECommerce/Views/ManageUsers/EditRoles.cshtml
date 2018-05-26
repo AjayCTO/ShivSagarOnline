@@ -1,0 +1,26 @@
+﻿@model SHIVAM_ECommerce.ViewModels.UserRoleViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Roles</h2>
+
+<form action="@Url.Action("EditRoles")" method="post">
+
+    <h3>
+        @Model.UserName
+        @Html.HiddenFor(model => model.UserId)
+    </h3>
+
+    @for (var i = 0; i < Model.Roles.Count; i++)
+    {
+        @Html.HiddenFor(m => m.Roles[i].Id)
+        @Html.CheckBoxFor(m => m.Roles[i].IsChecked)
+        @Html.HiddenFor(m => m.Roles[i].Role)
+        @Html.DisplayFor(m => m.Roles[i].Role)
+    }
+
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+
+</form>

@@ -1,0 +1,70 @@
+﻿@model SHIVAM_ECommerce.Models.ProductStatus
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/ProductStatus">Product Status</a>
+    </li>
+    <li class="breadcrumb-item active">Status Create</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-plus"></i> Create New Status</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Create", "ProductStatus", FormMethod.Post,
+                            new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control col-md-5" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-space">Create</button>
+                        <button type="reset" class="btn btn-secondary btn-space">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+
+
+
+@section Scripts {
+
+
+    <script>
+        $("#ParentCategory").addClass("form-control col-md-5")
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

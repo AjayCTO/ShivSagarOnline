@@ -1,0 +1,59 @@
+﻿@model SHIVAM_ECommerce.Models.Manufacturer
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/Manufacturers">Manufacturers</a>
+    </li>
+    <li class="breadcrumb-item active">Manufacturers Edit</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Manufacturers</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-5" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>
+
+ 
+
+
+

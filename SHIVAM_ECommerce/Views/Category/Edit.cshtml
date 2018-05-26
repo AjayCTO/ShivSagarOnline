@@ -1,0 +1,121 @@
+﻿@model SHIVAM_ECommerce.Models.Category
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/Category">Category</a>
+    </li>
+    <li class="breadcrumb-item active">Update Category</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-plus"></i> Update category</h3>
+    </div>
+    <div class="card-body">
+      @using (Html.BeginForm("Edit", "Category", FormMethod.Post, 
+                            new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model=>model.CategoryImage)
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-3" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control col-md-10" })
+                                @Html.ValidationMessageFor(model => model.CategoryName)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ParentCategory, "ParentCategory", new { @class = "control-label col-md-3" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("ParentCategory", String.Empty)
+                                @Html.ValidationMessageFor(model => model.ParentCategory)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-10" })
+                                @Html.ValidationMessageFor(model => model.Description)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <h4>Update Image</h4>
+
+
+                        @if (Model.CategoryImage != null)
+                        {
+                          <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/" + Model.CategoryImage)" alt="Alternate Text" />   
+                        }      
+
+
+                        @if (Model.CategoryImage == null)
+                        {
+                            <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/no-image.png")" alt="Alternate Text" />
+                        }  
+
+
+                        
+
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <label for="file">Upload Image:</label>
+                                <input type="file" name="file" id="file" style="width: 100%;" />
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+              
+
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button class="btn btn-default" type="submit"> <i class="fa fa-pencil"></i> Update</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+  
+
+    </div>
+
+
+@section Scripts {
+
+
+    <script>
+        $("#ParentCategory").addClass("form-control col-md-10")
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+ 

@@ -1,0 +1,66 @@
+﻿@{
+    var _CurrentUser = Session["CurrentUserContext"] as SHIVAM_ECommerce.ViewModels.CurrentUserContext;
+    ViewBag.Title = "AddAttributesForSupplier";
+}
+<div ng-app="SupplierAttribute" class="container">
+    <toaster-container></toaster-container>
+    <div class="card" ng-controller="SupplierAttributeController">
+        <div class="card-header">
+            <h2 class="card-title"> Add Attribute for Products</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12" ng-show="CurrentUserID==-1">
+                    <label class="form-label">Select Supplier</label>
+                    <select ng-model="CurrentSupplier" id="CurrentSupplier" ng-change="AllSupplierAttributes()" class=" form-control">
+                        <option value="">Select</option>
+                        <option ng-repeat="x in Suppliers" value="{{x.Id}}">{{x.Name}}</option>
+                    </select>
+                    <br />
+
+                    <hr />
+
+                </div>
+              
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <label class="form-label col-md-12">Select your Attributes</label>
+                    </div>
+                    <div class="col-lg-4" id="checkArray" ng-repeat="pa in ProductAttributes">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{pa.Name}}</h3>
+                                <div class="card-options">
+                                    <label class="custom-switch m-0">
+                                        <input type="checkbox" name="chk[]" ng-checked="pa.Checked" id="check_{{pa.Id}}" value="{{pa.Id}}" class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {{pa.Descp}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button type="button" ng-click="AddAttributes()" class="btn btn-primary">Save Attribute</button>
+        </div>
+
+    </div>
+
+
+</div>
+@section scripts
+{
+    <script>
+        var _supplierID='@_CurrentUser.SupplierID';
+    </script>
+    <link href="~/Content/toaster.css" rel="stylesheet" />
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/toaster.js"></script>
+    <script src="~/Scripts/controllers/SupplierAttribute.js"></script>
+}

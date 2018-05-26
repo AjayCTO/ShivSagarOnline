@@ -1,0 +1,100 @@
+﻿@model IEnumerable<SHIVAM_ECommerce.Models.Manufacturer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="#">Manufacturer</a>
+    </li>
+    <li class="breadcrumb-item active">Manufacturer List</li>
+</ol>
+
+
+<div class="card">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fa fa-list"></i> Manufacturer </h3>
+        <div class="flex-fill text-right">
+            <a href="/Manufacturers/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Manufacturer</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="myTable" class="table table-striped table-bordered dt-responsive">
+            <thead>
+                <tr>
+                    <th>Manufacturer Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#myTable").DataTable({
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "ajax": {
+                    "url": "/Manufacturers/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                        {
+                            "data": "Name", "name": "Name", "autoWidth": true
+                        },
+                         {
+                             "orderable": false,
+                             "mRender": function (data, type, row) {
+                                 debugger;
+                                 var _a = '<a onclick="Deleteman(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                                 return '<a href="/Manufacturers/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
+                             }
+                         },
+                ]
+            });
+        });
+
+        function Deleteman(Id) {
+            var _confirm = confirm("Are you sure you want to delete this Manufacturer ?");
+            if (_confirm) {
+
+                $.ajax({
+                    url: "/Category/DeleteConfirmed?id=" + Id,
+                    //data: JSON.stringify({ id: Id }),
+                    type: 'GET',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.Success === true) {
+                            toastr.success("Deleted Successfully");
+                            // $("#myTable").DataTable().fnDraw();
+                            $("#myTable").DataTable().clear().draw();
+                        } else {
+                            alert("error occurred during operation.");
+                        }
+                    },
+                    error: function (req, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        }
+
+
+    </script>
+
+
+}
+
+
+
+

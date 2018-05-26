@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <h3 class="card-title"><i class="fa fa-list"></i> All Suppliers </h3>
+        <div class="flex-fill text-right">
+            <a href="/Supplier/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Suppliers</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table style="width:100%;" id="myTable" class="table table-striped table-bordered dt-responsive">
+            <thead>
+                <tr>
+                    <th>Logo</th>
+                    <th>Company Name</th>
+                    <th>Owner</th>
+                    <th>Contact No</th>
+                    <th>City</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+ 
+
+@section scripts{
+
+
+
+    <script>
+
+    var Imagepath = @Url.Content("~/SupplierImage/")
+
+    $(document).ready(function () {
+        $("#myTable").DataTable({
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            "orderMulti": false, // for disable multiple column at once
+            "ajax": {
+                "url": "/Supplier/LoadData",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+
+                 {
+
+                     "mRender": function (data, type, row) {
+                         debugger;
+
+                         if (row.Logo != null) {
+                             var _img = '<img style="width:100px; " src="' + Imagepath + row.Logo + ' "></img>';
+                         }
+                         else {
+                             var _img = '<img style="width:50px;" src="' + Imagepath + "no-image.png" + '  "></img>';
+                         }
+
+                         return _img;
+                     }
+                 },
+
+                    {
+
+                        "data": "CompanyName", "name": "CompanyName", "autoWidth": true
+                    },
+                      {
+
+                          "data": "FirstName", "name": "FirstName", "autoWidth": true
+                      },
+                        {
+
+                            "data": "Phone", "name": "CompanyName", "Phone": true
+                        },
+                          {
+
+                              "data": "City", "name": "CompanyName", "City": true
+                          },
+                        {
+                         "orderable": false,
+                         "mRender": function (data, type, row) {
+                             debugger;
+                             var _a = '<a style="color:#fff; display:none" onclick="DeleteSupplier(' + row.Id + ')"  class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                             return '<a href="/Supplier/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
+                         }
+                     },
+            ]
+        });
+    });
+
+        function DeleteSupplier(Id) {
+            var _confirm = confirm("Are you sure you want to delete this Supplier ?");
+        if (_confirm) {
+
+            $.ajax({
+                url: "/Supplier/DeleteConfirmed?id=" + Id,
+             
+                type: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.Success === true) {
+                        toastr.success("Supplier Deleted Successfully");
+                     
+                        $("#myTable").DataTable().clear().draw();
+                    } else {
+                        alert("error occurred during operation.");
+                    }
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    }
+
+
+    </script>
+
+
+}
+
+
