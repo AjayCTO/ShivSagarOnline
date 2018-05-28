@@ -32,6 +32,8 @@ namespace SHIVAM_ECommerce.Models
                 PlanEndDate = _supplier == null ? DateTime.Now : _supplier.PlanEndDate,
                 ProductCount = _supplier == null ? 0 : _supplier.ProductCount,
                 UserCount = _supplier == null ? 0 : _supplier.UserCount,
+                PlanId = _supplier == null ? 0 : _supplier.PlanID,
+                CompanyName = _supplier == null ? "" : _supplier.CompanyName
             };
 
             HttpContext.Current.Session["CurrentUserContext"] = _user;

@@ -80,13 +80,14 @@ namespace SHIVAM_ECommerce.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Profile([Bind(Include = "Id,CompanyName,FirstName,LastName,Title,Address1,Address2,City,State,PostalCode,Country,Phone,Email,URL,Logo,SupplierType,UserID,PlanID,UserName,Password")] Supplier supplier, HttpPostedFileBase file)
+        public ActionResult Profile([Bind(Include = "Id,CompanyName,FirstName,LastName,Title,Address1,Address2,City,State,PostalCode,Country,Phone,Email,URL,Logo,SupplierType,UserID,PlanID,PlanStartDate,PlanEndDate,UserName,Password,ParentSupplierID")] Supplier supplier, HttpPostedFileBase file)
         {
             //supplier.UserName = "testtestsetetsetst";
             //supplier.Password = "testtestteststeest";
             supplier.UpdatedDate = DateTime.Now;
             supplier.CreatedDate = DateTime.Now;
-
+           
+            
            if (ModelState.IsValid)
             {
 

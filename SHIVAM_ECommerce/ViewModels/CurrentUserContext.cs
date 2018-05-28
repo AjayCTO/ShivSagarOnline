@@ -20,5 +20,7 @@ namespace SHIVAM_ECommerce.ViewModels
 
         public DateTime PlanEndDate { get; set; }
         public bool IsSuperAdmin { get; set; }
+        public int PlanId { get; set; }
+        public string CompanyName { get; set; }
     }
 }

@@ -10,13 +10,22 @@ using SHIVAM_ECommerce.Models;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using SHIVAM_ECommerce.Attributes;
+using SHIVAM_ECommerce.Repository;
+using System.Linq.Dynamic;
 
 namespace SHIVAM_ECommerce.Controllers
 {
-    [CustomAuthorize(Roles="superadmin,Admin,Supplier")]
+    //[CustomAuthorize(Roles="superadmin,Admin,Supplier")]
     public class SupplierUserController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+
+         private IRepository<Supplier> _repository = null;
+        public SupplierUserController()
+        {
+            this._repository = new Repository<Supplier>();
+        }
 
         // GET: /SupplierUser/
         public ActionResult Index()
@@ -24,6 +33,55 @@ namespace SHIVAM_ECommerce.Controllers
             var suppliers = db.Suppliers.Include(s => s.Plan).Include(s => s.User).Where(x => x.ParentSupplierID == CurrentUserData.SupplierID);
             return View(suppliers.ToList());
         }
+
+
+
+
+        public ActionResult LoadData()
+        {
+
+            var draw = Request.Form.GetValues("draw").FirstOrDefault();
+            var start = Request.Form.GetValues("start").FirstOrDefault();
+            var length = Request.Form.GetValues("length").FirstOrDefault();
+            var searchitem = Request["search[value]"];
+            //Find Order Column
+            var sortColumn = Request.Form.GetValues("columns[" + Request.Form.GetValues("order[0][column]").FirstOrDefault() + "][name]").FirstOrDefault();
+            var sortColumnDir = Request.Form.GetValues("order[0][dir]").FirstOrDefault();
+
+
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+            int recordsTotal = 0;
+
+            // dc.Configuration.LazyLoadingEnabled = false; // if your table is relational, contain foreign key
+            //var v = (from a in _repository.GetAll() select a);
+            var v = db.Suppliers.Include(s => s.Plan).Include(s => s.User).Where(x => x.ParentSupplierID == CurrentUserData.SupplierID);
+            if (!string.IsNullOrEmpty(searchitem))
+            {
+
+                v = v.Where(b => b.CompanyName.Contains(searchitem));
+            }
+            //SORT
+            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
+            {
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
+            }
+
+            recordsTotal = v.Count();
+            var data = v.Skip(skip).Take(pageSize).ToList();
+            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.CompanyName, x.FirstName, x.LastName, x.Logo, x.Phone, x.City,Address= x.Address1+" "+x.Address2 }) }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         // GET: /SupplierUser/Details/5
         public ActionResult Details(int? id)
@@ -43,6 +101,8 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /SupplierUser/Create
         public ActionResult Create()
         {
+            var allplans = db.Plans.ToList();
+            ViewBag.allplans = allplans;
             ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName");
             //  ViewBag.UserID = new SelectList(db.IdentityUsers, "Id", "UserName");
             return View();
@@ -75,11 +135,15 @@ namespace SHIVAM_ECommerce.Controllers
             }
             if (ModelState.IsValid)
             {
-                supplier.CreatedDate = DateTime.Now;
-                supplier.UpdatedDate = DateTime.Now;
+                supplier.CreatedDate = (DateTime)DateTime.Now;
+                supplier.UpdatedDate = (DateTime)DateTime.Now;
                 supplier.Sort = 33;
                 supplier.ParentSupplierID = CurrentUserData.SupplierID;
                 supplier.RegisteredByID = CurrentUserData.UserID;
+                supplier.PlanStartDate = (DateTime)DateTime.Now;
+                supplier.PlanEndDate = CurrentUserData.PlanEndDate;
+                supplier.PlanID = CurrentUserData.PlanId;
+                supplier.CompanyName = CurrentUserData.CompanyName;
                 db.Suppliers.Add(supplier);
                 var user = new ApplicationUser() { UserName = supplier.UserName, CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now };
                 IdentityResult result = await _controller.UserManager.CreateAsync(user, supplier.Password);
