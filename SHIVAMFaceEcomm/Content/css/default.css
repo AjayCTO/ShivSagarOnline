@@ -4354,5 +4354,22 @@ input[type="radio"] .styled:checked + label::after {
                float:left;
            }
 
+           .supplierlist
+           {
+               height:250px;
+               width:250px;
+               background:#fff;
+               display:flex;
+                 align-items: center;
+  justify-content: center;
+  float:left;
+  margin-right:35px;
+           }
+
+           .supplierlist .item 
+           {
+
+           }
+
 
 /*# sourceMappingURL=default.css.map */

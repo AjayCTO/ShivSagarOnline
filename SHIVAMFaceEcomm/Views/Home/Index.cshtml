@@ -112,7 +112,7 @@
                             </div>
                             <figure class="layer">
                                 <a href="javascript:void(0);">
-                                    <img src="http://localhost:14988/ProductImages/{{x[2]}}" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" alt="">
+                                    <img src="http://localhost:7080/ProductImages/{{x[2]}}" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" alt="">
                                 </a>
                             </figure>
                             <div class="icons">
@@ -136,7 +136,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <nav class="text-center">
-                        <button class="btn btn-success" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
+                        <button class="btn btn-success"  ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
                     </nav>
                 </div><!-- end col -->
             </div><!-- end row -->
@@ -147,52 +147,37 @@
    
     <!-- end section -->
     <!-- start section -->
+
+    
+
     <section class="section light-background">
+
+        
+
         <div class="container">
-            <div id="owl-demo" class="owl-carousel column-5 owl-theme">
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_01.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_02.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_03.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_04.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_01.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_02.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_03.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-                <div class="item">
-                    <figure class="zoom-out">
-                        <img src="http://diamondcreative.net/plus-v1.3.0/img/brands/brand_04.jpg" alt="">
-                    </figure>
-                </div><!-- end item -->
-            </div><!-- end owl carousel -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title-wrap">
+                        <h2 class="title lines">Suppliers</h2>
+                    </div>
+                </div><!-- end col -->
+            </div>
+            <div ng-repeat="obj in supplierlist" class="supplierlist">
+
+                     
+                            <div class="item">
+                                <figure class="zoom-out">
+                                    <img src="http://localhost:7080/SupplierImage/{{obj.Logo}}" alt="">
+                                </figure>
+                            </div>
+                        </div><!-- end owl carousel -->
         </div><!-- end container -->
     </section>
+
+    <!-- start section -->
+    
+
+
     <!-- end section -->
     <!-- start section -->
     <!-- start section -->

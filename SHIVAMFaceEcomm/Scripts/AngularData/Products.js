@@ -188,6 +188,25 @@
             }
         });
 
+        $.ajax({
+            url: '/api/Products/GetSupplier',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+
+
+                $scope.supplierlist = data;
+                $scope.$apply();
+             
+             
+                console.log($scope.supplierlist);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+             
+            }
+        });
+
+
     };
     $scope.loadMore = function () {
         $scope.currentPage++;

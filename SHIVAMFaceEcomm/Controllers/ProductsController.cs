@@ -134,6 +134,19 @@ namespace SHIVAMFaceEcomm.Controllers
                     .ToList();
         }
 
+
+
+
+        public HttpResponseMessage GetSupplier()
+        {
+
+            // Filling the list with data here...
+            var result = db.Suppliers.Select(p => new { CompanyName = p.CompanyName, Id = p.Id, Logo=p.Logo });
+
+            // Then I return the list
+            return Request.CreateResponse(HttpStatusCode.OK, result.ToList());
+        }
+
         public HttpResponseMessage GetAttributes()
         {
 
