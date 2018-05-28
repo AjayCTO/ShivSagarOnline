@@ -4271,9 +4271,16 @@ input[type="radio"] .styled:checked + label::after {
 
 }
 
+
+
 .cart-btn sup
 {
-    position:absolute;
+    position: absolute;
+    color: #7d7d7d;
+    font-size: 19px;
+    font-weight: 600;
+    margin-left: -13px;
+    margin-top:4px;
 }
 
      .shopping-cart {

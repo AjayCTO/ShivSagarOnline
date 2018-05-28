@@ -107,65 +107,65 @@
 
                             </ul>
                             <div class="tab-content pills">
-                                <div id="step-1" class="tab-pane">
-                              
-                                        <div class="table-responsive">
-                                            <table id="cart" class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width:50%">Product</th>
-                                                        <th style="width:10%">Price</th>
-                                                        <th style="width:8%">Quantity</th>
-                                                        <th style="width:22%" class="text-center">Subtotal</th>
-                                                        <th style="width:10%"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr ng-repeat="item in CartItems track by $index">
-                                                        <td data-th="Product">
-                                                            <div class="row">
-                                                                <div class="col-sm-2 hidden-xs">
-                                                                    <img ng-hide="item.Image==null" src="http://localhost:14988/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
+                                <div id="step-1" class="tab-pane active">
 
-                                                                    <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
+                                    <div class="table-responsive">
+                                        <table id="cart" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:50%">Product</th>
+                                                    <th style="width:10%">Price</th>
+                                                    <th style="width:8%">Quantity</th>
+                                                    <th style="width:22%" class="text-center">Subtotal</th>
+                                                    <th style="width:10%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in CartItems track by $index">
+                                                    <td data-th="Product">
+                                                        <div class="row">
+                                                            <div class="col-sm-2 hidden-xs">
+                                                                <img ng-hide="item.Image==null" src="http://localhost:14988/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
 
-                                                                    
-                                                                </div>
-                                                                <div class="col-sm-10">
+                                                                <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
 
-                                                                    <h6 class="regular"><a href="javascript:void(0);">{{item.ProductName}}</a></h6>
 
-                                                               
-                                                                    <p>Quis aute iure reprehenderit</p>
-                                                                </div>
                                                             </div>
-                                                        </td>
-                                                        <td data-th="Price">${{item.Cost}}</td>
-                                                        <td data-th="Quantity">
-                                                            <input type="number" class="form-control text-center" value="1">
-                                                        </td>
-                                                        <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
-                                                        <td  data-th="">
-                                                            <button class="close"><i class="fa fa-trash-o"></i> </button>
+                                                            <div class="col-sm-10">
 
-                                                            <button style="margin-right:5px;" class="close"><i class="fa fa-refresh"></i> </button>
-                                                         
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr class="visible-xs">
-                                                        <td class="text-center" colspan="5"><strong>${{TotalOfCartItems}}</strong></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td colspan="2" class="hidden-xs"></td>
-                                                        <td class="hidden-xs text-center"><strong>Total ${{TotalOfCartItems}}</strong></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
+                                                                <h6 class="regular"><a href="javascript:void(0);">{{item.ProductName}}</a></h6>
+
+
+                                                                <p>Quis aute iure reprehenderit</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td data-th="Price">${{item.Cost}}</td>
+                                                    <td data-th="Quantity">
+                                                        <input type="number" class="form-control text-center" value="1">
+                                                    </td>
+                                                    <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
+                                                    <td data-th="">
+                                                        <button class="close"><i class="fa fa-trash-o"></i> </button>
+
+                                                        <button style="margin-right:5px;" class="close"><i class="fa fa-refresh"></i> </button>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="visible-xs">
+                                                    <td class="text-center" colspan="5"><strong>${{TotalOfCartItems}}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td colspan="2" class="hidden-xs"></td>
+                                                    <td class="hidden-xs text-center"><strong>Total ${{TotalOfCartItems}}</strong></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
 
 
                                     <div class="row">
@@ -186,7 +186,7 @@
                                                             <th>Cart Subtotal</th>
                                                             <td>${{TotalOfCartItems}}</td>
                                                         </tr>
-                                                      
+
                                                         <tr>
                                                             <th>Order Total</th>
                                                             <td>${{TotalOfCartItems}}</td>
@@ -196,7 +196,7 @@
                                             </div><!-- end table-responsive -->
                                         </div><!-- end col -->
                                     </div>
-                                  
+
                                 </div>
                                 <div id="step-2" class="tab-pane">
                                     @Html.Partial("AddNewCustomer")
