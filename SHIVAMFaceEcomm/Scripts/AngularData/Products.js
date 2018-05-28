@@ -241,3 +241,7 @@
 $("#cart").on("click", function () {
     $(".shopping-cart").fadeToggle("fast");
 });
+
+$(".fa-angle-double-right").on("click", function () {
+    $(".shopping-cart").fadeToggle("fast");
+});
