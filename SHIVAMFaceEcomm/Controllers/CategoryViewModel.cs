@@ -15,7 +15,7 @@ namespace SHIVAMFaceEcomm.Controllers
          
         public Nullable<int> ParentCategory { get; set; }
         public string CategoryImage { get; set; }
-
+        public string Description { get; set; }
 
         public List<CategoryViewModel> Categories1 { get; set; }
         

@@ -11,6 +11,7 @@
     $scope.AttributesValue = [];
     $scope.categories = [];
     $scope.AllAttributeFilters = [];
+    $scope.Suppliers = [];
     $scope.selectedAttribute = "";
     $scope.category = {
         "id": 0,
@@ -72,11 +73,9 @@
             dataType: 'json',
             data: { displayLength: limit, displayStart: offset, searchText: "", filtertext: FilterText },
             success: function (data, textStatus, xhr) {
-                debugger;
+                
                 $scope.total = data.iTotalDisplayRecords;
                 $scope.pagedItems = $scope.pagedItems.concat(data.aaData);
-
-                console.log($scope.pagedItems)
 
                 $scope.$apply();
             },
@@ -116,6 +115,23 @@
         
         return true;
     }
+
+    $scope.loadSuppliers = function () {
+        $.ajax({
+            url: '/api/Products/GetSuppliers',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+                debugger;
+                $scope.Suppliers = data;
+
+                $scope.$apply();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $scope.Attributes = [];
+            }
+        });
+    };
 
     $scope.loadFilters = function () {
 
@@ -161,7 +177,7 @@
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
-
+                
                 $scope.categories = data;
 
 
@@ -213,13 +229,10 @@
         debugger;
 
 
-        console.log($scope.AllCartItems);
-
-
     };
 
     $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
-
+    $scope.loadSuppliers();
     $scope.addTowishList = function (productId,customerId) {
        
     };
@@ -228,8 +241,3 @@
 $("#cart").on("click", function () {
     $(".shopping-cart").fadeToggle("fast");
 });
-
-$(".fa-angle-double-right").on("click", function () {
-    $(".shopping-cart").fadeToggle("fast");
-});
-

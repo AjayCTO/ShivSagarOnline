@@ -20,6 +20,28 @@
        
     };
 
+    $scope.updateQuantityOfCartItem = function (Product) { 
+        CartToCookieService.setCookieData($scope.CartItems);
+    };
+
+    $scope.DeleteCartItem = function (Product) {
+
+        if (confirm("are you sure you want to delete this item from cart ?") == true) {
+            for (var i = 0; i < $scope.CartItems.length; i++) {
+                if ($scope.CartItems[i].ProductId == Product.ProductId) {
+                    $scope.CartItems.splice($.inArray(Product, $scope.CartItems), 1);
+                }
+            }
+            debugger;
+            CartToCookieService.setCookieData($scope.CartItems);
+        }
+        
+          
+    };
+
+
+
+
     $scope.Continue = function () {
 
         var allDataToSend = { CartItems: $scope.CartItems, CustomerData: $scope.CustomerDetails, CustAddress: $scope.CustomerAddress };

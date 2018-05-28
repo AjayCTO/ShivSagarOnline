@@ -18,7 +18,7 @@ namespace SHIVAMFaceEcomm.Models
 
         public List<object> newcolumns = null;
         private int filteredRows = 0;
-       // private int SupplierId = Convert.ToInt32(ConfigurationManager.AppSettings["SupplierID"]);
+        private int SupplierId = Convert.ToInt32(ConfigurationManager.AppSettings["SupplierID"]);
         public void ProcessRequest(HttpContext context)
         {
             int displayLength = int.Parse(context.Request["displayLength"]);

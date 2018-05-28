@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿
 
 using SHIVAMFaceEcomm.Models;
 using System;
@@ -9,8 +8,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 //using System.Web.Security;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Razorpay.Api;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace SHIVAMFaceEcomm.Controllers
 {
@@ -18,17 +20,53 @@ namespace SHIVAMFaceEcomm.Controllers
     public class ShoppingCartController : Controller
     {
         SHIVAMECommerceDBNewEntities context = new SHIVAMECommerceDBNewEntities();
+        ApplicationDbContext con=new ApplicationDbContext();
+        //public ShoppingCartController()
+        //    : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        //{
+        //}
+
+        //public ShoppingCartController(UserManager<ApplicationUser> userManager)
+        //{
+        //    UserManager = userManager;
+        //}
+        private ApplicationSignInManager _signInManager;
+        private ApplicationUserManager _userManager;
+
         public ShoppingCartController()
-            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
         }
 
-        public ShoppingCartController(UserManager<ApplicationUser> userManager)
+        public ShoppingCartController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
+            SignInManager = signInManager;
         }
 
-        public UserManager<ApplicationUser> UserManager { get; private set; }
+        public ApplicationSignInManager SignInManager
+        {
+            get
+            {
+                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            }
+            private set 
+            { 
+                _signInManager = value; 
+            }
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+       // public UserManager<ApplicationUser> UserManager { get; private set; }
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -84,7 +122,9 @@ namespace SHIVAMFaceEcomm.Controllers
                 SHIVAMFaceEcomm.Models.Customer newCustomer = new SHIVAMFaceEcomm.Models.Customer();
                 //Add Customer as User
                 var user = new ApplicationUser() { UserName = CartDetails.CustomerData.userName, Email = CartDetails.CustomerData.email };
-                IdentityResult result = UserManager.Create(user, CartDetails.CustomerData.password);
+                 var store=new UserStore<ApplicationUser>(con);
+                 var manager = new UserManager<ApplicationUser>(store);
+                IdentityResult result = manager.Create(user, CartDetails.CustomerData.password);
                 if (result.Succeeded)
                 {
                     newCustomer.UserID = user.Id;
@@ -192,12 +232,12 @@ namespace SHIVAMFaceEcomm.Controllers
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("SHIVAMFaceEcomm");
-                //UserManager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-                // var token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                //  string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                UserManager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 await SignInAsync(user, isPersistent: false);
                 // WebSecurity.Login(CartDetails.CustomerData.userName, CartDetails.CustomerData.password);\
                 TempData["orderId"] = order.Id;

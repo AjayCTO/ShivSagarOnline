@@ -38,22 +38,57 @@ namespace SHIVAMFaceEcomm.Controllers
         {
         }
 
+        public HttpResponseMessage GetSuppliers()
+        {
+            var nresult = db.Suppliers.Where(p => p.UserID != null).ToList();
+            return Request.CreateResponse(HttpStatusCode.OK, nresult);
+        }
+
         public HttpResponseMessage GetCategories()
         {
-           // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();
+            // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();
 
-            var result = db.Categories.Where(y => y.ParentCategory==null)
+            var result = db.Categories.Where(y => y.ParentCategory == null)
                                       .SelectMany(x => x.Categories1).ToList();
-
-            var nresult = result.Select(c => new CategoryViewModel()
+            db.Categories.Where(p => p.ParentCategory != null).Select(p => new { cid = p.Id, pId = p.ParentCategory }).ToList();
+            var xitems = from c1 in db.Categories
+                         where c1.ParentCategory != null
+                         join c2 in db.Categories on 1 equals 1
+                         where c1.ParentCategory != c2.Id && c1.Id != c2.Id
+                         select c2;
+            result.AddRange(xitems.ToList());
+            var nresult = new List<CategoryViewModel>();
+            result.ForEach(c =>
+            {
+                if (c.Category1 == null)
                 {
+                    nresult.Add(new CategoryViewModel()
+                        {
+                            CategoryName = c.CategoryName,
+                            CategoryImage = c.CategoryImage,
+                            Id = c.Id,
+                            Description=c.Description,
+                            Categories1 = new List<CategoryViewModel>()
+                        });
 
-                    CategoryName = c.Category1.CategoryName,
-                    CategoryImage = c.Category1.CategoryImage,
-                    Id = c.Category1.Id,
-                    Categories1 = GetChildren(c.Category1.Categories1.ToList(), c.Id)
-                });
-            return Request.CreateResponse(HttpStatusCode.OK, nresult.ToList());
+                }
+                else
+                {
+                    nresult.Add(new CategoryViewModel()
+                       {
+                           CategoryName = c.Category1.CategoryName,
+                           CategoryImage = c.Category1.CategoryImage,
+                           Id = c.Category1.Id,
+                           Description=c.Category1.Description,
+                           Categories1 = GetChildren(c.Category1.Categories1.ToList(), c.Id)
+                       });
+                }
+
+
+            });
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, nresult);
         }
 
         public HttpResponseMessage GetWishList(Guid CustomerId)
@@ -64,16 +99,16 @@ namespace SHIVAMFaceEcomm.Controllers
 
             var nresult = result.Select(c => new WishListItems()
             {
-                Customer=c.Customer,
-                CustomerId=c.CustomerId,
-                Id=c.Id,
-                Product=c.Product,
-                ProductId=c.ProductId
-              
+                Customer = c.Customer,
+                CustomerId = c.CustomerId,
+                Id = c.Id,
+                Product = c.Product,
+                ProductId = c.ProductId
+
             });
             return Request.CreateResponse(HttpStatusCode.OK, nresult.ToList());
         }
-        public HttpResponseMessage AddToWishList(int CustomerId,int ProductId)
+        public HttpResponseMessage AddToWishList(int CustomerId, int ProductId)
         {
             // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();
             WishList newWishList = new WishList();
@@ -81,29 +116,29 @@ namespace SHIVAMFaceEcomm.Controllers
             newWishList.CustomerId = CustomerId;
             db.WishLists.Add(newWishList);
             db.SaveChanges();
-              
+
             return Request.CreateResponse(HttpStatusCode.OK, "");
         }
-       
 
-        private static List<CategoryViewModel> GetChildren(List<Category> categories,int p)
+
+        private static List<CategoryViewModel> GetChildren(List<Category> categories, int p)
         {
             return categories
                     .Select(c => new CategoryViewModel
                     {
                         CategoryName = c.CategoryName,
                         CategoryImage = c.CategoryImage,
-                        Id =c.Id,
+                        Id = c.Id,
                         Categories1 = GetChildren(c.Categories1.ToList(), c.Id)
                     })
                     .ToList();
         }
-        
+
         public HttpResponseMessage GetAttributes()
         {
 
             // Filling the list with data here...
-            var result = db.ProductAttributes.Select(p => new { AttributeName = p.AttributeName, Id=p.Id });
+            var result = db.ProductAttributes.Select(p => new { AttributeName = p.AttributeName, Id = p.Id });
 
             // Then I return the list
             return Request.CreateResponse(HttpStatusCode.OK, result.ToList());
@@ -113,11 +148,11 @@ namespace SHIVAMFaceEcomm.Controllers
         {
 
             // Filling the list with data here...
-            var result = db.ProductAttribute_view.Select(p => new {AttributeId=p.AttributeName,AttributeValue=p.AttributeValue });
+            var result = db.ProductAttribute_view.Select(p => new { AttributeId = p.AttributeName, AttributeValue = p.AttributeValue });
 
             // Then I return the list
             return Request.CreateResponse(HttpStatusCode.OK, result.ToList());
         }
-       
+
     }
 }

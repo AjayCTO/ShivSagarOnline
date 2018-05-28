@@ -11,6 +11,7 @@ namespace SHIVAMFaceEcomm.Migrations
             RenameIndex(table: "dbo.AspNetUserClaims", name: "IX_User_Id", newName: "IX_UserId");
             DropPrimaryKey("dbo.AspNetUserLogins");
             AddColumn("dbo.AspNetUsers", "Email", c => c.String(maxLength: 256));
+            AddColumn("dbo.AspNetUsers", "UserId", c => c.String(maxLength: 256));
             AddColumn("dbo.AspNetUsers", "EmailConfirmed", c => c.Boolean(nullable: false));
             AddColumn("dbo.AspNetUsers", "PhoneNumber", c => c.String());
             AddColumn("dbo.AspNetUsers", "PhoneNumberConfirmed", c => c.Boolean(nullable: false));
