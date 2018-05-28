@@ -76,6 +76,8 @@
                 $scope.total = data.iTotalDisplayRecords;
                 $scope.pagedItems = $scope.pagedItems.concat(data.aaData);
 
+                console.log($scope.pagedItems)
+
                 $scope.$apply();
             },
             error: function (xhr, textStatus, errorThrown) {
@@ -211,6 +213,9 @@
         debugger;
 
 
+        console.log($scope.AllCartItems);
+
+
     };
 
     $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
@@ -223,3 +228,8 @@
 $("#cart").on("click", function () {
     $(".shopping-cart").fadeToggle("fast");
 });
+
+$(".fa-angle-double-right").on("click", function () {
+    $(".shopping-cart").fadeToggle("fast");
+});
+
