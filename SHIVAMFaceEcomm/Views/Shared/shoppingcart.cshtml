@@ -5,15 +5,30 @@
     Layout = null;
 }
 
- <a class="cart_anchor " id="cart"><i class="fa fa-shopping-basket mr-5"></i><span class="badge badge-success">{{CartProductsCounter}}</span> <i class="fa fa-angle-down ml-5"></i></a>
+<a class="cart-btn cart_anchor" id="cart">
+    <i class="fa fa-shopping-basket"></i>
+    <span class="hidden-xs">
+        <sup>{{CartProductsCounter}}</sup>
+    </span>
+</a>
+
+
+
 <div class="shopping-cart">
 
-    <ul class="list-group" ng-repeat="item in AllCartItems track by $index">
 
-        <li class="list-group-item justify-content-between">
+    <div class="cart-header">
+        <h4>Cart List <span class="pull-right"> <i class="fa fa-angle-double-right"></i> </span> </h4>
+    </div>
+
+    <ul class="cart-list" >
+        <li ng-repeat="item in AllCartItems track by $index" class="">
             <div class="row">
                 <div class="col-md-3">
-                    <img class="responsive-img" style="width:50px;height:50px;" src="http://localhost:14988/ProductImages/{{item.Image}}" alt="Card image cap">
+
+                    <img ng-hide="item.Image==null" class="responsive-img" style="width:50px;height:50px; border:1px solid #ccc;" src="http://localhost:14988/ProductImages/{{item.Image}}" >
+
+                    <img ng-show="item.Image==null" class="responsive-img" style="width:50px;height:50px;" src="/Content/images/no-image.png">
                 </div>
                 <div class="col-md-9">
                     <h5>{{item.ProductName}}</h5>
@@ -23,12 +38,12 @@
         </li>
 
     </ul>
-    <hr />
-    <div class="row scfooter">
-        <a href="/ShoppingCart" class="btn btn-success pull-right">Checkout</a>
-        <a href="#" class="btn btn-success pull-left">Continue</a>
-    </div>
+   
 
+    <div class="cart-footer">
+        <a href="#" class="btn btn-success"> <i class="fa fa-check"></i> Continue</a>
+        <a href="/ShoppingCart" class="btn btn-danger"> <i class="fa fa-sign-out"></i> Checkout</a>
+    </div>
 
 
 </div>

@@ -2,104 +2,222 @@
     ViewBag.Title = "Index";
 }
 
-<br />
-<div class="container-fluid" ng-app="MyApp" ng-controller="ShoppingCartCtrl">
-    <div class="content white-background">
-        <div class="page-header">
-            <h3>Complete your purchase</h3>
-        </div>
+<div  ng-app="MyApp" ng-controller="ShoppingCartCtrl">
 
-        <div id="smartwizard" >
-             
-            <ul class="nav nav-pills style2 nav-justified">
-                <li class="active">
-                    <a href="#step-1" data-toggle="tab">
-                        1. Shopping Cart
-                        <div class="icon">
-                            <i class="fa fa-check"></i>
+
+    <section class="section white-backgorund">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="widget">
+                        <h6 class="subtitle">Account Navigation</h6>
+
+                        <ul class="list list-unstyled">
+                            <li>
+                                <a href="#">My Account</a>
+                            </li>
+                            <li class="active">
+                                <a href="#">My Cart <span class="text-primary">(3)</span></a>
+                            </li>
+                            <li>
+                                <a href="#">My Order</a>
+                            </li>
+                            <li>
+                                <a href="#">Wishlist <span class="text-primary">(5)</span></a>
+                            </li>
+                            <li>
+                                <a href="#">Settings</a>
+                            </li>
+                        </ul>
+                    </div><!-- end widget -->
+
+
+
+                    <div class="widget">
+                        <h6 class="subtitle">Your cart</h6>
+
+                        <ul class="items">
+                            <li ng-repeat="item in CartItems track by $index">
+                                <a href="shop-single-product-v1.html" class="product-image">
+                                    <img src="http://diamondcreative.net/plus-v1.3.0/img/products/men_01.jpg" alt="Sample Product ">
+                                </a>
+                                <div class="product-details">
+                                    <p class="product-name">
+                                        <a>{{item.ProductName}}</a>
+                                    </p>
+                                    <p class="product-name">
+                                        <a>Quantity - {{item.Quantity}}</a>
+                                    </p>
+                                    <span class="price text-primary">{{item.Cost}}</span>
+                              
+                                </div>
+                            </li><!-- end item -->
+
+                         
+
+                        </ul>
+
+                        <hr class="spacer-10 no-border">
+
+                        <strong class="text-dark">Cart Subtotal:<span class="pull-right text-primary">${{TotalOfCartItems}}</span></strong>
+
+                        <hr class="spacer-10 no-border">
+
+                        <a href="/home/Products" class="btn btn-default btn-block semi-circle btn-md">All Products</a>
+                        
                         </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#step-2" data-toggle="tab">
-                        2. Billing/Payment Info
-                        <div class="icon">
-                            <i class="fa fa-home"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#step-3" data-toggle="tab">
-                        3. Order Confirm
-                        <div class="icon">
-                            <i class="fa fa-list"></i>
-                        </div>
-                    </a>
-                </li>
-                 
-            </ul>
-            <div class="tab-content pills">
-                <div id="step-1" class="tab-pane">
-                    <div class="container-fluid">
-                        <div class="container-fluid">
-                            <table id="cart" class="table table-hover table-bordered table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50%">Product</th>
-                                        <th style="width:10%">Price</th>
-                                        <th style="width:8%">Quantity</th>
-                                        <th style="width:22%" class="text-center">Subtotal</th>
-                                        <th style="width:10%"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in CartItems track by $index">
-                                        <td data-th="Product">
-                                            <div class="row">
-                                                <div class="col-sm-2 hidden-xs"><img src="http://localhost:14988/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" /></div>
-                                                <div class="col-sm-10">
-                                                    <h4 class="nomargin">{{item.ProductName}}</h4>
-                                                    <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+
+                        
+                    </div>
+
+                <div class="col-sm-9">
+                    <div>
+
+
+                        <h6 class="subtitle">Complete your purchase</h6>
+                      
+
+                        <div id="smartwizard">
+
+                            <ul class="nav nav-pills style2 nav-justified">
+                                <li class="active">
+                                    <a href="#step-1" data-toggle="tab">
+                                        1. Shopping Cart
+                                        <div class="icon">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-2" data-toggle="tab">
+                                        2. Billing/Payment Info
+                                        <div class="icon">
+                                            <i class="fa fa-home"></i>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-3" data-toggle="tab">
+                                        3. Order Confirm
+                                        <div class="icon">
+                                            <i class="fa fa-list"></i>
+                                        </div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content pills">
+                                <div id="step-1" class="tab-pane">
+                              
+                                        <div class="table-responsive">
+                                            <table id="cart" class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:50%">Product</th>
+                                                        <th style="width:10%">Price</th>
+                                                        <th style="width:8%">Quantity</th>
+                                                        <th style="width:22%" class="text-center">Subtotal</th>
+                                                        <th style="width:10%"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="item in CartItems track by $index">
+                                                        <td data-th="Product">
+                                                            <div class="row">
+                                                                <div class="col-sm-2 hidden-xs">
+                                                                    <img ng-hide="item.Image==null" src="http://localhost:14988/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
+
+                                                                    <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
+
+                                                                    
+                                                                </div>
+                                                                <div class="col-sm-10">
+
+                                                                    <h6 class="regular"><a href="javascript:void(0);">{{item.ProductName}}</a></h6>
+
+                                                               
+                                                                    <p>Quis aute iure reprehenderit</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td data-th="Price">${{item.Cost}}</td>
+                                                        <td data-th="Quantity">
+                                                            <input type="number" class="form-control text-center" value="1">
+                                                        </td>
+                                                        <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
+                                                        <td  data-th="">
+                                                            <button class="close"><i class="fa fa-trash-o"></i> </button>
+
+                                                            <button style="margin-right:5px;" class="close"><i class="fa fa-refresh"></i> </button>
+                                                         
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class="visible-xs">
+                                                        <td class="text-center" colspan="5"><strong>${{TotalOfCartItems}}</strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td colspan="2" class="hidden-xs"></td>
+                                                        <td class="hidden-xs text-center"><strong>Total ${{TotalOfCartItems}}</strong></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+
+                                    <div class="row">
+                                        <div class="col-sm-7 text-left">
+                                            <form class="form-inline">
+                                                <div class="form-group">
+                                                    <input class="form-control input-md" type="text" placeholder="Coupon code">
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td data-th="Price">${{item.Cost}}</td>
-                                        <td data-th="Quantity">
-                                            <input type="number" ng-model="item.Quantity" class="form-control text-center" value="{{item.Quantity}}">
-                                        </td>
-                                        <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
-                                        <td class="actions" data-th="">
-                                            <button class="btn btn-info btn-sm" ng-click="updateQuantityOfCartItem(item)"><i class="fa fa-refresh"></i></button>
-                                            <button class="btn btn-danger btn-sm" ng-click="DeleteCartItem(item)"><i class="fa fa-trash-o"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr class="visible-xs">
-                                        <td class="text-center" colspan="5"><strong>${{TotalOfCartItems}}</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/home/Products" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-                                        <td colspan="2" class="hidden-xs"></td>
-                                        <td class="hidden-xs text-center"><strong>Total ${{TotalOfCartItems}}</strong></td>
-                                        <td>@*<a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a>*@</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                                <button class="btn btn-default btn-md round" type="submit">Apply</button>
+                                            </form>
+                                        </div><!-- end col -->
+
+                                        <div class="col-sm-5">
+                                            <div class="table-responsive">
+                                                <table class="table no-border">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Cart Subtotal</th>
+                                                            <td>${{TotalOfCartItems}}</td>
+                                                        </tr>
+                                                      
+                                                        <tr>
+                                                            <th>Order Total</th>
+                                                            <td>${{TotalOfCartItems}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table><!-- end table -->
+                                            </div><!-- end table-responsive -->
+                                        </div><!-- end col -->
+                                    </div>
+                                  
+                                </div>
+                                <div id="step-2" class="tab-pane">
+                                    @Html.Partial("AddNewCustomer")
+
+                                </div>
+                                <div id="step-3" class="tab-pane">
+                                    Order Confirmation
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="step-2" class="tab-pane">
-                    @Html.Partial("AddNewCustomer")
-
-                </div>
-                <div id="step-3" class="tab-pane">
-                    Order Confirmation
-                </div>
-                 
             </div>
         </div>
-    </div>
+    </section>
+
+    
+
+
+    
 
 </div>
 
