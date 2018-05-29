@@ -13,6 +13,7 @@
     $scope.AllAttributeFilters = [];
     $scope.Suppliers = [];
     $scope.selectedAttribute = "";
+    $scope.showloader = true;
     $scope.category = {
         "id": 0,
         "categoryName": null,
@@ -91,6 +92,8 @@
 
     $scope.AddAttrToFilter=function(ischecked,name,value)
     {
+     
+
         if (ischecked == 1)
         {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
@@ -181,7 +184,20 @@
                 $scope.categories = data;
 
 
+                console.log("category");
+                console.log($scope.categories);
+
+              $scope.showloader = false;
+              
                 $scope.$apply();
+
+            
+
+             
+
+
+           
+              
             },
             error: function (xhr, textStatus, errorThrown) {
                 $scope.categories = [];
