@@ -20,6 +20,8 @@ namespace SHIVAM_ECommerce.ViewModels
         public int? StatusId { get; set; }
         public List<ProductImagesViewModel> Images { get; set; }
 
+        public int Id { get; set; }
+
     }
 
     public class ProductAttributeModelInner

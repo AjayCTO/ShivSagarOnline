@@ -20,6 +20,9 @@ namespace SHIVAM_ECommerce.Models
         [ForeignKey("ParentCategory")]
         public virtual Category Categories { get; set; }
 
+
+        public bool IsTopCategory { get; set; }
+
         public string CategoryImage { get; set; }
 
         //public int SupplierID { get; set; } 

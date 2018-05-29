@@ -1,9 +1,9 @@
 ﻿angular.module('myFormApp', ['toaster']).
     controller('ProductController', function ($scope, $http, $location, $window, toaster) {
         $scope.productstatuslist = JSON.parse(_productstatuslist);
-      
+
         $scope.productstatuslist[0].Name;
-       
+
         var id = 0;
 
         function init() {
@@ -26,8 +26,8 @@
 
             };
             CheckScopeBeforeApply();
-           
-         
+
+
 
             $scope.AllAttributes();
             for (var i = 0; i < $scope.ProductObject.allAttributes.length; i++) {
@@ -142,14 +142,14 @@
         };
 
 
-      
+
 
         setTimeout(function () {
             $(".statusselect").each(function () {
                 $(this).val($(this).attr("selectedvalue"));
                 $(this).trigger("change");
             });
-        },1000)
+        }, 1000)
         $scope.triggerFileClick = function () {
             $("#files").trigger("click");
 
@@ -160,7 +160,7 @@
             for (var i = 0; i < $scope.ProductAttributes.length; i++) {
                 _ListData.push({ AttributeID: $scope.ProductAttributes[i].Id, Value: "", Quantity: "" })
             }
-            $scope.ProductAttributesList.push({ ColumnsData: _ListData,IsFeatured:false, lowQuantityThreshold: null, highQuantityThreshold : null,StatusId:null, Quantity: "", price: "", weight: "", Images: [] });
+            $scope.ProductAttributesList.push({ ColumnsData: _ListData, IsFeatured: false, lowQuantityThreshold: null, highQuantityThreshold: null, StatusId: null, Quantity: "", price: "", weight: "", Images: [], Id: 0 });
             CheckScopeBeforeApply();
         }
 
@@ -171,7 +171,43 @@
             $("#myModal").modal("show");
         }
         $scope.RemoveIt = function ($index) {
-            $scope.ProductAttributesList.splice($index, 1);
+
+            var _ID = $scope.ProductAttributesList[$index].Id;
+            if (_ID != 0) {
+
+                $.ajax({
+                    url: "/Product/DeleteProductDetail",
+                    type: 'POST',
+                    data: JSON.stringify({ "ID": _ID }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+
+                        if (result.Success == true) {
+                            alert("deleted success fully");
+                            $scope.ProductAttributesList.splice($index, 1);
+                            CheckScopeBeforeApply();
+
+                        }
+                        else {
+                            alert(result.ex);
+                            //toastr.error(result.ex);
+                        }
+                    },
+                    error: function (err) {
+
+
+
+                    },
+                    complete: function () {
+                    }
+                });
+            }
+            else {
+                $scope.ProductAttributesList.splice($index, 1);
+                CheckScopeBeforeApply();
+            }
+
 
         };
 
@@ -179,18 +215,56 @@
             for (var i = 0; i < event.currentTarget.files.length; i++) {
                 $scope.handleFileSelect(event.currentTarget.files[i]);
 
-            } 
+            }
         });
 
 
 
         $scope.RemoveFromImageList = function (ID) {
+            var _Index = -1;
             for (var i = 0; i < $scope.ProductAttributesList[$scope.TempIndex].Images.length; i++) {
                 if ($scope.ProductAttributesList[$scope.TempIndex].Images[i].ImageID == ID) {
-                    $scope.ProductAttributesList[$scope.TempIndex].Images.splice(i, 1);
+                    _Index = i;
                     break;
                 }
             }
+
+            var _ID = $scope.ProductAttributesList[$scope.TempIndex].Images[_Index].ID;
+            if (_ID != 0) {
+
+                $.ajax({
+                    url: "/Product/DeleteProductImage",
+                    type: 'POST',
+                    data: JSON.stringify({ "ID": _ID }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (result) {
+
+                        if (result.Success == true) {
+                            alert("deleted success fully");
+                            $scope.ProductAttributesList[$scope.TempIndex].Images.splice(_Index, 1);
+
+                            CheckScopeBeforeApply();
+
+                        }
+                        else {
+                            alert(result.ex);
+                            //toastr.error(result.ex);
+                        }
+                    },
+                    error: function (err) {
+
+
+
+                    },
+                    complete: function () {
+                    }
+                });
+            }
+            else {
+                $scope.ProductAttributesList[$scope.TempIndex].Images.splice(_Index, 1);
+            }
+          
 
         }
 
@@ -257,31 +331,31 @@
 
             FileName = "";
             StreamData = "";
-            var _ImgObj = { ImageID: 0, FileName: "", bytestring: "", Size: 0 }
- 
+            var _ImgObj = { ImageID: 0, FileName: "", bytestring: "", Size: 0, ID: 0 }
 
-               
 
-                var reader = new FileReader();
 
-                // Closure to capture the file information.
-                reader.onload = (function (theFile) {
 
-                    var id = randomString(5, '0123456789');
-                    _ImgObj.ImageID = id;
-                    return function (e) {
-                        // Render thumbnail.
-                        FileName = theFile.name;
-                        StreamData = e.target.result;
-                        _ImgObj.FileName = FileName;
-                        _ImgObj.bytestring = e.target.result;
-                        _ImgObj.Size = theFile.size;
+            var reader = new FileReader();
 
-                    };
-                })(f);
+            // Closure to capture the file information.
+            reader.onload = (function (theFile) {
 
-                // Read in the image file as a data URL.
-                reader.readAsDataURL(f);
+                var id = randomString(5, '0123456789');
+                _ImgObj.ImageID = id;
+                return function (e) {
+                    // Render thumbnail.
+                    FileName = theFile.name;
+                    StreamData = e.target.result;
+                    _ImgObj.FileName = FileName;
+                    _ImgObj.bytestring = e.target.result;
+                    _ImgObj.Size = theFile.size;
+
+                };
+            })(f);
+
+            // Read in the image file as a data URL.
+            reader.readAsDataURL(f);
 
 
 
@@ -313,11 +387,7 @@
 
             var _toAddAttributes = angular.copy($scope.ProductAttributesList);
 
-            console.log("====================================");
-            console.log($scope.ProductAttributesList);
 
-            console.log("====================================");
-            
 
             for (var i = 0; i < _toAddAttributes.length; i++) {
 
@@ -336,11 +406,11 @@
 
                     if (_toSendImages[k].bytestring != null && _toSendImages[k].bytestring != undefined) {
                         _toSendImages[k].bytestring = removePaddingCharacters(_toSendImages[k].bytestring);
-                        _Myimages.push({ ImageID: _toSendImages[k].ImageID, FileName: _toSendImages[k].FileName, Size: _toSendImages[k].Size, bytestring: _toSendImages[k].bytestring });
+                        _Myimages.push({ ID: _toSendImages[k].ID, ImageID: _toSendImages[k].ImageID, FileName: _toSendImages[k].FileName, Size: _toSendImages[k].Size, bytestring: _toSendImages[k].bytestring });
                     }
 
                 }
-                $scope.ProductObject.allAttributes.push({ ColumnsData: _columnsData, IsFeatured: _toAddAttributes[i].IsFeatured, lowQuantityThreshold: _toAddAttributes[i].lowQuantityThreshold, highQuantityThreshold: _toAddAttributes[i].highQuantityThreshold, StatusId: _toAddAttributes[i].StatusId, Quantity: _toAddAttributes[i].Quantity, price: _toAddAttributes[i].price, weight: _toAddAttributes[i].weight, Images: _Myimages });
+                $scope.ProductObject.allAttributes.push({ ColumnsData: _columnsData, IsFeatured: _toAddAttributes[i].IsFeatured, lowQuantityThreshold: _toAddAttributes[i].lowQuantityThreshold, highQuantityThreshold: _toAddAttributes[i].highQuantityThreshold, StatusId: _toAddAttributes[i].StatusId, Quantity: _toAddAttributes[i].Quantity, price: _toAddAttributes[i].price, weight: _toAddAttributes[i].weight, Images: _Myimages, Id: _toAddAttributes[i].Id });
             }
 
 

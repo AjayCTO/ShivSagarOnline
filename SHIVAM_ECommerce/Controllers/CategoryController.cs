@@ -96,7 +96,7 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,CategoryName,IsActive,ParentCategory,CategoryImage,CreatedDate,UpdatedDate,Sort,Description,Notes")] Category category, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "Id,CategoryName,IsActive,ParentCategory,CategoryImage,CreatedDate,UpdatedDate,Sort,Description,Notes,IsTopCategory")] Category category, HttpPostedFileBase file)
         {
             category.CreatedDate = DateTime.Now;
             category.UpdatedDate = DateTime.Now;
@@ -156,7 +156,7 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,CategoryName,IsActive,ParentCategory,CategoryImage,CreatedDate,UpdatedDate,Sort,Description,Notes")] Category category, HttpPostedFileBase file)
+        public ActionResult Edit([Bind(Include = "Id,CategoryName,IsActive,ParentCategory,CategoryImage,CreatedDate,UpdatedDate,Sort,Description,Notes,IsTopCategory")] Category category, HttpPostedFileBase file)
         {
             category.CreatedDate = DateTime.Now;
             category.UpdatedDate = DateTime.Now;

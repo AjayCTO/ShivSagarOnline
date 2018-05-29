@@ -47,6 +47,7 @@ namespace SHIVAM_ECommerce.Controllers
             return View();
         }
 
+
         public FileStreamResult DownloadSample()
         {
             return ExportToExcel.getSampleFile(CurrentUserData.SupplierID);
@@ -166,7 +167,6 @@ namespace SHIVAM_ECommerce.Controllers
                 List<string> data = new List<string>();
                 if (FileUpload != null)
                 {
-                    // tdata.ExecuteCommand("truncate table OtherCompanyAssets");  
                     if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     {
 
@@ -179,8 +179,10 @@ namespace SHIVAM_ECommerce.Controllers
                         if (filename.EndsWith(".xls"))
                         {
                             // connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=\"Excel 8.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
-                            //connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0}; Extended Properties=\"Excel 8.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
-                            connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathToExcelFile + ";Extended Properties=\"Excel 8.0;HDR=NO;IMEX=1\";";
+                            //connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.4.0;Data Source={0}; Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\";", pathToExcelFile);
+                            connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathToExcelFile + ";Extended Properties=\"Excel 8.0;HDR=YES;\"";
+                            // connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathToExcelFile + ";Extended Properties=\"Excel 8.0;HDR=YES;\"";
+
                         }
                         else if (filename.EndsWith(".xlsx"))
                         {
@@ -463,7 +465,7 @@ namespace SHIVAM_ECommerce.Controllers
             ViewBag.productstatuslist = productstauts;
 
             var _ProductViewModel = GetProduct(productID);
-            var _ProductAttributes = _Attributerepository.GetAll().Where(x => x.ProductId == productID).ToList();
+            var _ProductAttributes = _Attributerepository.GetAll().Where(x => x.ProductId == productID && x.IsActive == true).ToList();
             _ProductViewModel.allAttributes = new List<ProductAttributeModel>();
             foreach (var _item in _ProductAttributes)
             {
@@ -479,10 +481,11 @@ namespace SHIVAM_ECommerce.Controllers
                 _newitem.ColumnsData = GetColumnsDataSplitted(_item.AttributeValues);
                 _newitem.Images = new List<ProductImagesViewModel>();
                 _newitem.Images = GetImages(_item.Id);
+                _newitem.Id = _item.Id;
                 _ProductViewModel.allAttributes.Add(_newitem);
             }
-          
-                return View(_ProductViewModel);
+
+            return View(_ProductViewModel);
         }
 
         private List<ProductImagesViewModel> GetImages(int ProductID)
@@ -499,6 +502,7 @@ namespace SHIVAM_ECommerce.Controllers
                 _Newitem.FileName = _item.ImagePath;
                 _Path = System.Web.Hosting.HostingEnvironment.MapPath("~/ProductImages/") + _item.ImagePath;
                 _Newitem.bytestring = System.IO.File.ReadAllBytes(_Path);
+                _Newitem.ID = _item.Id;
                 _productImages.Add(_Newitem);
 
             }
@@ -556,17 +560,19 @@ namespace SHIVAM_ECommerce.Controllers
             try
             {
 
-                DeleteOldAttributes(Model.ProductID);
+                // DeleteOldAttributes(Model.ProductID);
+                var _ProductAttributes = _Attributerepository.GetAll().Where(x => x.ProductId == Model.ProductID).ToList();
 
-
-
+                var _productRel = new ProductAttributeWithQuantity();
                 #region Product Attributes
                 Model.allAttributes = (Model.allAttributes == null ? new List<ProductAttributeModel>() : Model.allAttributes);
                 if (Model.allAttributes.Count() > 0)
                 {
                     foreach (var _item in Model.allAttributes)
                     {
-                        var _productRel = new ProductAttributeWithQuantity();
+                        var _tempProductRel = _ProductAttributes != null && _ProductAttributes.Count() > 0 ? _ProductAttributes.Where(x => x.Id == _item.Id).FirstOrDefault() : new ProductAttributeWithQuantity();
+                        _tempProductRel = _tempProductRel == null ? new ProductAttributeWithQuantity() : _tempProductRel;
+                        _productRel = _tempProductRel;
                         _productRel.IsAvailable = true;
                         _productRel.AttributeValues = GetAttributeValues(_item.ColumnsData);
                         _productRel.ProductPrice = Model.ProductPrice;
@@ -578,7 +584,12 @@ namespace SHIVAM_ECommerce.Controllers
                         _productRel.IsFeatured = _item.IsFeatured;
                         _productRel.lowQuantityThreshold = _item.lowQuantityThreshold;
                         _productRel.highQuantityThreshold = _item.highQuantityThreshold;
-                        _Attributerepository.Insert(_productRel);
+                        _productRel.IsActive = true;
+                        if (_productRel.Id == 0)
+                        {
+                            _Attributerepository.Insert(_productRel);
+
+                        }
                         _Attributerepository.Save();
 
                         #region Product Image
@@ -587,29 +598,33 @@ namespace SHIVAM_ECommerce.Controllers
                         {
                             foreach (var _image in _item.Images)
                             {
-                                byte[] bitmap = _image.bytestring;
-                                var _imageName = "";
-                                if (bitmap != null)
+                                if (_image.ID == 0)
                                 {
-                                    _imageName = Guid.NewGuid().ToString() + ".png";
 
-                                    var _Path = System.Web.Hosting.HostingEnvironment.MapPath("~/ProductImages/");
-                                    using (Image image = Image.FromStream(new MemoryStream(bitmap)))
+                                    byte[] bitmap = _image.bytestring;
+                                    var _imageName = "";
+                                    if (bitmap != null)
                                     {
-                                        var _CompletePath = _Path + _imageName;
-                                        image.Save(_CompletePath, ImageFormat.Png);  // Or Png
-                                    }
-                                }
+                                        _imageName = Guid.NewGuid().ToString() + ".png";
 
-                                var _productImage = new ProductImages();
-                                _productImage.ImageName = _image.FileName;
-                                _productImage.ImagePath = _imageName;
-                                _productImage.ProductQuantityId = _productRel.Id;
-                                //_productImage.ProductId = Model.ProductID;
-                                _productImage.CreatedDate = DateTime.Now;
-                                _productImage.UpdatedDate = DateTime.Now;
-                                _Imagesrepository.Insert(_productImage);
-                                _Imagesrepository.Save();
+                                        var _Path = System.Web.Hosting.HostingEnvironment.MapPath("~/ProductImages/");
+                                        using (Image image = Image.FromStream(new MemoryStream(bitmap)))
+                                        {
+                                            var _CompletePath = _Path + _imageName;
+                                            image.Save(_CompletePath, ImageFormat.Png);  // Or Png
+                                        }
+                                    }
+
+                                    var _productImage = new ProductImages();
+                                    _productImage.ImageName = _image.FileName;
+                                    _productImage.ImagePath = _imageName;
+                                    _productImage.ProductQuantityId = _productRel.Id;
+                                    //_productImage.ProductId = Model.ProductID;
+                                    _productImage.CreatedDate = DateTime.Now;
+                                    _productImage.UpdatedDate = DateTime.Now;
+                                    _Imagesrepository.Insert(_productImage);
+                                    _Imagesrepository.Save();
+                                }
                             }
                         }
                         #endregion
@@ -635,6 +650,52 @@ namespace SHIVAM_ECommerce.Controllers
 
         }
 
+        [HttpPost]
+
+        public ActionResult DeleteProductDetail(int ID)
+        {
+            try
+            {
+                var _orderItems = db.OrderItems.Where(x => x.ProductID == ID).Count();
+                if (_orderItems <= 0)
+                {
+
+                    var _obj = db.ProductAttributeWithQuantity.Where(x => x.Id == ID).FirstOrDefault();
+                    _obj.IsActive = false;
+                    db.SaveChanges();
+                    return Json(new { Success = true, ex = "", data = "" });
+
+                }
+                return Json(new { Success = false, ex = "This item is currently in use", data = "" });
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString(), data = "" });
+
+            }
+        }
+
+        [HttpPost]
+
+        public ActionResult DeleteProductImage(int ID)
+        {
+            try
+            {
+
+                _Imagesrepository.Delete(ID);
+                _Imagesrepository.Save();
+
+                return Json(new { Success = true, ex = "", data = "" });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString(), data = "" });
+
+            }
+        }
         public void DeleteOldAttributes(int productID)
         {
             var _db = new ApplicationDbContext();

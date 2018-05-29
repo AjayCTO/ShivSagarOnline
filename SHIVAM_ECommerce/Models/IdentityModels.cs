@@ -55,7 +55,13 @@ namespace SHIVAM_ECommerce.Models
 
         public DbSet<CustomerReviews> Reviews { get; set; }
         public DbSet<ProductStatus> ProductStatus { get; set; }
-        
+
+        public DbSet<Features> Features { get; set; }
+
+        public DbSet<PlanFeatures> PlanFeatures { get; set; }
+
+
+        public DbSet<FeaturedSupplier> FeaturedSuppliers { get; set; }
         public System.Data.Entity.DbSet<SHIVAM_ECommerce.Models.AllProductImages> AllProductImages { get; set; }
 
         public System.Data.Entity.DbSet<SHIVAM_ECommerce.Models.ThreshHold> ThreshHolds { get; set; }

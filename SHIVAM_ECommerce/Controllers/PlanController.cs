@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using System.Linq.Dynamic;
 using SHIVAM_ECommerce.Attributes;
+using SHIVAM_ECommerce.ViewModels;
 namespace SHIVAM_ECommerce.Controllers
 {
     [CustomAuthorize]
@@ -16,6 +17,12 @@ namespace SHIVAM_ECommerce.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public PlanController()
+        {
+
+
+
+        }
         // GET: /Plan/
         public ActionResult Index()
         {
@@ -102,7 +109,25 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /Plan/Create
         public ActionResult Create()
         {
-            return View();
+            return View(GetViewBagData());
+        }
+
+        public PlanViewModel GetViewBagData()
+        {
+            var _Model = new PlanViewModel();
+            _Model.Features = new List<PlanFeaturesViewModel>();
+            var _features = db.Features.ToList();
+            foreach (var item in _features)
+            {
+                var _obj = new PlanFeaturesViewModel();
+                _obj.ID = item.Id;
+                _obj.title = item.Title;
+                _obj.IsSelected = false;
+                _obj.price = item.Price;
+                _Model.Features.Add(_obj);
+            }
+
+            return _Model;
         }
 
         // POST: /Plan/Create
@@ -110,14 +135,45 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PlanName,Plancode,CreatedDate,UpdatedDate,Sort,Description,Notes,PlanFrequency,MonthlyPrice,YearlyPrice,ProductBucketCount,UserBucketCount,IsActive")] Plans plans)
+        public ActionResult Create(PlanViewModel plans)
         {
             if (ModelState.IsValid)
             {
-                plans.UpdatedDate = DateTime.Now;
-                plans.CreatedDate = DateTime.Now;
-                plans.IsActive = true;
-                db.Plans.Add(plans);
+                var _newplan = new Plans();
+                _newplan.UpdatedDate = DateTime.Now;
+                _newplan.CreatedDate = DateTime.Now;
+                _newplan.IsActive = true;
+                _newplan.Description = plans.Description;
+                _newplan.Notes = plans.Notes;
+                _newplan.IsActive = true;
+                _newplan.MonthlyPrice = plans.MonthlyPrice;
+                _newplan.YearlyPrice = plans.YearlyPrice;
+                _newplan.TotalMonthlyPrice = plans.TotalMonthlyPrice;
+                _newplan.Plancode = plans.Plancode;
+                _newplan.PlanFrequency = plans.PlanFrequency;
+                _newplan.PlanName = plans.PlanName;
+                _newplan.ProductBucketCount = plans.ProductBucketCount;
+                _newplan.Sort = 45;
+                _newplan.TotalYearlyPrice = plans.TotalYearlyPrice;
+                _newplan.UserBucketCount = plans.UserBucketCount;
+                db.Plans.Add(_newplan);
+
+                db.SaveChanges();
+                foreach (var _item in plans.Features)
+                {
+                    if (_item.IsSelected)
+                    {
+
+                        var _planfeature = new PlanFeatures();
+                        _planfeature.FeatureID = _item.ID;
+                        _planfeature.CreatedDate = DateTime.Now;
+                        _planfeature.UpdatedDate = DateTime.Now;
+                        _planfeature.PlanID = _newplan.Id;
+                        db.PlanFeatures.Add(_planfeature);
+                    }
+
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -137,7 +193,40 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 return HttpNotFound();
             }
-            return View(plans);
+
+            var _Model = new PlanViewModel();
+            _Model.Features = new List<PlanFeaturesViewModel>();
+            var _features = db.Features.ToList();
+
+            _Model.CreatedDate = plans.CreatedDate;
+            _Model.Description = plans.Description;
+            _Model.Notes = plans.Notes;
+            _Model.IsActive = plans.IsActive;
+            _Model.MonthlyPrice = plans.MonthlyPrice;
+            _Model.YearlyPrice = plans.YearlyPrice;
+            _Model.TotalMonthlyPrice = plans.TotalMonthlyPrice;
+            _Model.Plancode = plans.Plancode;
+            _Model.PlanFrequency = plans.PlanFrequency;
+            _Model.PlanName = plans.PlanName;
+            _Model.ProductBucketCount = plans.ProductBucketCount;
+            _Model.TotalYearlyPrice = plans.TotalYearlyPrice;
+            _Model.UserBucketCount = plans.UserBucketCount;
+            _Model.Sort = plans.Sort;
+            _Model.Id = plans.Id;
+            var _planFeatures = db.PlanFeatures.Where(x => x.PlanID == _Model.Id).ToList();
+            _planFeatures = _planFeatures == null ? new List<PlanFeatures>() : _planFeatures;
+
+            foreach (var item in _features)
+            {
+                var _isExisting = _planFeatures.Where(x => x.FeatureID == item.Id).FirstOrDefault();
+                var _obj = new PlanFeaturesViewModel();
+                _obj.ID = item.Id;
+                _obj.title = item.Title;
+                _obj.IsSelected = _isExisting == null ? false : true;
+                _obj.price = item.Price;
+                _Model.Features.Add(_obj);
+            }
+            return View(_Model);
         }
 
         // POST: /Plan/Edit/5
@@ -145,42 +234,93 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,PlanName,Plancode,CreatedDate,UpdatedDate,Sort,Description,Notes,PlanFrequency,MonthlyPrice,YearlyPrice,ProductBucketCount,UserBucketCount,IsActive")] Plans plans)
+        public ActionResult Edit(PlanViewModel plans)
         {
             if (ModelState.IsValid)
             {
-                plans.UpdatedDate = DateTime.Now;
-                db.Entry(plans).State = EntityState.Modified;
+                var _newplan = new Plans();
+                _newplan.UpdatedDate = DateTime.Now;
+                _newplan.CreatedDate = plans.CreatedDate;
+                _newplan.Description = plans.Description;
+                _newplan.Notes = plans.Notes;
+                _newplan.IsActive = plans.IsActive;
+                _newplan.MonthlyPrice = plans.MonthlyPrice;
+                _newplan.YearlyPrice = plans.YearlyPrice;
+                _newplan.TotalMonthlyPrice = plans.TotalMonthlyPrice;
+                _newplan.Plancode = plans.Plancode;
+                _newplan.PlanFrequency = plans.PlanFrequency;
+                _newplan.PlanName = plans.PlanName;
+                _newplan.ProductBucketCount = plans.ProductBucketCount;
+                _newplan.TotalYearlyPrice = plans.TotalYearlyPrice;
+                _newplan.UserBucketCount = plans.UserBucketCount;
+                _newplan.Sort = plans.Sort;
+                _newplan.UpdatedDate = DateTime.Now;
+                _newplan.Id = plans.Id;
+                db.Entry(_newplan).State = EntityState.Modified;
                 db.SaveChanges();
+                var _planFeatures = db.PlanFeatures.Where(x => x.PlanID == _newplan.Id).ToList();
+                _planFeatures = _planFeatures == null ? new List<PlanFeatures>() : _planFeatures;
+                foreach (var _item in plans.Features)
+                {
+                    var _isExisting = _planFeatures.Where(x => x.FeatureID == _item.ID).FirstOrDefault();
+                    if (_item.IsSelected && _isExisting == null)
+                    {
+
+                        var _planfeature = new PlanFeatures();
+                        _planfeature.FeatureID = _item.ID;
+                        _planfeature.CreatedDate = DateTime.Now;
+                        _planfeature.UpdatedDate = DateTime.Now;
+                        _planfeature.PlanID = _newplan.Id;
+                        db.PlanFeatures.Add(_planfeature);
+                    }
+                    else if (_isExisting != null)
+                    {
+                        if (!_item.IsSelected)
+                        {
+                            db.PlanFeatures.Remove(_isExisting);
+
+                        }
+                    }
+
+                }
+
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(plans);
         }
 
-        // GET: /Plan/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Plans plans = db.Plans.Find(id);
-            if (plans == null)
-            {
-                return HttpNotFound();
-            }
-            return View(plans);
-        }
+
 
         // POST: /Plan/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            Plans plans = db.Plans.Find(id);
-            db.Plans.Remove(plans);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            try
+            {
+                Plans plans = db.Plans.Find(id);
+                var _suppliers = db.Suppliers.Where(x => x.PlanID == plans.Id).Count();
+                if (_suppliers == 0)
+                {
+
+                    db.Plans.Remove(plans);
+                    db.SaveChanges();
+
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This Plan is currently in use" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
         }
 
         protected override void Dispose(bool disposing)

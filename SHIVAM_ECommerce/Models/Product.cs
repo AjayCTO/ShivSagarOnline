@@ -104,6 +104,7 @@ namespace SHIVAM_ECommerce.Models
         public decimal? highQuantityThreshold { get; set; }
         public int? StatusId { get; set; }
         public bool? IsAvailable { get; set; }
+        public bool IsActive { get; set; }
         public decimal? Discount { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal UnitWeight { get; set; }

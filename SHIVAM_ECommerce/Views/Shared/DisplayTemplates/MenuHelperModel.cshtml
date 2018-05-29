@@ -14,24 +14,24 @@
                 <ul class="nav nav-tabs">
 
                     @*<li class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-home"></i> Home</a>
+                            <a href="javascript:void(0)" class="nav-link"><i class="fe fe-home"></i> Home</a>
 
-                        <div class="nav-submenu nav">
-                            @foreach (var node in Model.Nodes)
-                            {
-                                <a href="@node.Url" class="nav-item ">@node.Title</a>
-
-
-                                if (node.Children.Any())
+                            <div class="nav-submenu nav">
+                                @foreach (var node in Model.Nodes)
                                 {
+                                    <a href="@node.Url" class="nav-item ">@node.Title</a>
 
-                                    @Html.DisplayFor(m => node.Children)
+
+                                    if (node.Children.Any())
+                                    {
+
+                                        @Html.DisplayFor(m => node.Children)
+                                    }
                                 }
-                            }
-                        </div>
-                    </li>*@
+                            </div>
+                        </li>*@
 
-               
+
 
                     @if (Request.IsAuthenticated)
                     {
@@ -41,73 +41,95 @@
                                 <a href="/Category" class="nav-link"><i class="fe fe-box"></i> Category</a>
 
                             </li>
-                            <li class="nav-item">
-                                <a href="/Supplier" class="nav-link"><i class="fe fe-user"></i> Supplier</a>
+                        
+                        <li class="nav-item dropdown">
+                                <a href="javascript:void(0)" class="nav-link"><i class="fe fe-user"></i> Supplier</a>
+                                <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
+                                    <div></div>
+                                    <a href="/Supplier" class="nav-item ">Supplier</a>
+                                  
+
+                         
+                                    <a href="/FeaturedSupplier/" class="nav-item ">Featured Suppliers</a>
+                                </div>
 
                             </li>
-                        
-                         <li class="nav-item">
+
+                            @*<li class="nav-item">
                                 <a href="/Plan" class="nav-link"><i class="fe fe-list"></i> Plans</a>
+
+                            </li>*@
+
+                            <li class="nav-item dropdown">
+                                <a href="javascript:void(0)" class="nav-link"><i class="fe fe-list"></i> Plans</a>
+                                <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
+                                    <div></div>
+                                    <a href="/Plan" class="nav-item ">Plans</a>
+                                  
+
+                         
+                                    <a href="/Features/" class="nav-item ">Features</a>
+                                </div>
 
                             </li>
                         }
                         @*<li class="nav-item">
-                            <a href="/Order" class="nav-link"><i class="fe fe-shopping-cart"></i> Orders</a>
+                                <a href="/Order" class="nav-link"><i class="fe fe-shopping-cart"></i> Orders</a>
 
-                        </li>*@
+                            </li>*@
                         <li class="nav-item">
                             <a href="/Manufacturers" class="nav-link"><i class="fe fe-file-text"></i> Manufacturers</a>
 
                         </li>
 
-    <li class="nav-item dropdown">
-        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-layers"></i> Products</a>
-        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-            <div></div>
-            <a href="/Product/GetAllProducts" class="nav-item ">Product</a>
-            @if (_CurrentUser.IsSuperAdmin)
+                        <li class="nav-item dropdown">
+                            <a href="javascript:void(0)" class="nav-link"><i class="fe fe-layers"></i> Products</a>
+                            <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
+                                <div></div>
+                                <a href="/Product/GetAllProducts" class="nav-item ">Product</a>
+                                @if (_CurrentUser.IsSuperAdmin)
             {
 
-                <a href="/ProductStatus" class="nav-item"> Product Status</a>
-                <a href="/UnitOfMeasures" class="nav-item">Unit of Measure</a>
-                <a href="/ProductAttributes" class="nav-item ">Product Attributes</a>}
-            <a href="/ProductAttributes/AddAttributesForSupplier" class="nav-item ">Add Attributes for Supplier</a>
-        </div>
+            <a href="/ProductStatus" class="nav-item"> Product Status</a>
+            <a href="/UnitOfMeasures" class="nav-item">Unit of Measure</a>
+            <a href="/ProductAttributes" class="nav-item ">Product Attributes</a>}
+                                <a href="/ProductAttributes/AddAttributesForSupplier" class="nav-item ">Add Attributes for Supplier</a>
+                            </div>
 
-    </li>
+                        </li>
 
-    <li class="nav-item dropdown">
-        <a href="/Customer" class="nav-link"><i class="fe fe-users"></i> Customers</a>
-        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-            <a href="/Customer" class="nav-item">Customers</a>
-            <a href="/Order" class="nav-item"> Orders</a>
-        </div>
+                        <li class="nav-item dropdown">
+                            <a href="/Customer" class="nav-link"><i class="fe fe-users"></i> Customers</a>
+                            <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
+                                <a href="/Customer" class="nav-item">Customers</a>
+                                <a href="/Order" class="nav-item"> Orders</a>
+                            </div>
 
-    </li>
+                        </li>
                         <li class="nav-item">
                             <a href="/EmailRecords" class="nav-link"><i class="fe fe-mail"></i>Mail Records </a>
 
                         </li>
-                        
-                        
-                        @*if (_CurrentUser.IsSuperAdmin)
-                        {
-                            <li class="nav-item">
-                                <a href="/ProductStatus" class="nav-link"><i class="fe fe-box"></i> Product Status</a>
 
-                            </li>                           
-                        }*@                      
-                        
+
+                        @*if (_CurrentUser.IsSuperAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a href="/ProductStatus" class="nav-link"><i class="fe fe-box"></i> Product Status</a>
+
+                                </li>
+                            }*@
+
                     }
                 </ul>
             </div>
             <div class="col-3 ml-auto">
                 @*<form class="input-icon">
-                    <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
-                    <div class="input-icon-addon">
-                        <i class="fe fe-search"></i>
-                    </div>
-                </form>*@
+                        <input type="search" class="form-control header-search" placeholder="Search&hellip;" tabindex="1">
+                        <div class="input-icon-addon">
+                            <i class="fe fe-search"></i>
+                        </div>
+                    </form>*@
             </div>
         </div>
     </div>

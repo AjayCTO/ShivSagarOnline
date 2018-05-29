@@ -120,9 +120,13 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 var _a = '<a href="/Plan/Details/' + row.Id + '"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i></a>';
-                                 var _b = '<a onclick="UpdatePlanStatus(' + row.Id + ')"  class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Toggle plan" ><i class="fa fa-check"  align="center"></i></a>';
-                                 return '<a href="/Plan/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a + _b;
+                                 var _a = '<a href="/Plan/Details/' + row.Id + '"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i> Details</a>';
+                                 var _b = '<a onclick="UpdatePlanStatus(' + row.Id + ')" href="#"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Toggle plan" ><i class="fa fa-check"  align="center"></i> Toggle plan</a>';
+                                 var _c = '<a href="/Plan/Edit/' + row.Id + '" class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i> Edit plan</a>  '
+                                 var _d = '<a onclick="DeletePlan(' + row.Id + ')" href="#"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-trash"  align="center"></i> Delete plan</a>  '
+
+
+                                 return '<div class="item-action dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="icon" aria-expanded="false"><i class="fe fe-more-vertical"></i></a><div class="dropdown-menu dropdown-menu-right" x-placement="top-end" style="position: absolute; transform: translate3d(-177px, -139px, 0px); top: 0px; left: 0px; will-change: transform;">' + _c + _a + _b +_d+ '</div></div>';
                              }
                          },
                 ]
@@ -154,5 +158,29 @@
                 });
             }
         }
+        function DeletePlan(Id) {
+            var _confirm = confirm("Are you sure you want to delete this plan ?");
+            if (_confirm) {
+
+                $.ajax({
+                    url: "/Plan/Delete",
+                    data: JSON.stringify({ ID: Id }),
+                    type: 'POSt',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.Success === true) {
+                            _datatable.clear().draw();
+                        } else {
+                            alert("error occurred during operation." + result.ex);
+                        }
+                    },
+                    error: function (req, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        }
+        
     </script>
 }

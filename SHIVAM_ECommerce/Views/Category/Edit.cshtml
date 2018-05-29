@@ -16,7 +16,7 @@
         <h3 class="card-title"><i class="fa fa-plus"></i> Update category</h3>
     </div>
     <div class="card-body">
-      @using (Html.BeginForm("Edit", "Category", FormMethod.Post, 
+        @using (Html.BeginForm("Edit", "Category", FormMethod.Post,
                             new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
@@ -24,7 +24,7 @@
             <div class="form-horizontal">
                 @Html.ValidationSummary(true)
                 @Html.HiddenFor(model => model.Id)
-                @Html.HiddenFor(model=>model.CategoryImage)
+                @Html.HiddenFor(model => model.CategoryImage)
 
                 <div class="row">
                     <div class="col-md-8">
@@ -44,7 +44,17 @@
                                 @Html.ValidationMessageFor(model => model.ParentCategory)
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Show at home</label>
+                            <label class="custom-control custom-checkbox">
+                                @Html.CheckBoxFor(model => model.IsTopCategory,
+       new Dictionary<string, object> { { "class", "custom-control-input" } })
 
+
+                                <span class="custom-control-label"></span>
+                            </label>
+                            
+                        </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3" })
                             <div class="col-md-10">
@@ -60,17 +70,17 @@
 
                         @if (Model.CategoryImage != null)
                         {
-                          <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/" + Model.CategoryImage)" alt="Alternate Text" />   
-                        }      
+                            <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/" + Model.CategoryImage)" alt="Alternate Text" />
+                        }
 
 
                         @if (Model.CategoryImage == null)
                         {
                             <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/no-image.png")" alt="Alternate Text" />
-                        }  
+                        }
 
 
-                        
+
 
                         <div class="form-group">
 
@@ -86,7 +96,7 @@
                     </div>
                 </div>
 
-              
+
 
 
 
@@ -100,9 +110,9 @@
     </div>
 
 
-  
 
-    </div>
+
+</div>
 
 
 @section Scripts {
@@ -118,4 +128,3 @@
 
 
 
- 

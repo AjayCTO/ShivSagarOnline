@@ -124,6 +124,9 @@ namespace SHIVAM_ECommerce.Functions
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", FileName + ".xls"));
             return new FileStreamResult(CsvfileWriter.BaseStream, "application/vnd.ms-excel");
+            //return new FileStreamResult(CsvfileWriter.BaseStream, "text/csv");
+            //return new FileStreamResult(CsvfileWriter.BaseStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
         }
     }
 }

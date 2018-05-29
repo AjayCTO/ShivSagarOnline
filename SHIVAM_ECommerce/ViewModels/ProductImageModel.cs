@@ -13,7 +13,7 @@ namespace SHIVAM_ECommerce.ViewModels
         public double Size { get; set; }
         public byte[] bytestring { get; set; }
 
-
+        public int ID { get; set; }
     }
 
     public class ProductImagesAssignViewModel
