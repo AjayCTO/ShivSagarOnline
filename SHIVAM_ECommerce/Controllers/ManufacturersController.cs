@@ -13,6 +13,7 @@ namespace SHIVAM_ECommerce.Controllers
 {
     public class ManufacturersController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         private IRepository<Manufacturer> _repository = null;
         public ManufacturersController()
@@ -32,7 +33,7 @@ namespace SHIVAM_ECommerce.Controllers
 
         }
 
-     
+
         public ActionResult LoadData()
         {
 
@@ -142,15 +143,33 @@ namespace SHIVAM_ECommerce.Controllers
             return View(manufacturer);
         }
 
-    
 
-        public ActionResult DeleteConfirmed(int id)
+
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            _repository.Save();
-            return RedirectToAction("Index");
-        }
+            try
+            {
+                var _products = db.Products.Where(x => x.ManuFacturerID == id).Count();
+                if (_products == 0)
+                {
 
+                    _repository.Delete(id);
+                    _repository.Save();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This Manufacturer Associated with some product, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

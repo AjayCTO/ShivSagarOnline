@@ -137,28 +137,39 @@ namespace SHIVAM_ECommerce.Controllers
             return View(UM);
         }
 
-        // GET: /Category/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UnitOfMeasures UM = _repository.GetById(id);
-            if (UM == null)
-            {
-                return HttpNotFound();
-            }
-            return View(UM);
-        }
 
-        // POST: /Category/Delete/5
-      
-        public ActionResult DeleteConfirmed(int id)
+
+
+        // GET: /Category/Delete/5
+       
+
+    
+
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            _repository.Save();
-            return RedirectToAction("Index");
+            try
+            {
+                var db=new ApplicationDbContext();
+                var _products = db.Products.Where(x => x.UnitOfMeasuresId == id).Count();
+                if (_products == 0)
+                {
+
+                    _repository.Delete(id);
+                    _repository.Save();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This Unit of measure Associated with some product, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
         }
 
         protected override void Dispose(bool disposing)

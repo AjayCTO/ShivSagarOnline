@@ -116,7 +116,7 @@ namespace SHIVAM_ECommerce.Controllers
         {
             try
             {
-                SupplierID = CurrentUserData.SupplierID;
+                SupplierID = CurrentUserData.IsSuperAdmin == true ? SupplierID : CurrentUserData.SupplierID;
                 var ctx = new ApplicationDbContext();
                 var _List = new List<object>();
                 using (var cmd = ctx.Database.Connection.CreateCommand())

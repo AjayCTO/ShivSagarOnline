@@ -65,6 +65,7 @@ namespace SHIVAM_ECommerce.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string AttributeName { get; set; }
 
         public string AttributeDescription { get; set; }
@@ -86,6 +87,8 @@ namespace SHIVAM_ECommerce.Models
     public class UnitOfMeasures
     {
         public int Id { get; set; }
+
+        [Required]
         public string UnitOfMeasuresName { get; set; }
 
 

@@ -109,8 +109,8 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 var _a = '<a href="/FeaturedSupplier/Details/' + row.Id + '"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i> Details</a>';
-                                 var _c = '<a href="/FeaturedSupplier/Edit/' + row.Id + '" class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i> Edit Featured Supplier</a>  '
+                                 var _a = '<a href="/FeaturedSupplier/Details?id=' + row.Id + '"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i> Details</a>';
+                                 var _c = '<a href="/FeaturedSupplier/Edit?id=' + row.Id + '" class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i> Edit Featured Supplier</a>  '
                                  var _d = '<a onclick="DeleteFeaturedSupplier(' + row.Id + ')" href="#"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-trash"  align="center"></i> Delete Featured Supplier</a>  '
 
 
@@ -129,9 +129,9 @@
             if (_confirm) {
 
                 $.ajax({
-                    url: "/Plan/Delete",
+                    url: "/FeaturedSupplier/Delete",
                     data: JSON.stringify({ ID: Id }),
-                    type: 'POSt',
+                    type: 'POST',
                     contentType: 'application/json',
                     dataType: 'json',
                     success: function (result) {

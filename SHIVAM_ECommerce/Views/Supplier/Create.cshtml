@@ -28,7 +28,7 @@
                     <div class="row">
                         @foreach (var items in allplans)
                         {
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="card">
                                     <input type="hidden" class="getid_@items.Sort" value="@items.Id" />
 
@@ -164,9 +164,10 @@
                                         <div class="form-group">
                                             <label>Logo</label>
                                             <div class="custom-file">
-                                                <input type="file" multiple class="custom-file-input form-control" name="file" id="file" accept="image/*">
+                                                <input type="file"  class="custom-file-input form-control" name="file" id="file" accept="image/*">
                                                 <label class="custom-file-label">Choose file</label>
                                             </div>
+                                            <div class="gallery"></div>
                                         </div>
                                     </div>
 
@@ -252,8 +253,8 @@
                         <div class="row">
                             <div class="form-group">
 
-                                <input type="submit" value="Submit" class="btn btn-primary" />
-                                <input type="button" value="back to plan" class="btn btn-info back" />
+                                <button type="submit" value="Submit" class="btn btn-primary" > <i class="fa fa-check"></i> Submit</button>
+                                <a class="btn btn-secondary btn-gray" href="/Supplier"><i class="fa fa-times"></i> Cancel</a>
 
 
                             </div>

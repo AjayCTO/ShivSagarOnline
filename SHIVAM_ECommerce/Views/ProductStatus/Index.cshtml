@@ -68,8 +68,8 @@
                              "orderable": false,
                              "mRender": function (data, type, row) {
                                  debugger;
-                                 var _a = '<a onclick="DeleteStatus(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
-                                 return '<a href="/ProductStatus/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
+                                 var _a = '<a onclick="DeleteStatus(' + row.Id + ')"  class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                                 return '<a href="/ProductStatus/Edit?id=' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
                              }
                          },
                 ]

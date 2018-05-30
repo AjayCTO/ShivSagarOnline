@@ -43,8 +43,13 @@
 
                     <label class="control-label col-md-2">  Image Path </label>
 
-                    <div class="col-md-10">
-                        <input type="file" name="ImagePath" id="ImagePath" value=" " />
+                    <div class="col-md-4">
+                        @*<input type="file" name="ImagePath" id="ImagePath" value=" " />*@
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input form-control" name="ImagePath" id="ImagePath" accept="image/*">
+                            <label class="custom-file-label">Choose file</label>
+                        </div>
+                        <div class="gallery"></div>
                         @Html.ValidationMessageFor(model => model.ImagePath)
                     </div>
                 </div>
@@ -70,8 +75,8 @@
 
                 <div class="form-group">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-space">Create</button>
-                        <button type="reset" class="btn btn-secondary btn-space">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-space"><i class="fa fa-check"></i> Create</button>
+                        <a class="btn btn-secondary btn-gray" href="/FeaturedSupplier"><i class="fa fa-times"></i> Cancel</a>
                     </div>
 
                 </div>

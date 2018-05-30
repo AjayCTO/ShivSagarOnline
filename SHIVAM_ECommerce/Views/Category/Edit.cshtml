@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-plus"></i> Update category</h3>
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Update category</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm("Edit", "Category", FormMethod.Post,
@@ -45,15 +45,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Show at home</label>
-                            <label class="custom-control custom-checkbox">
-                                @Html.CheckBoxFor(model => model.IsTopCategory,
+                            <div class="col-md-10">
+                                <label class="custom-control custom-checkbox">
+                                    @Html.CheckBoxFor(model => model.IsTopCategory,
        new Dictionary<string, object> { { "class", "custom-control-input" } })
 
 
-                                <span class="custom-control-label"></span>
-                            </label>
-                            
+                                    <span class="custom-control-label">Show at home</span>
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-3" })
@@ -86,7 +86,13 @@
 
                             <div class="col-md-10">
                                 <label for="file">Upload Image:</label>
-                                <input type="file" name="file" id="file" style="width: 100%;" />
+                                @*<input type="file" name="file" id="file" style="width: 100%;" />*@
+                                <div class="custom-file">
+                                    <input type="file"  class="custom-file-input form-control" name="file" id="file" accept="image/*">
+                                    <label class="custom-file-label">Choose file</label>
+                                </div>
+
+                                <div class="gallery"></div>
                             </div>
 
 
@@ -102,7 +108,8 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button class="btn btn-default" type="submit"> <i class="fa fa-pencil"></i> Update</button>
+                        <button class="btn btn-primary" type="submit"> <i class="fa fa-check"></i> Update</button>
+                        <a class="btn btn-secondary btn-gray" href="/Category"> <i class="fa fa-times"></i> Cancel</a>
                     </div>
                 </div>
             </div>

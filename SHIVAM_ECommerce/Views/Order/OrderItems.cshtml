@@ -14,7 +14,7 @@
             <span class="text-muted">   @Html.DisplayNameFor(model => model.Order.OrderNumber) </span>
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Product.ProductName)
+        Product Name
         </th>
 
         <th>
@@ -44,7 +44,7 @@
                 @Html.DisplayFor(modelItem => item.Order.OrderNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.ProductName)
+                @Html.DisplayFor(modelItem => item.ProductAttributeWithQuantity.Product.ProductName)
             </td>
 
             <td>

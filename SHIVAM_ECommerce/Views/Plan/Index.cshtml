@@ -99,11 +99,11 @@
                             },
                             {
 
-                                "data": "MonthlyPrice", "name": "MonthlyPrice", "autoWidth": true
+                                "data": "TotalMonthlyPrice", "name": "TotalMonthlyPrice", "autoWidth": true
                             },
                             {
 
-                                "data": "YearlyPrice", "name": "YearlyPrice", "autoWidth": true
+                                "data": "TotalYearlyPrice", "name": "TotalYearlyPrice", "autoWidth": true
                             },
                              {
 
@@ -120,9 +120,9 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 var _a = '<a href="/Plan/Details/' + row.Id + '"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i> Details</a>';
+                                 var _a = '<a href="/Plan/Details?id=' + row.Id + '"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i> Details</a>';
                                  var _b = '<a onclick="UpdatePlanStatus(' + row.Id + ')" href="#"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Toggle plan" ><i class="fa fa-check"  align="center"></i> Toggle plan</a>';
-                                 var _c = '<a href="/Plan/Edit/' + row.Id + '" class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i> Edit plan</a>  '
+                                 var _c = '<a href="/Plan/Edit?id=' + row.Id + '" class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i> Edit plan</a>  '
                                  var _d = '<a onclick="DeletePlan(' + row.Id + ')" href="#"  class="dropdown-item" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-trash"  align="center"></i> Delete plan</a>  '
 
 

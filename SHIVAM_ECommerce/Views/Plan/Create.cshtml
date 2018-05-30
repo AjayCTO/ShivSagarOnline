@@ -130,13 +130,12 @@
 
                         @for (int i = 0; i < Model.Features.Count(); i++)
                             {
-                            <label>@Model.Features[i].title</label>
                             <label class="custom-control custom-checkbox">
                                 @Html.CheckBoxFor(m => m.Features[i].IsSelected,
        new Dictionary<string, object> { { "data-price", Model.Features[i].price }, { "class", "custom-control-input" } })
 
 
-                                <span class="custom-control-label"></span>
+                                <span class="custom-control-label">@Model.Features[i].title</span>
                             </label>
                             @Html.HiddenFor(m => m.Features[i].ID)
                             }
@@ -151,7 +150,12 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2  ">
-                        <input type="submit" value="Create" class="btn btn-default" />
+                        <button type="submit"  class="btn btn-primary">
+                            <i class="fa fa-check"></i>
+                            Create
+                            </button>
+                        
+                        <a class="btn btn-secondary btn-gray" href="/Plan"> <i class="fa fa-times" ></i> Cancel</a>
                     </div>
                 </div>
             </div>

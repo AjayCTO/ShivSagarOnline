@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Index";
-   
+
 }
 
 <ol class="breadcrumb">
@@ -15,7 +15,7 @@
 <div class="card">
     <div class="card-header">
 
-        <h3 class="card-title"><i class="fa fa-list"></i> Categories </h3>
+        <h3 class="card-title"><i class="fe fe-box"></i> Categories </h3>
         <div class="flex-fill text-right">
             <a href="/Category/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Category</a>
         </div>
@@ -38,89 +38,85 @@
 
 @section scripts{
 
-    
+
 
     <script>
+        var _dataTable = "";
+        var Imagepath = @Url.Content("~/CategoryImage/")
+        $(document).ready(function () {
+            _dataTable= $("#myTable").DataTable({
+                "processing": true, // for show progress bar
+                "serverSide": true, // for process server side
+                "filter": true, // this is for disable filter (search box)
+                "orderMulti": false, // for disable multiple column at once
+                "ajax": {
+                    "url": "/Category/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
 
-    var Imagepath = @Url.Content("~/CategoryImage/")
-    $(document).ready(function () {
-        $("#myTable").DataTable({
-            "processing": true, // for show progress bar
-            "serverSide": true, // for process server side
-            "filter": true, // this is for disable filter (search box)
-            "orderMulti": false, // for disable multiple column at once
-            "ajax": {
-                "url": "/Category/LoadData",
-                "type": "POST",
-                "datatype": "json"
-            },
-            "columns": [
-
-                 {
-
-                     "mRender": function (data, type, row) {
-                         debugger;
-
-                         if (row.CategoryImage != null) {
-                             var _img = '<img style="height:50px; width:50px; border-radius:100%;" src="' + Imagepath + row.CategoryImage + ' "></img>';
-                         }
-
-                         else {
-                             var _img = '<img style="height:50px; width:50px; border-radius:100%;" src="' + Imagepath + "no-image.png" + '  "></img>';
-
-                         }
-
-                       
-                         return _img;
-                     }
-                 },
-
-                    {
-
-                        "data": "CategoryName", "name": "CategoryName", "autoWidth": true
-                    },
                      {
-                         "orderable": false,
+
                          "mRender": function (data, type, row) {
                              debugger;
-                             var _a = '<a onclick="DeleteCategory(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
-                             return '<a href="/Category/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
+
+                             if (row.CategoryImage != null) {
+                                 var _img = '<img style="height:50px; width:50px; border-radius:100%;" src="' + Imagepath + row.CategoryImage + ' "></img>';
+                             }
+
+                             else {
+                                 var _img = '<img style="height:50px; width:50px; border-radius:100%;" src="' + Imagepath + "no-image.png" + '  "></img>';
+
+                             }
+
+
+                             return _img;
                          }
                      },
-            ]
-        });
-    });
 
-    function DeleteCategory(Id) {
-        var _confirm = confirm("Are you sure you want to delete this CategoryName ?");
-        if (_confirm) {
+                        {
 
-            $.ajax({
-                url: "/Category/DeleteConfirmed?id=" + Id,
-                //data: JSON.stringify({ id: Id }),
-                type: 'GET',
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function (result) {
-                    if (result.Success === true) {
-                        toastr.success("Category Deleted Successfully");
-                        // $("#myTable").DataTable().fnDraw();
-                        $("#myTable").DataTable().clear().draw();
-                    } else {
-                        alert("error occurred during operation.");
-                    }
-                },
-                error: function (req, status, error) {
-                    alert(error);
-                }
+                            "data": "CategoryName", "name": "CategoryName", "autoWidth": true
+                        },
+                         {
+                             "orderable": false,
+                             "mRender": function (data, type, row) {
+                                 var _a = '<a onclick="DeleteCategory(' + row.Id + ')"  class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                                 return '<a href="/Category/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
+                             }
+                         },
+                ]
             });
+        });
+
+        function DeleteCategory(Id) {
+            var _confirm = confirm("Are you sure you want to delete this CategoryName ?");
+            if (_confirm) {
+
+                $.ajax({
+                    url: "/Category/Delete",
+                    data: JSON.stringify({ id: Id }),
+                    type: 'POSt',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.Success === true) {
+                            // $("#myTable").DataTable().fnDraw();
+                            _dataTable.clear().draw();
+                        } else {
+                            alert("error occurred during operation. " + result.ex);
+                        }
+                    },
+                    error: function (req, status, error) {
+                        alert(error);
+                    }
+                });
+            }
         }
-    }
 
 
     </script>
-
-
 }
 
 

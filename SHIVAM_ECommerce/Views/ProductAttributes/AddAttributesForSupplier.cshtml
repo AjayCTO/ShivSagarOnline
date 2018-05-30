@@ -21,7 +21,7 @@
                     <hr />
 
                 </div>
-              
+
                 <div class="row">
 
                     <div class="col-md-12">
@@ -47,7 +47,12 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button type="button" ng-click="AddAttributes()" class="btn btn-primary">Save Attribute</button>
+
+            <div class="form-group">
+
+                <button type="button" ng-disabled="CurrentSupplier==''" ng-click="AddAttributes()" class="btn btn-primary"> <i class="fa fa-check"></i> Save Attribute</button>
+                    <a href="/ProductAttributes" class="btn btn-gray"> <i class="fa fa-times"></i> Cancel</a>
+            </div>
         </div>
 
     </div>
@@ -57,7 +62,7 @@
 @section scripts
 {
     <script>
-        var _supplierID='@_CurrentUser.SupplierID';
+        var _supplierID = '@_CurrentUser.SupplierID';
     </script>
     <link href="~/Content/toaster.css" rel="stylesheet" />
     <script src="~/Scripts/angular.js"></script>

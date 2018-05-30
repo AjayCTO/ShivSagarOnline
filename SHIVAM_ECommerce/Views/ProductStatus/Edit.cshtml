@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-plus"></i> Update Product Status</h3>
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Update Product Status</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm("Edit", "ProductStatus", FormMethod.Post,
@@ -37,10 +37,14 @@
                         </div>
                        
                         <div class="form-group">
-                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label col-md-3" })
                             <div class="col-md-10">
-                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control col-md-10" })
-                                @Html.ValidationMessageFor(model => model.IsActive)
+                                <label class="custom-control custom-checkbox">
+                                    @Html.CheckBoxFor(model => model.IsActive,
+       new Dictionary<string, object> { { "class", "custom-control-input" } })
+
+
+                                    <span class="custom-control-label">Active</span>
+                                </label>
                             </div>
                         </div>
                        
@@ -49,7 +53,9 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button class="btn btn-default" type="submit"> <i class="fa fa-pencil"></i> Update</button>
+                     
+                        <button type="submit" class="btn btn-primary btn-space"><i class="fa fa-check"></i> Update</button>
+                        <a href="/ProductStatus" class="btn btn-gray"><i class="fa fa-times"></i> Cancel</a>
                     </div>
                 </div>
             </div>

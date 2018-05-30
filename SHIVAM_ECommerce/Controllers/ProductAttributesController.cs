@@ -15,7 +15,7 @@ namespace SHIVAM_ECommerce.Controllers
     {
         private IRepository<ProductAttributes> _repository = null;
         private IRepository<ProductAttributesRelation> _ProductAttributeRelationrepository = null;
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         public ProductAttributesController()
         {
             this._repository = new Repository<ProductAttributes>();
@@ -42,7 +42,7 @@ namespace SHIVAM_ECommerce.Controllers
 
         }
 
-      
+
         public ActionResult AddAttributesForSupplier()
         {
             return View();
@@ -194,28 +194,34 @@ namespace SHIVAM_ECommerce.Controllers
             return View(PA);
         }
 
-        // GET: /Category/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProductAttributes PA = _repository.GetById(id);
-            if (PA == null)
-            {
-                return HttpNotFound();
-            }
-            return View(PA);
-        }
+
 
         // POST: /Category/Delete/5
 
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            _repository.Save();
-            return RedirectToAction("Index");
+            try
+            {
+                var _products = db.ProductAttributesRelation.Where(x => x.ProductAttributesId == id).Count();
+                if (_products == 0)
+                {
+
+                    _repository.Delete(id);
+                    _repository.Save();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This attribute Associated with some product, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
         }
 
         protected override void Dispose(bool disposing)

@@ -154,7 +154,7 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 var _a = '<a onclick="ChangePaymentStatus(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" ><i class="fa fa-money"  align="center"></i></a> <a href="/Order/Details/' + row.Id + '"   class="btn btn-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-info-circle"  align="center"></i></a> ';
+                                 var _a = '<a onclick="ChangePaymentStatus(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" ><i class="fa fa-money"  align="center"></i></a> <a href="/Order/Details?id=' + row.Id + '"   class="btn btn-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-info-circle"  align="center"></i></a> ';
                                  return _a + '<a href="#" class="btn btn-primary" onclick="GetOrderItems(' + row.Id + ')" data-toggle="tooltip" data-placement="top" title="" data-original-title="Order Items"><i class="fa fa-list"  align="center"></i></a>  ';
                              }
                          },

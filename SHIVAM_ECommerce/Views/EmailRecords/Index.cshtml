@@ -30,7 +30,7 @@
                     <th>Send Date</th>
                     <th>Subject</th>
                     <th>Message</th>
-                    <th>Action</th>
+                    @*<th>Action</th>*@
                   
                 </tr>
             </thead>
@@ -80,15 +80,15 @@
 
                            "data": "message", "name": "message", "autoWidth": true
                        },
-                       {
-                           "orderable": false,
-                           "mRender": function (data, type, row) {
-                               debugger;
-                               var _a ='<a onclick="DeleteCustomer(' + row.id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
-
-                               return '<a href="/EmailRecords/Edit/' + row.id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  '+_a ;
-                           }
-                       },
+                       //{
+                       //    "orderable": false,
+                       //    "mRender": function (data, type, row) {
+                       //        debugger;
+                       //        var _a ='<a onclick="DeleteCustomer(' + row.id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                       //        //'<a href="/EmailRecords/Edit?' + row.id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  '
+                       //        return "" ;
+                       //    }
+                       //},
             ]
         });
     });

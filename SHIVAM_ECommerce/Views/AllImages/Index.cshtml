@@ -23,8 +23,11 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <input class="btn btn-primary" type="submit" value="Upload" disabled />
-                    <button type="button" class="btn btn-danger" id="delete" > Delete </button>
+                    <button class="btn btn-primary" type="submit" value="Upload" disabled>
+                        <i class="fa fa-upload"></i>
+                        Upload
+                        </button>
+                    <button type="button" class="btn btn-danger" id="delete"> <i class="fa fa-trash"></i> Delete </button>
 
                 </div>
             </div>
@@ -53,7 +56,7 @@
             <div class="d-flex align-items-center px-2">
                 <label class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" class="custom-control-input" name="example-inline-checkbox1" value="@item.Id">
-                    <span class="custom-control-label">Check to remove</span>
+                    <span class="custom-control-label">Select</span>
                 </label>
             </div>
         </div>
@@ -84,11 +87,24 @@
 
     });
 
+    function RemoveCheck(id)
+    {
+        var _tempArray = selectedIDs;
+        for (var i = 0; i < _tempArray.length; i++) {
+            if(_tempArray[i]==id)
+            {
+                selectedIDs.splice(i, 1);
+            }
+        }
+    }
 
     var selectedIDs = new Array();
     $('input:checkbox.custom-control-input').click(function () {
         if ($(this).prop('checked')) {
             selectedIDs.push($(this).val());
+        }
+        else {
+            RemoveCheck($(this).val());
         }
 
 
@@ -137,42 +153,39 @@
 
     $(function () {
         // Multiple images preview in browser
-        var imagesPreview = function (input, placeToInsertImagePreview) {
+        //var imagesPreview = function (input, placeToInsertImagePreview) {
 
 
-            var files = $('#file1')[0].files;
+        //    var files = $('#file1')[0].files;
 
 
 
-            if (input.files) {
-                var filesAmount = input.files.length;
+        //    if (input.files) {
+        //        var filesAmount = input.files.length;
 
-                for (i = 0; i < filesAmount; i++) {
-                    var reader = new FileReader();
+        //        for (i = 0; i < filesAmount; i++) {
+        //            var reader = new FileReader();
 
-                    reader.onload = function (event) {
-                        $($.parseHTML('<img style="height:50px; width:50px; margin-right:10px; margin-top:5px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
-                    }
+        //            reader.onload = function (event) {
+        //                $($.parseHTML('<img style="height:50px; width:50px; margin-right:10px; margin-top:5px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+        //            }
 
-                    reader.readAsDataURL(input.files[i]);
-                }
-            }
+        //            reader.readAsDataURL(input.files[i]);
+        //        }
+        //    }
 
-        };
+        //};
 
-        $('#file1').on('change', function () {
-            imagesPreview(this, 'div.gallery');
-        });
+        //$('#file1').on('change', function () {
+        //    imagesPreview(this, 'div.gallery');
+        //});
     });
 </script>
 
 <style>
     #delete {
 
-        position:fixed;
-        z-index:100;
-        right:50px;
-        bottom:50px;
+ 
         display:none;
         
     }

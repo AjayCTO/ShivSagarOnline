@@ -15,7 +15,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-plus"></i> Edit Feature</h3>
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Edit Feature</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm("Edit", "Features", FormMethod.Post,
@@ -57,9 +57,18 @@
 
 
 
+         
+
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-default" />
+                        <button type="submit" value="Create" class="btn btn-primary">
+                            <i class="fa fa-check"></i>
+                            Update
+                        </button>
+                        <a href="/Features" class="btn btn-gray">
+                            <i class="fa fa-times"></i>
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>

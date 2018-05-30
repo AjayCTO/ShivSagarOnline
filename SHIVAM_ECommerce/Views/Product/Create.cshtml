@@ -128,8 +128,13 @@
 
                 <div class="card-footer">
                     <div class="btn-list text-left">
-                        <input type="button" ng-disabled="!IsValidProduct()" ng-click="SaveProduct()" class="btn btn-primary" value="Save changes" />
-                        <input type="reset" class="btn btn-secondary" value="Cancel changes" />
+                        <button type="button" ng-disabled="!IsValidProduct()" ng-click="SaveProduct()" class="btn btn-primary">
+                            <i class="fa fa-check"></i>
+                            Save changes
+                            </button>
+                       
+                        
+                        <a href="/Product/GetAllProducts" class="btn btn-gray"> <i class="fa fa-times"></i> Cancel</a>
 
                     </div>
 
@@ -139,9 +144,7 @@
 
     </div>
 </div>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section scripts
 {

@@ -1,5 +1,4 @@
-﻿
-@model SHIVAM_ECommerce.ViewModels.ProductViewmodel
+﻿@model SHIVAM_ECommerce.ViewModels.ProductViewmodel
 
 @{
     ViewBag.Title = "Edit";
@@ -42,13 +41,13 @@
                                         </div>
                                     </div>
                                     @*<div class="col-sm-6 col-md-4">
-                                        <div class="form-group">
-                                            <label class="form-label">Product Price</label>
+                                            <div class="form-group">
+                                                <label class="form-label">Product Price</label>
 
-                                            <input type="text" ng-model="ProductObject.ProductPrice" class="form-control" />
+                                                <input type="text" ng-model="ProductObject.ProductPrice" class="form-control" />
 
-                                        </div>
-                                    </div>*@
+                                            </div>
+                                        </div>*@
 
                                     <div class="col-sm-6 col-md-6">
                                         <div class="form-group">
@@ -62,9 +61,7 @@
                                         <div class="form-group mb-0">
                                             <label class="form-label">Description</label>
 
-                                            <textarea rows="6" class="form-control" ng-model="ProductObject.Description" placeholder="Here can be your description">
-
-                                            </textarea>
+                                            <textarea rows="6" class="form-control" ng-model="ProductObject.Description" placeholder="Here can be your description"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -132,9 +129,11 @@
 
                 <div class="card-footer">
                     <div class="btn-list text-left">
-                        <input type="button" ng-disabled="!IsValidProduct()" ng-click="EditProduct()" class="btn btn-primary" value="Save changes" />
-                        <input type="reset" class="btn btn-secondary" value="Cancel changes" />
+                        <button type="button" ng-disabled="!IsValidProduct()" ng-click="EditProduct()" class="btn btn-primary" value="Save">
+                            <i class="fa fa-check"> Save</i>
+                        </button>
 
+                        <a href="/Product/GetAllProducts" class="btn btn-gray"><i class="fa fa-times"></i>  Cancel</a>
                     </div>
 
                 </div>
@@ -143,18 +142,14 @@
 
     </div>
 </div>
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section scripts
 {
-<script>
-    var _productData = '@Html.Raw(Json.Encode(Model))';
+    <script>
+        var _productData = '@Html.Raw(Json.Encode(Model))';
 
-    console.log(_productData);
 
-</script>
+    </script>
     <link href="~/Content/toaster.css" rel="stylesheet" />
 
     <script src="~/Scripts/angular.js"></script>

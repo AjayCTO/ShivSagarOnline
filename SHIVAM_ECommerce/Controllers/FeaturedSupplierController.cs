@@ -156,7 +156,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                     featuredsupplier.ImagePath = pic;
 
-                   
+
                 }
                 db.Entry(featuredsupplier).State = EntityState.Modified;
                 db.SaveChanges();
@@ -166,32 +166,25 @@ namespace SHIVAM_ECommerce.Controllers
             return View(featuredsupplier);
         }
 
-        // GET: /FeaturedSupplier/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            FeaturedSupplier featuredsupplier = db.FeaturedSuppliers.Find(id);
-            if (featuredsupplier == null)
-            {
-                return HttpNotFound();
-            }
-            return View(featuredsupplier);
-        }
 
-        // POST: /FeaturedSupplier/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            FeaturedSupplier featuredsupplier = db.FeaturedSuppliers.Find(id);
-            db.FeaturedSuppliers.Remove(featuredsupplier);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
+        // POST: /Featured/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                FeaturedSupplier featuredsupplier = db.FeaturedSuppliers.Find(id);
+                db.FeaturedSuppliers.Remove(featuredsupplier);
+                db.SaveChanges();
+                return Json(new { Success = true, ex = "" });
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

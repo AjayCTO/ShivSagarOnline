@@ -69,7 +69,7 @@ namespace SHIVAM_ECommerce.Controllers
 
             recordsTotal = v.Count();
             var data = v.Skip(skip).Take(pageSize).ToList();
-            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.PlanName, PlanFrequency = x.PlanFrequency == "1" ? "Monthly" : "Yearly", x.Plancode, x.ProductBucketCount, x.UserBucketCount, x.Description, x.IsActive, x.MonthlyPrice, x.YearlyPrice }) }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.PlanName, PlanFrequency = x.PlanFrequency == "1" ? "Monthly" : "Yearly", x.Plancode, x.ProductBucketCount, x.UserBucketCount, x.Description, x.IsActive, x.MonthlyPrice, x.YearlyPrice, x.TotalYearlyPrice, x.TotalMonthlyPrice }) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -80,7 +80,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Plans plans = db.Plans.Find(id);
+            Plans plans = db.Plans.Include(x=>x.Features).Where(x=>x.Id==id).FirstOrDefault();
             if (plans == null)
             {
                 return HttpNotFound();

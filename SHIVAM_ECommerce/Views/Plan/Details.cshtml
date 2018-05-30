@@ -4,119 +4,191 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Plans</h4>
-	<hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.PlanName)
-        </dt>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/Plan">Plan</a>
+    </li>
+    <li class="breadcrumb-item active">Plan Details</li>
+</ol>
 
-        <dd>
-            @Html.DisplayFor(model => model.PlanName)
-        </dd>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-list"></i>Plan Detail </h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.PlanName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Plancode)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Plancode)
-        </dd>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.PlanName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PlanFrequency)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PlanFrequency)
-        </dd>
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.MonthlyPrice)
-        </dt>
+                <td>
+                    @Html.DisplayNameFor(model => model.Plancode)
 
-        <dd>
-            @Html.DisplayFor(model => model.MonthlyPrice)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.YearlyPrice)
-        </dt>
+                </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.YearlyPrice)
-        </dd>
+                <td>
+                    @Html.DisplayFor(model => model.Plancode)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductBucketCount)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ProductBucketCount)
-        </dd>
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
+            </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.PlanFrequency)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserBucketCount)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserBucketCount)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdatedDate)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UpdatedDate)
-        </dd>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.PlanFrequency)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Sort)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Sort)
-        </dd>
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <td>
+                    @Html.DisplayNameFor(model => model.MonthlyPrice)
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
+                </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
+                <td>
+                    @Html.DisplayFor(model => model.MonthlyPrice)
 
-    </dl>
+
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.YearlyPrice)
+
+
+
+
+
+
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.YearlyPrice)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(model => model.ProductBucketCount)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.ProductBucketCount)
+
+
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.IsActive)
+
+
+
+
+
+
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.IsActive)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(model => model.UserBucketCount)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.UserBucketCount)
+
+
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.TotalMonthlyPrice)
+
+
+
+
+
+
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.TotalMonthlyPrice)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayNameFor(model => model.TotalYearlyPrice)
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => model.TotalYearlyPrice)
+
+
+                </td>
+
+            </tr>
+        </table>
+
+
+        @if (Model.Features.Count() > 0)
+        {
+
+            <h4>Features</h4>
+            <table class="table card-table">
+                <tbody>
+                    @foreach(var item in Model.Features)
+                    {
+
+                    <tr>
+                        <td>@item.Feature.Title</td>
+                        <td class="text-right">
+                            <span class="badge badge-success">@item.Feature.Price</span>
+                        </td>
+                    </tr>
+
+
+
+
+                    }
+                </tbody>
+            </table>
+        }
+
+
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

@@ -2,7 +2,7 @@
 @model SHIVAM_ECommerce.Models.FeaturedSupplier
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Edit";
 }
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-plus"></i> Update  Featured Supplier</h3>
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Update  Featured Supplier</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm("Edit", "FeaturedSupplier", FormMethod.Post,
@@ -68,7 +68,9 @@
 
                     @if (Model.ImagePath != null)
                     {
-                        <img style="height:100px; width:100px;" src="@Url.Content("~/FeaturedImages/" + Model.ImagePath)" alt="Alternate Text" />
+                        <img style="height:100px; width:100px;" id="SupplierImage" src="@Url.Content("~/FeaturedImages/" + Model.ImagePath)" alt="Alternate Text" />
+                        <br /><br />
+                        <button type="button" class="btn btn-danger removeImage" onclick="RemoveImage()"><i class="fa fa-times"></i> Remove Image</button>
                     }
 
 
@@ -84,7 +86,12 @@
 
                         <div class="col-md-10">
                             <label for="file">Upload Image:</label>
-                            <input type="file" name="file" id="file" style="width: 100%;" />
+                            @*<input type="file" name="file" id="file" style="width: 100%;" />*@
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input form-control" name="file" id="file" >
+                                <label class="custom-file-label">Choose file</label>
+                            </div>
+                            <div class="gallery"></div>
                         </div>
 
 
@@ -99,8 +106,8 @@
 
                 <div class="form-group">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary btn-space">Update</button>
-                        <button type="reset" class="btn btn-secondary btn-space">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-space"> <i class="fa fa-check"></i> Update</button>
+                        <a class="btn btn-secondary btn-gray" href="/FeaturedSupplier"><i class="fa fa-times"></i> Cancel</a>
                     </div>
 
                 </div>
@@ -112,9 +119,26 @@
 
 @section Scripts {
 
+<style>
+    /*.removeImage {
+        position: absolute;
+        height: 30px;
+        width: 30px;
+        border-radius: 100%;
+        padding: 0px !important;
+        text-align: center;
+        top: 33px;
+        right: 236px;
+    }*/
+</style>
 
     <script>
         $("select").addClass("form-control col-md-5")
+        function RemoveImage() {
+            $("#SupplierImage").remove();
+            $(".removeImage").hide();
+            $("#ImagePath").val("");
+        }
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")

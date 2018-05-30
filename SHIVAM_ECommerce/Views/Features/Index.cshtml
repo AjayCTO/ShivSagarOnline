@@ -95,9 +95,9 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 var _b = '  <a onclick="DeleteFeature(' + row.Id + ')"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
-                                 var _a = '<a href="/Features/Details/' + row.Id + '"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i></a>';
-                                 return '<a href="/Features/Edit/' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a + _b;
+                                 var _b = '  <a onclick="DeleteFeature(' + row.Id + ')"  class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
+                                 var _a = '<a href="/Features/Details?id=' + row.Id + '"  class="btn btn-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="Details" ><i class="fa fa-list"  align="center"></i></a>';
+                                 return '<a href="/Features/Edit?id=' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a + _b;
                              }
                          },
                 ]

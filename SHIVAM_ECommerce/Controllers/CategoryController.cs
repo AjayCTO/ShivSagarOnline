@@ -15,7 +15,7 @@ namespace SHIVAM_ECommerce.Controllers
     public class CategoryController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-      
+
         private IRepository<Category> _repository = null;
         public CategoryController()
         {
@@ -31,7 +31,7 @@ namespace SHIVAM_ECommerce.Controllers
 
         public JsonResult AllCategories()
         {
-            var categories = _repository.GetAll().Where(p=>p.IsActive==true).Select(p => new { Name = p.CategoryName, Id = p.Id });
+            var categories = _repository.GetAll().Where(p => p.IsActive == true).Select(p => new { Name = p.CategoryName, Id = p.Id });
             return Json(categories.ToList(), JsonRequestBehavior.AllowGet);
 
         }
@@ -61,7 +61,7 @@ namespace SHIVAM_ECommerce.Controllers
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-             // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                // v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -195,28 +195,34 @@ namespace SHIVAM_ECommerce.Controllers
             return View(category);
         }
 
-        // GET: /Category/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category category = _repository.GetById(id);
-            if (category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(category);
-        }
+
 
         // POST: /Category/Delete/5
-      
-        public ActionResult DeleteConfirmed(int id)
+
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            _repository.Delete(id);
-            _repository.Save();
-            return RedirectToAction("Index");
+            try
+            {
+                var _products = db.Products.Where(x => x.CateogryID == id).Count();
+                if (_products == 0)
+                {
+
+                    _repository.Delete(id);
+                    _repository.Save();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This Category Associated with some product, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
         }
 
         protected override void Dispose(bool disposing)

@@ -159,7 +159,12 @@
 
                                     <div class="col-md-12">
 
-                                        <input type="file" name="file" id="file" />
+                                        @*<input type="file" name="file" id="file" />*@
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input form-control" name="file" id="file" accept="image/*">
+                                            <label class="custom-file-label">Choose file</label>
+                                        </div>
+                                        <div class="gallery"></div>
                                     </div>
 
 
@@ -203,7 +208,8 @@
 
     </div>
 
-    <input type="submit" class="btn btn-default" value="Update">
+     <button type="submit" value="Submit" class="btn btn-primary" > <i class="fa fa-check"></i> Update</button>
+        <a class="btn btn-secondary btn-gray" href="/Supplier"> <i class="fa fa-times"></i> Cancel</a>
 
 }
 
