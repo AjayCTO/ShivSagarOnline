@@ -51,6 +51,8 @@
         $scope.Title = "Add New Product";
 
 
+      
+
         $scope.CurrentSupplier = { Id: 0, Name: "" };
         $scope.Suppliers = [];
         $scope.UnitsOfMeasureList = [];
@@ -142,6 +144,17 @@
         };
 
 
+
+        $scope.CheckColumn = function (ID) {
+            for (var i = 0; i < $scope.ProductAttributes.length; i++) {
+                if ($scope.ProductAttributes[i].Id == ID) {
+                    return true;
+
+                }
+            }
+
+            return false;
+        }
 
 
         setTimeout(function () {

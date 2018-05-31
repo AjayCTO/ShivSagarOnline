@@ -26,7 +26,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.AttributeName, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.AttributeName, new { @class = "form-control col-md-5" })
+                        @Html.TextBoxFor(model => model.AttributeName, new { @class = "form-control col-md-5 customColumnData" })
                         @Html.ValidationMessageFor(model => model.AttributeName)
                     </div>
                 </div>

@@ -193,6 +193,14 @@
         $('.custom-file-input').on('change', function () {
             imagesPreview(this, 'div.gallery');
         });
+
+        $(document).on("keypress", ".customColumnData", function (evt) {
+
+            var keycode = evt.charCode || evt.keyCode;
+            if (keycode == 35 || keycode == 64) { //Enter key's keycode
+                return false;
+            }
+        });
     </script>
 
 </body>

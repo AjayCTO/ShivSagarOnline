@@ -115,11 +115,7 @@ namespace SHIVAM_ECommerce.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-        // POST: /Supplier/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanyName,FirstName,LastName,Title,Address1,Address2,City,State,PostalCode,Country,Phone,Email,URL,Logo,SupplierType,UserID,PlanID,UserName,Password")] Supplier supplier, HttpPostedFileBase file)
         {
             var _controller = new AccountController();
@@ -176,6 +172,26 @@ namespace SHIVAM_ECommerce.Controllers
                     supplier.UserID = user.Id;
                     db.SaveChanges();
                     _controller.UserManager.AddToRole(user.Id, "Supplier");
+
+
+                    //Add Claims to the AspNetUserClaims table for the supplier registerd.
+                    var Claims = db.Claims.Where(x => x.Role == "Supplier").ToList();
+
+                    foreach (var claim in Claims)
+                    {
+                        ApplicationUserClaim UserClaim = new ApplicationUserClaim();
+                        //_controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue)); 
+                        UserClaim.ClaimType = claim.ClaimType;
+                        UserClaim.ClaimValue = claim.ClaimValue;
+                        UserClaim.User = db.Users.FirstOrDefault(x => x.Id == user.Id);
+                        UserClaim.IsActive = true;
+                        UserClaim.DisplayLabel = claim.Notes;
+                        db.AspNetUserClaims.Add(UserClaim);
+                    }
+                    db.SaveChanges();
+
+
+                    //Send confirmation mail to user and admin
                     string email = supplier.Email;
                     string username = supplier.UserName;
                     string adminemail = ConfigurationManager.AppSettings["adminemail"].ToString();
@@ -200,8 +216,10 @@ namespace SHIVAM_ECommerce.Controllers
             var allplans = db.Plans.ToList();
             ViewBag.allplans = allplans;
             return View(supplier);
-            return View(supplier);
+
         }
+
+        
 
 
         [HttpPost]

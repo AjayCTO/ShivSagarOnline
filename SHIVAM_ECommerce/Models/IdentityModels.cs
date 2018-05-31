@@ -15,7 +15,12 @@ namespace SHIVAM_ECommerce.Models
         public int? Sort { get; set; }
        
     }
+    public class ApplicationUserClaim : IdentityUserClaim
+    {
+        public bool IsActive { get; set; }
+        public string DisplayLabel { get; set; }
 
+    }
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
@@ -41,7 +46,7 @@ namespace SHIVAM_ECommerce.Models
         public DbSet<Plans> Plans { get; set; }
         public DbSet<OrderItems> OrderItems { get; set; }
         public DbSet<Claims> Claims { get; set; }
-        public DbSet<IdentityUserClaim> AspNetUserClaims { get; set; }
+        public DbSet<ApplicationUserClaim> AspNetUserClaims { get; set; }
 
         public DbSet<ProductAttributes> ProductAttributes { get; set; }
         public DbSet<ProductAttributesRelation> ProductAttributesRelation { get; set; }

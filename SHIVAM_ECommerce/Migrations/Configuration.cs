@@ -94,6 +94,20 @@ namespace SHIVAM_ECommerce.Migrations
             //    context.SaveChanges();
             //}
 
+            //if (!context.OrderStatuses.Any(p => p.Status == "Confirmed" || p.Status == "Cancelled" || p.Status == "On_Hold" || p.Status == "Delivered"))
+            //{
+            //    var OrderStatus = new List<OrderStatus>
+            //    {
+            //        new OrderStatus{Status="Confirmed"},
+            //        new OrderStatus{Status="Cancelled"},
+            //        new OrderStatus{Status="On_Hold"},
+            //        new OrderStatus{Status="Delivered"}
+
+            //    };
+            //    OrderStatus.ForEach(p => context.OrderStatuses.Add(p));
+            //    context.SaveChanges();
+            //}
+
 
             //if (!context.Plans.Any(p => p.PlanName == "PlatinumPackage" || p.PlanName == "GoldPackage" || p.PlanName == "SilverPackage"))
             //{

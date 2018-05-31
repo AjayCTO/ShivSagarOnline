@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using SHIVAM_ECommerce.Attributes;
 using SHIVAM_ECommerce.Repository;
 using System.Linq.Dynamic;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
 
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -152,6 +154,18 @@ namespace SHIVAM_ECommerce.Controllers
                     supplier.UserID = user.Id;
                     db.SaveChanges();
                     _controller.UserManager.AddToRole(user.Id, "SupplierUser");
+
+                    //Add Claims to the AspNetUserClaims table for the supplier registerd.
+                    var Claims = db.Claims.Where(x => x.Description == "SupplierUser").ToList();
+
+                    var listOfUserClaims = new List<IdentityUserClaim>();
+
+                    foreach (var claim in Claims)
+                    {
+                        _controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue));
+                    }
+                    db.SaveChanges();
+
                     return RedirectToAction("Index");
                 }
                 else

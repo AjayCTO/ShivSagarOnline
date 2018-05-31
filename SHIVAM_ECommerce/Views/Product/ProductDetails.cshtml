@@ -44,8 +44,8 @@
                             <tbody>
                                 <tr class="prototype" ng-repeat="obj in ProductAttributesList">
 
-                                    <td ng-repeat="x in obj.ColumnsData">
-                                        <input type="text" class="form-control" placeholder="Enter Value" ng-model="x.Value">
+                                    <td ng-repeat="x in obj.ColumnsData" ng-if="CheckColumn(x.AttributeID)">
+                                        <input type="text" class="form-control customColumnData" placeholder="Enter Value" ng-model="x.Value">
                                     </td>
                                     <td>
                                         <label class="custom-control custom-checkbox">

@@ -256,9 +256,11 @@
     <Compile Include="Controllers\EmailRecordsController.cs" />
     <Compile Include="Controllers\FeaturedSupplierController.cs" />
     <Compile Include="Controllers\FeaturesController.cs" />
+    <Compile Include="Controllers\ManageClaimsController.cs" />
     <Compile Include="Controllers\PlanController.cs" />
     <Compile Include="Controllers\ProductStatusController.cs" />
     <Compile Include="Controllers\ThresholdController.cs" />
+    <Compile Include="Controllers\UserClaimsController.cs" />
     <Compile Include="Models\emailrecord.cs" />
     <Compile Include="Models\FeaturedSupplier.cs" />
     <Compile Include="Models\Features.cs" />
@@ -980,6 +982,16 @@
     <Content Include="Views\FeaturedSupplier\Details.cshtml" />
     <Content Include="Views\FeaturedSupplier\Edit.cshtml" />
     <Content Include="Views\FeaturedSupplier\Index.cshtml" />
+    <Content Include="Views\ManageClaims\Create.cshtml" />
+    <Content Include="Views\ManageClaims\Delete.cshtml" />
+    <Content Include="Views\ManageClaims\Details.cshtml" />
+    <Content Include="Views\ManageClaims\Edit.cshtml" />
+    <Content Include="Views\ManageClaims\Index.cshtml" />
+    <Content Include="Views\UserClaims\Create.cshtml" />
+    <Content Include="Views\UserClaims\Delete.cshtml" />
+    <Content Include="Views\UserClaims\Details.cshtml" />
+    <Content Include="Views\UserClaims\Edit.cshtml" />
+    <Content Include="Views\UserClaims\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
