@@ -313,12 +313,33 @@ namespace SHIVAM_ECommerce.Controllers
 
         // POST: /Supplier/Delete/5
 
-        public ActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
-            Supplier supplier = db.Suppliers.Find(id);
-            db.Suppliers.Remove(supplier);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            try
+            {
+                var _products = db.Products.Where(x => x.SupplierID == id).Count();
+                var _fsupplier = db.FeaturedSuppliers.Where(x => x.SupplierID == id).Count();
+                if (_products == 0 && _fsupplier==0)
+                {
+
+                    Supplier supplier = db.Suppliers.Find(id);
+                    db.Suppliers.Remove(supplier);
+                    db.SaveChanges();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This supplier is Associated with some product or featured supplier, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+          
         }
 
         protected override void Dispose(bool disposing)

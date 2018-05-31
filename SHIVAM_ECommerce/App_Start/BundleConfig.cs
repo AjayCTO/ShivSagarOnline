@@ -20,7 +20,7 @@ namespace SHIVAM_ECommerce
                         "~/Scripts/dataTables.bootstrap4.min.js",
                         "~/Scripts/dataTables.rowGroup.min.js",
                         "~/Scripts/dataTables.responsive.min.js"
-                        
+
                         ));
 
             bundles.Add(new StyleBundle("~/Content/dataTableStyles").Include(
@@ -38,7 +38,7 @@ namespace SHIVAM_ECommerce
                       "~/Content/TabularTheme/assets/plugins/charts-c3/plugin.js",
                       "~/Content/TabularTheme/assets/plugins/maps-google/plugin.js",
                       "~/Content/TabularTheme/assets/plugins/input-mask/plugin.js"
-                      //"~/Scripts/toastr.js"
+                //"~/Scripts/toastr.js"
                        ));
 
 
@@ -79,13 +79,13 @@ namespace SHIVAM_ECommerce
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js",
-                        "~/Scripts/jquery.dataTables.min.js"));
+                        "~/Scripts/bootbox.min.js"));
+
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                         "~/Content/dataTables.bootstrap.min.css"
-                      
+
                   ));
         }
     }

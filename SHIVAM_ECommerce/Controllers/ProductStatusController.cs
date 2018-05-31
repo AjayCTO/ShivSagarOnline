@@ -93,7 +93,7 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /ProductStatus/Create
         public ActionResult Create()
         {
-            
+
             return View();
         }
 
@@ -102,13 +102,14 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include="Id,Name,IsActive")] ProductStatus productstatus)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,IsActive")] ProductStatus productstatus)
         {
             if (ModelState.IsValid)
             {
                 //_repository.Insert(productstatus);
                 //_repository.Save();
-
+                productstatus.CreatedDate = DateTime.Now;
+                productstatus.UpdatedDate = DateTime.Now;
 
                 db.ProductStatus.Add(productstatus);
                 await db.SaveChangesAsync();
@@ -138,10 +139,11 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include="Id,Name,IsActive")] ProductStatus productstatus)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,IsActive,CreatedDate")] ProductStatus productstatus)
         {
             if (ModelState.IsValid)
             {
+                productstatus.UpdatedDate = DateTime.Now;
                 db.Entry(productstatus).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -165,19 +167,33 @@ namespace SHIVAM_ECommerce.Controllers
         }
 
         // POST: /ProductStatus/Delete/5
-        [HttpPost, ActionName("DeleteConfirmed")]
-      
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+
+        public async Task<ActionResult> Delete(int id)
         {
+            try
+            {
+                var _products = db.ProductAttributeWithQuantity.Where(x => x.StatusId == id).Count();
+                if (_products == 0)
+                {
 
-            //_repository.Delete(id);
-            //_repository.Save();
 
-            ProductStatus productstatus = await db.ProductStatus.FindAsync(id);
-            db.ProductStatus.Remove(productstatus);
-            await db.SaveChangesAsync();           
-           
-            return Json(new {Success = true},JsonRequestBehavior.AllowGet);
+                    ProductStatus productstatus = await db.ProductStatus.FindAsync(id);
+                    db.ProductStatus.Remove(productstatus);
+                    await db.SaveChangesAsync();
+                    return Json(new { Success = true, ex = "" });
+                }
+                else
+                {
+                    return Json(new { Success = false, ex = "This status Associated with some product, unable to delete this." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { Success = false, ex = ex.Message.ToString() });
+            }
+
         }
 
         protected override void Dispose(bool disposing)

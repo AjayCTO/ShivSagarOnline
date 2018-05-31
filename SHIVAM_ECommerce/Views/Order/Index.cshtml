@@ -73,9 +73,6 @@
             max-width: 800px;
         }
 
-        .btn i {
-            color: white;
-        }
     </style>
 
 
@@ -218,31 +215,42 @@
         }
 
         function ChangePaymentStatus(id) {
-            var _x = confirm("are you sure you want to change this order's status to paid?");
-            if (_x) {
+            bootbox.confirm("are you sure you want to change this order's status to paid?", function (result) {
 
-                $.ajax({
-                    url: "/Order/UpdatePaymentStatus",
-                    type: "POST",
-                    dataType: "json",
-                    data: JSON.stringify({ "ID": id }),
-                    contentType: "application/json; charset=utf-8",
-                    error: function () {
-                        alert('There is a problem with the service!');
-                    },
-                    success: function (data) {
-                        try {
-                            if (data.Success) {
-                                alert("Payment Status updated successfully");
-                                _myTableData.clear().draw();
+                if (result) {
+
+                    $.ajax({
+                        url: "/Order/UpdatePaymentStatus",
+                        type: "POST",
+                        dataType: "json",
+                        data: JSON.stringify({ "ID": id }),
+                        contentType: "application/json; charset=utf-8",
+                        error: function () {
+                            bootbox.alert('There is a problem with the service!');
+                        },
+                        success: function (data) {
+                            try {
+                                if (data.Success) {
+                                    bootbox.alert("Payment Status updated successfully");
+                                    _myTableData.clear().draw();
+                                }
+                                else {
+                                    bootbox.alert("Error occurred during operation" + data.ex);
+                                }
+
+                            } catch (_ex) {
+                                bootbox.alert(_ex);
                             }
-
-                        } catch (_ex) {
-                            alert(_ex);
                         }
-                    }
-                });
-            }
+                    });
+
+                }
+
+
+
+
+            });
+
 
         }
     </script>

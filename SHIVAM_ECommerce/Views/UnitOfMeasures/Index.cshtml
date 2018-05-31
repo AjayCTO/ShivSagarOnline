@@ -15,7 +15,7 @@
 <div class="card">
     <div class="card-header">
 
-        <h3 class="card-title"><i class="fa fa-list"></i> Unit Of Measures </h3>
+        <h3 class="card-title"><i class="fe fe-layers"></i> Unit Of Measures </h3>
         <div class="flex-fill text-right">
             <a href="/UnitOfMeasures/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Unit Of Measures</a>
         </div>
@@ -54,7 +54,6 @@
                          {
                              "orderable": false,
                              "mRender": function (data, type, row) {
-                                 debugger;
                                  var _a = '<a onclick="Deleteuom(' + row.Id + ')"  class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" ><i class="fa fa-trash"  align="center"></i></a>';
                                  return '<a href="/UnitOfMeasures/Edit?id=' + row.Id + '" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"  align="center"></i></a>  ' + _a;
                              }
@@ -64,27 +63,31 @@
         });
 
         function Deleteuom(Id) {
-            var _confirm = confirm("Are you sure you want to delete this ?");
-            if (_confirm) {
 
-                $.ajax({
-                    url: "/UnitOfMeasures/Delete",
-                    data: JSON.stringify({ id: Id }),
-                    type: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.Success === true) {
-                            _datatable.clear().draw();
-                        } else {
-                            alert("error occurred during operation. " + result.ex);
+            bootbox.confirm("Are you sure you want to delete this ?", function (result) {
+
+                if (result) {
+                    $.ajax({
+                        url: "/UnitOfMeasures/Delete",
+                        data: JSON.stringify({ id: Id }),
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.Success === true) {
+                                _datatable.clear().draw();
+                            } else {
+                                bootbox.alert("error occurred during operation. " + result.ex);
+                            }
+                        },
+                        error: function (req, status, error) {
+                            bootbox.alert(error);
                         }
-                    },
-                    error: function (req, status, error) {
-                        alert(error);
-                    }
-                });
-            }
+                    });
+
+                }
+            });
+
         }
 
 

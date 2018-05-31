@@ -4,79 +4,73 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/FeaturedSupplier"> Featured Supplier</a>
+    </li>
+    <li class="breadcrumb-item active">Featured Supplier Details</li>
+</ol>
 
-<div>
-    <h4>FeaturedSupplier</h4>
-	<hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Supplier.CompanyName)
-        </dt>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-list"></i>Featured Supplier Detail </h3>
+    </div>
+    <div class="card-body">
 
-        <dd>
-            @Html.DisplayFor(model => model.Supplier.CompanyName)
-        </dd>
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.Supplier.CompanyName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.OfferMessage)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.OfferMessage)
-        </dd>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Supplier.CompanyName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
+                <td>
+                    @Html.DisplayNameFor(model => model.OfferMessage)
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdatedDate)
-        </dt>
+                </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.UpdatedDate)
-        </dd>
+                <td>
+                    @Html.DisplayFor(model => model.OfferMessage)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Sort)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Sort)
-        </dd>
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+            </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+            <tr>
+                <td>
+                    Featured Image
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Notes)
-        </dt>
+                </td>
+                <td>
 
-        <dd>
-            @Html.DisplayFor(model => model.Notes)
-        </dd>
 
-    </dl>
+                    <img src="@Url.Content("~/FeaturedImages/"+Model.ImagePath)"  height="100" width="100"/>
+
+
+                </td>
+
+                <td>
+                    Description
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Description)
+                </td>
+
+
+
+
+            </tr>
+
+
+        </table>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

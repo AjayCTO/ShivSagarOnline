@@ -16,7 +16,7 @@
 <div class="card">
     <div class="card-header">
 
-        <h3 class="card-title"><i class="fa fa-list"></i> Product Attributes </h3>
+        <h3 class="card-title"><i class="fe fe-layers"></i> Product Attributes </h3>
         <div class="flex-fill text-right">
             <a href="/ProductAttributes/Create" class="btn btn-success"> <i class="fa fa-plus"></i> Add New Attribute</a>
         </div>
@@ -65,28 +65,36 @@
         });
 
         function DeleteAttribute(Id) {
-            var _confirm = confirm("Are you sure you want to delete this Attribute ?");
-            if (_confirm) {
 
-                $.ajax({
-                    url: "/ProductAttributes/Delete",
-                    data: JSON.stringify({ id: Id }),
-                    type: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    success: function (result) {
-                        if (result.Success === true) {
-                            // $("#myTable").DataTable().fnDraw();
-                            _dataTable.clear().draw();
-                        } else {
-                            alert("error occurred during operation. "+result.ex);
+
+            bootbox.confirm("Are you sure you want to delete this Attribute ?", function (result) {
+
+                if (result) {
+                    $.ajax({
+                        url: "/ProductAttributes/Delete",
+                        data: JSON.stringify({ id: Id }),
+                        type: 'POST',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.Success === true) {
+                                _dataTable.clear().draw();
+                            } else {
+                                bootbox.alert("error occurred during operation. " + result.ex);
+                            }
+                        },
+                        error: function (req, status, error) {
+                            bootbox.alert(error);
                         }
-                    },
-                    error: function (req, status, error) {
-                        alert(error);
-                    }
-                });
-            }
+                    });
+
+                }
+
+
+
+
+            });
+
         }
 
 
