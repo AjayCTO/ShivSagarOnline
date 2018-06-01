@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using System.Linq.Dynamic;
 using SHIVAM_ECommerce.Attributes;
+using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.ViewModels;
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -175,6 +176,7 @@ namespace SHIVAM_ECommerce.Controllers
                 }
 
                 db.SaveChanges();
+                this.AddNotification("Plan created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -285,7 +287,7 @@ namespace SHIVAM_ECommerce.Controllers
                 }
 
                 db.SaveChanges();
-
+                this.AddNotification("Plan updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             return View(plans);

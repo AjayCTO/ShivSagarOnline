@@ -8,7 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Repository;
-
+using SHIVAM_ECommerce.Extensions;
+using System.Linq.Dynamic;
 namespace SHIVAM_ECommerce.Controllers
 {
     public class UnitOfMeasuresController : Controller
@@ -58,7 +59,7 @@ namespace SHIVAM_ECommerce.Controllers
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-              // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+              v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -99,6 +100,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 _repository.Insert(UM);
                 _repository.Save();
+                this.AddNotification("Unit of Measure Created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -132,6 +134,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 _repository.Update(UM);
                 _repository.Save();
+                this.AddNotification("Unit of Measure Updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             return View(UM);

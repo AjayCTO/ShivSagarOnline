@@ -16,7 +16,7 @@ using SHIVAM_ECommerce.Repository;
 using System.Configuration;
 using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.Attributes;
-
+using System.Linq.Dynamic;
 namespace SHIVAM_ECommerce.Controllers
 {
 
@@ -68,7 +68,7 @@ namespace SHIVAM_ECommerce.Controllers
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-                // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -104,7 +104,7 @@ namespace SHIVAM_ECommerce.Controllers
         public ActionResult Create()
         {
 
-            var allplans = db.Plans.ToList();
+            var allplans = db.Plans.Include(x=>x.Features).ToList();
             ViewBag.allplans = allplans;
             return View(new Supplier());
         }
@@ -116,6 +116,7 @@ namespace SHIVAM_ECommerce.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<ActionResult> Create([Bind(Include = "Id,CompanyName,FirstName,LastName,Title,Address1,Address2,City,State,PostalCode,Country,Phone,Email,URL,Logo,SupplierType,UserID,PlanID,UserName,Password")] Supplier supplier, HttpPostedFileBase file)
         {
             var _controller = new AccountController();

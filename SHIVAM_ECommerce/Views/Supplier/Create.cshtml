@@ -7,7 +7,7 @@
 
 @*<h2>@ViewBag.Title.</h2>*@
 
-@using (Html.BeginForm("Create", "Supplier", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Create", "Supplier", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -25,26 +25,43 @@
                 <div id="selectplan">
 
                     <h1> Select Plan</h1>
-                    <div class="row">
+                    <div class="row sameheight">
                         @foreach (var items in allplans)
-                        {
-                            <div class="col-sm-6 col-lg-4">
-                                <div class="card">
-                                    <input type="hidden" class="getid_@items.Sort" value="@items.Id" />
+{
+    <div class="col-sm-6 col-lg-3 card">
 
-                                    <div id="plans_@items.Sort" class="status"></div>
-                                    <div class="card-body text-center">
-                                        <div class="card-category valueone getname_@items.Sort">@items.PlanName</div>
-                                        <div class="display-3 my-4">@items.Plancode</div>
-                                        <div>@items.Description</div>
+        <div class="card-header bg-indigo">
+            <div class="card-category">@items.PlanName</div>
+        </div>
 
-                                        <div class="text-center mt-6">
-                                            <input type="button" class="btn btn-green btn-block" btnname="@items.Sort" value="Choose plan" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
+        <div>
+            <input type="hidden" class="getid_@items.Sort" value="@items.Id" />
+            <div class="card-body text-center">
+             
+                <div class="display-3 my-4">@items.YearlyPrice</div>
+                <ul class="list-unstyled leading-loose">
+                    <li> <b> Features</b></li>
+
+                    @foreach (var item1 in items.Features)
+                    {
+                    <li><i class="fe fe-check text-success mr-2" aria-hidden="true"></i> @item1.Feature.Title</li>
+                    }
+
+
+
+                </ul>
+                <div class="text-center mt-6">
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <input type="button" class="btn btn-green btn-block" btnname="@items.Sort" value="Choose plan" />
+            </div>
+
+        </div>
+    </div>
+}
                     </div>
 
 
@@ -164,7 +181,7 @@
                                         <div class="form-group">
                                             <label>Logo</label>
                                             <div class="custom-file">
-                                                <input type="file"  class="custom-file-input form-control" name="file" id="file" accept="image/*">
+                                                <input type="file" class="custom-file-input form-control" name="file" id="file">
                                                 <label class="custom-file-label">Choose file</label>
                                             </div>
                                             <div class="gallery"></div>
@@ -273,11 +290,6 @@
 
 
 
-
-
-
-
-
 }
 
 @section Scripts {
@@ -372,6 +384,55 @@
 
 
     </script>
+
+
+    <style>
+        .sameheight {
+            display: flex;
+            flex-flow: row;
+            align-items: stretch;
+        }
+
+            .sameheight .col-lg-3.card {
+           
+                flex: 1 auto;
+            
+                align-items: stretch;
+                flex-flow: column;
+                padding-left:0;
+                padding-right:0;
+                margin-left:0.75rem;
+                margin-right:0.75rem;
+            
+                }
+
+        .sameheight .card .card-footer
+        {
+            position:absolute;
+            bottom:0;
+            width:100%
+        }
+
+        .sameheight .card-body
+        {
+            padding-bottom:50px;
+        }
+
+            .sameheight .my-4
+            {
+                margin-top:0 !important;
+            }
+
+            .sameheight .card-category
+            {
+                color:#fff;
+                font-size:20px;
+                padding-top:5px;
+            }
+
+     
+
+    </style>
 
 
 }

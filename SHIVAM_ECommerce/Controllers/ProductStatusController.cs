@@ -12,7 +12,6 @@ using SHIVAM_ECommerce.Repository;
 using SHIVAM_ECommerce.Extensions;
 using System.IO;
 using SHIVAM_ECommerce.Attributes;
-
 namespace SHIVAM_ECommerce.Controllers
 {
     [CustomAuthorize]
@@ -113,6 +112,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                 db.ProductStatus.Add(productstatus);
                 await db.SaveChangesAsync();
+                this.AddNotification("Product Status Created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -146,6 +146,7 @@ namespace SHIVAM_ECommerce.Controllers
                 productstatus.UpdatedDate = DateTime.Now;
                 db.Entry(productstatus).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+                this.AddNotification("Product Status updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             return View(productstatus);

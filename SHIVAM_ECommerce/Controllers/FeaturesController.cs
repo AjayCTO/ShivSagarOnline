@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using System.Net;
+using SHIVAM_ECommerce.Extensions;
 using System.Data.Entity;
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -99,6 +100,7 @@ namespace SHIVAM_ECommerce.Controllers
                 features.UpdatedDate = DateTime.Now;
                 db.Features.Add(features);
                 await db.SaveChangesAsync();
+                this.AddNotification("Featured Added successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -132,6 +134,7 @@ namespace SHIVAM_ECommerce.Controllers
                 features.UpdatedDate = DateTime.Now;
                 db.Entry(features).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+                this.AddNotification("Featured Updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             return View(features);

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using SHIVAM_ECommerce.Extensions;
 namespace SHIVAM_ECommerce.Controllers
 {
     public class ManageUsersController : Controller
@@ -86,6 +86,7 @@ namespace SHIVAM_ECommerce.Controllers
 
 
                 db.SaveChanges();
+                this.AddNotification("Roles updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -134,6 +135,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                 }
                 _UserClaimsRepository.Save();
+                this.AddNotification("Claims updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("index");
             }
             catch (Exception ex)

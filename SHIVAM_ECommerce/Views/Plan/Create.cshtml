@@ -43,14 +43,18 @@
                             </div>
                         </div>
 
-
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Sort, new { @class = "control-label  " })
+                            @Html.LabelFor(model => model.PlanFrequency, new { @class = "control-label  " })
                             <div class=" ">
-                                @Html.TextBoxFor(model => model.Sort, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Sort)
+                                <select class="form-control" data-val="true" data-val-required="Plan Frequency is Required." name="PlanFrequency" id="PlanFrequency">
+                                    <option value="">None</option>
+                                    <option value="1">Monthly</option>
+                                    <option value="2">Yearly</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.PlanFrequency)
                             </div>
                         </div>
+                        
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.MonthlyPrice, new { @class = "control-label  " })
@@ -101,14 +105,10 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.PlanFrequency, new { @class = "control-label  " })
+                            @Html.LabelFor(model => model.Sort, new { @class = "control-label  " })
                             <div class=" ">
-                                <select class="form-control" data-val="true" data-val-required="Plan Frequency is Required." name="PlanFrequency" id="PlanFrequency">
-                                    <option value="">None</option>
-                                    <option value="1">Monthly</option>
-                                    <option value="2">Yearly</option>
-                                </select>
-                                @Html.ValidationMessageFor(model => model.PlanFrequency)
+                                @Html.TextBoxFor(model => model.Sort, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Sort)
                             </div>
                         </div>
 

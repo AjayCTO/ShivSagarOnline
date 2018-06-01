@@ -17,8 +17,14 @@ namespace SHIVAM_ECommerce.Models
     }
     public class ApplicationUserClaim : IdentityUserClaim
     {
+
+        public int ClaimID { get; set; }
         public bool IsActive { get; set; }
         public string DisplayLabel { get; set; }
+
+
+        [ForeignKey("ClaimID")]
+        public virtual Claims claims { get; set; }
 
     }
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

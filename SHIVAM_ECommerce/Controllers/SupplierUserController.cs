@@ -14,7 +14,7 @@ using SHIVAM_ECommerce.Repository;
 using System.Linq.Dynamic;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Security.Claims;
-
+using SHIVAM_ECommerce.Extensions;
 namespace SHIVAM_ECommerce.Controllers
 {
     //[CustomAuthorize(Roles="superadmin,Admin,Supplier")]
@@ -165,7 +165,7 @@ namespace SHIVAM_ECommerce.Controllers
                         _controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue));
                     }
                     db.SaveChanges();
-
+                    this.AddNotification("User Created successfully.", NotificationType.SUCCESS);
                     return RedirectToAction("Index");
                 }
                 else

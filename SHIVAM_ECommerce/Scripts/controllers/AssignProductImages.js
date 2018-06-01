@@ -100,19 +100,24 @@
                 dataType: "json",
                 data: JSON.stringify({ "Model": _model }),
                 contentType: "application/json; charset=utf-8",
-                error: function () {
-                    alert('There is a problem with the service!');
+                error: function (err) {
+                    console.log(err);
+                    bootbox.alert('There is a problem with the service!');
                 },
                 success: function (data) {
                     try {
-                        if (data.Success) {
+                        debugger;
+                        if (data.Success==true) {
                             $scope.Images = data.data;
                             $scope.TotalItems = data.TotalCount;
                             CheckScopeBeforeApply();
                         }
+                        else {
+                            bootbox.alert("An issue occurred while performning action " + data.ex);
+                        }
 
                     } catch (_ex) {
-                        alert(_ex);
+                        bootbox.alert("An issue occurred while performning action " + _ex);
                     }
                 }
             });
@@ -132,22 +137,23 @@
                 error: function () {
                     $scope.Paths = [];
                     $scope.IsSaving = false;
-                    alert('There is a problem with the service!');
+                    bootbox.alert('There is a problem with the service!');
                 },
                 success: function (data) {
                     try {
                         $scope.Paths = [];
                         $scope.IsSaving = false;
-                        if (data.Success) {
-                            alert("Saved Successfully");
+                        if (data.Success === true) {
+                            bootbox.alert("Saved Successfully");
                             GetImages();
+                            window.location.reload();
                             CheckScopeBeforeApply();
                         }
 
                     } catch (_ex) {
                         $scope.Paths = [];
                         $scope.IsSaving = false;
-                        alert(_ex);
+                        bootbox.alert(_ex);
                     }
                 }
             });

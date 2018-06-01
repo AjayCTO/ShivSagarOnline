@@ -11,7 +11,8 @@ using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Repository;
 using Microsoft.AspNet.Identity.EntityFramework;
 using SHIVAM_ECommerce.Attributes;
-
+using System.Linq.Dynamic;
+using SHIVAM_ECommerce.Extensions;
 namespace SHIVAM_ECommerce.Controllers
 {
     [CustomAuthorize]
@@ -58,17 +59,17 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.ClaimType.Contains(searchitem)).ToList();
+                v = v.Where(b => b.Role.Contains(searchitem)).ToList();
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-                //v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
             var data = v.Skip(skip).Take(pageSize).ToList();
-            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.ClaimType, x.ClaimValue, x.IsActive, x.CreatedDate, x.UpdatedDate, x.Sort, x.Description, x.Notes }) }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.ClaimType, x.ClaimValue, x.IsActive, x.CreatedDate, x.UpdatedDate, x.Sort, x.Description, x.Notes, x.Role }) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -93,6 +94,9 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /UserClaims/Create
         public ActionResult Create()
         {
+            ViewBag.AllClaims = db.Claims.Where(x => x.Role == "SuperAdmin");
+
+
             ViewBag.Roles = db.Roles;
 
             return View();
@@ -112,11 +116,65 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 db.Claims.Add(claims);
                 await db.SaveChangesAsync();
+                this.AddNotification("User Claims Created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             ViewBag.Roles = db.Roles;
             return View(claims);
         }
+
+
+
+        public ActionResult CreateFromAjax(List<Claims> model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var RoleName = model[0].Role;
+
+                List<Claims> existingClaims = db.Claims.Where(x => x.Role.ToLower() == RoleName.ToLower()).ToList();
+
+                foreach (var claim in model)
+                {
+
+                    var _obj = existingClaims.Where(x => x.ClaimValue.ToLower() == claim.ClaimValue.ToLower()).FirstOrDefault();
+
+                    if (_obj == null && claim.IsActive == true)
+                    {
+                        claim.CreatedDate = DateTime.Now;
+                        claim.UpdatedDate = DateTime.Now;
+
+                        db.Claims.Add(claim);
+                    }
+                    else
+                    {
+                        _obj.IsActive = claim.IsActive;
+                    }
+
+                }
+                db.SaveChanges();
+                return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+
+            }
+
+            ViewBag.Roles = db.Roles;
+            return View(model);
+
+            //claims.CreatedDate = DateTime.Now;
+            //claims.UpdatedDate = DateTime.Now;
+
+            //if (ModelState.IsValid)
+            //{
+            //    db.Claims.Add(claims);
+            //    await db.SaveChangesAsync();
+            //    return RedirectToAction("Index");
+            //}
+            //ViewBag.Roles = db.Roles;
+            //return View(model);
+        }
+
+
+
 
         // GET: /UserClaims/Edit/5
         public async Task<ActionResult> Edit(int? id)
@@ -146,16 +204,12 @@ namespace SHIVAM_ECommerce.Controllers
 
                 db.Entry(claims).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+                this.AddNotification("User Claims Updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             ViewBag.Roles = db.Roles;
             return View(claims);
         }
-
-
-
-        // POST: /UserClaims/Delete/5
-
 
         [HttpPost]
         public ActionResult Delete(int id)

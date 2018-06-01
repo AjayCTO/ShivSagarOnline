@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
+using SHIVAM_ECommerce.Extensions;
 using System.Linq.Dynamic;
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -53,6 +54,8 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 db.EmailRecord.Add(emailrecord);
                 await db.SaveChangesAsync();
+                this.AddNotification("Email record successfully.", NotificationType.SUCCESS);
+
                 return RedirectToAction("Index");
             }
 

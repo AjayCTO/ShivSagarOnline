@@ -8,8 +8,10 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
+using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.Repository;
 using System.Security.Claims;
+using System.Linq.Dynamic;
 
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -82,7 +84,7 @@ namespace SHIVAM_ECommerce.Controllers
             int recordsTotal = 0;
 
             // dc.Configuration.LazyLoadingEnabled = false; // if your table is relational, contain foreign key
-            var v = db.AspNetUserClaims.ToList();
+            var v = db.AspNetUserClaims.AsEnumerable();
 
             if (!string.IsNullOrEmpty(UserID))
             {
@@ -97,7 +99,7 @@ namespace SHIVAM_ECommerce.Controllers
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-                 //v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -141,6 +143,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 db.AspNetUserClaims.Add(claims);
                 await db.SaveChangesAsync();
+                this.AddNotification("Claims created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -179,6 +182,7 @@ namespace SHIVAM_ECommerce.Controllers
                 claim.IsActive = claims.IsActive;
 
                 await db.SaveChangesAsync();
+                this.AddNotification("Claims updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
                 //var _controller = new AccountController();
 

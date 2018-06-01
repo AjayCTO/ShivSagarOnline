@@ -197,13 +197,13 @@
                     success: function (result) {
 
                         if (result.Success == true) {
-                            alert("deleted success fully");
+                            toaster.pop('success', "Product Details", "deleted success fully");
                             $scope.ProductAttributesList.splice($index, 1);
                             CheckScopeBeforeApply();
 
                         }
                         else {
-                            alert(result.ex);
+                            bootbox.alert(result.ex);
                             //toastr.error(result.ex);
                         }
                     },
@@ -254,14 +254,14 @@
                     success: function (result) {
 
                         if (result.Success == true) {
-                            alert("deleted success fully");
+                            toaster.pop('success', "Product Images", "deleted success fully");
                             $scope.ProductAttributesList[$scope.TempIndex].Images.splice(_Index, 1);
 
                             CheckScopeBeforeApply();
 
                         }
                         else {
-                            alert(result.ex);
+                            bootbox.alert(result.ex);
                             //toastr.error(result.ex);
                         }
                     },
@@ -444,7 +444,7 @@
                         window.location.href = "/Product/GetAllProducts";
                     }
                     else {
-                        alert(result.ex);
+                        bootbox.alert(result.ex);
                         //toastr.error(result.ex);
                     }
                 },

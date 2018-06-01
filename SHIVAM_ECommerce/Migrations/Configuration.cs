@@ -66,6 +66,24 @@ namespace SHIVAM_ECommerce.Migrations
 
                 manager.Create(user, "Shivam@123");
                 manager.AddToRole(user.Id, "superadmin");
+
+                var listOfClaims = new List<Claims>
+                {
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Category",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Category",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Supplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Supplier",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Plan",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Plan",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Manufacturers",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Manufacturer",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Product/GetAllProducts",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Products",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductStatus",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Status",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/UnitOfMeasures",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See UOM",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can see Product Attribute",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes/AddAttributesForSupplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Attr For Supplier",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Customer",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Customer",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Order",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Orders",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/EmailRecords",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See EmailRecords",Role = "SuperAdmin" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/SupplierUser",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Settings",Role = "SuperAdmin" }
+                };
+
             }
 
             //if (!context.Users.Any(u => u.UserName == "Test"))
@@ -166,101 +184,101 @@ namespace SHIVAM_ECommerce.Migrations
 
             //    }
 
-                //if (!context.Cateogries.Any(c => c.CategoryName == "Clothing"))
-                //{
-                //    var categories = new List<Category>
-                //    {
-                //        new Category { CategoryName = "Clothing", IsActive = true, ParentCategory = 0 ,CategoryImage = "", CreatedDate = DateTime.Now,
-                //        UpdatedDate = DateTime.Now, Sort = 1 ,Description = "Dummy category" , Notes = "Dummy Category" 
-                //        }
-                //    };
+            //if (!context.Cateogries.Any(c => c.CategoryName == "Clothing"))
+            //{
+            //    var categories = new List<Category>
+            //    {
+            //        new Category { CategoryName = "Clothing", IsActive = true, ParentCategory = 0 ,CategoryImage = "", CreatedDate = DateTime.Now,
+            //        UpdatedDate = DateTime.Now, Sort = 1 ,Description = "Dummy category" , Notes = "Dummy Category" 
+            //        }
+            //    };
 
-                //    categories.ForEach(c => context.Cateogries.Add(c));
-                //    context.SaveChanges();
-                //}
+            //    categories.ForEach(c => context.Cateogries.Add(c));
+            //    context.SaveChanges();
+            //}
 
-                //if (!context.Manufacturers.Any(m => m.Name == "Miraj"))
-                //{
-                //    var manufactures = new List<Manufacturer>
-                //    {
-                //        new Manufacturer { Code = "#111" , Name= "Miraj" ,SupplierID = 1 , CreatedDate= DateTime.Now, UpdatedDate = DateTime.Now,
-                //            Sort = 1 , Description = "Dummy Manufacturer",Notes = "Dummy Manufacturer"
-                //        }
-                //    };
-                //    manufactures.ForEach(m => context.Manufacturers.Add(m));
-                //    context.SaveChanges();
-                //}
+            //if (!context.Manufacturers.Any(m => m.Name == "Miraj"))
+            //{
+            //    var manufactures = new List<Manufacturer>
+            //    {
+            //        new Manufacturer { Code = "#111" , Name= "Miraj" ,SupplierID = 1 , CreatedDate= DateTime.Now, UpdatedDate = DateTime.Now,
+            //            Sort = 1 , Description = "Dummy Manufacturer",Notes = "Dummy Manufacturer"
+            //        }
+            //    };
+            //    manufactures.ForEach(m => context.Manufacturers.Add(m));
+            //    context.SaveChanges();
+            //}
 
-                //if (!context.Products.Any(p => p.ProductName == "Product1"))
-                //{
-                //    var Products = new List<Product>
-                //    {
-                //        new Product { 
-                //            ProductName = "Product1" , ProductCode= "#111" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        },
-                //        new Product { 
-                //            ProductName = "Product2" , ProductCode= "#112" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        },
-                //        new Product { 
-                //            ProductName = "Product3" , ProductCode= "#113" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product4" , ProductCode= "#114" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product5" , ProductCode= "#115" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product6" , ProductCode= "#116" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product7" , ProductCode= "#117" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product8" , ProductCode= "#118" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product9" , ProductCode= "#119" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //        ,new Product { 
-                //            ProductName = "Product10" , ProductCode= "#1110" , Ranking = "Top" , SKU = "", IDSKU ="",
-                //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
-                //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
-                //            Description = "Dummy Product", Notes = "Dummy Product"
-                //        }
-                //    };
-                //    Products.ForEach(p => context.Products.Add(p));
-                //    context.SaveChanges();
-                //}
+            //if (!context.Products.Any(p => p.ProductName == "Product1"))
+            //{
+            //    var Products = new List<Product>
+            //    {
+            //        new Product { 
+            //            ProductName = "Product1" , ProductCode= "#111" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        },
+            //        new Product { 
+            //            ProductName = "Product2" , ProductCode= "#112" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        },
+            //        new Product { 
+            //            ProductName = "Product3" , ProductCode= "#113" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product4" , ProductCode= "#114" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product5" , ProductCode= "#115" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product6" , ProductCode= "#116" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product7" , ProductCode= "#117" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product8" , ProductCode= "#118" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product9" , ProductCode= "#119" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //        ,new Product { 
+            //            ProductName = "Product10" , ProductCode= "#1110" , Ranking = "Top" , SKU = "", IDSKU ="",
+            //            SupplierID = 1 , ManuFacturerID = 1 , UnitOfMeasuresId = 1, CateogryID = 1,
+            //            CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now, Sort =1, 
+            //            Description = "Dummy Product", Notes = "Dummy Product"
+            //        }
+            //    };
+            //    Products.ForEach(p => context.Products.Add(p));
+            //    context.SaveChanges();
+            //}
 
-            }
         }
     }
+}
 

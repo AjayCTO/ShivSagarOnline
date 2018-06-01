@@ -5,6 +5,7 @@
 @using SHIVAM_ECommerce.ViewModels
 @{
     var _CurrentUser = Session["CurrentUserContext"] as CurrentUserContext;
+    var _AllClaims = Session["UserClaims"] as List<SHIVAM_ECommerce.Models.ApplicationUserClaim>;
 
     var CanSeeCategoryURL = Session["CanSeeCategoryURL"].ToString() == "URL:/Category" ? true : false;
     var CanSeeSupplierURL = Session["CanSeeSupplierURL"].ToString() == "URL:/Supplier" ? true : false;
@@ -29,11 +30,18 @@
             <div class="col">
                 <ul class="nav nav-tabs">
 
-
+                 
 
 
                     @if (Request.IsAuthenticated)
                     {
+                        
+                        @*foreach(var _item in _AllClaims)
+                        {
+                              <li class="nav-item">
+                                <a href="@_item.ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.ClaimValue</a>
+                            </li>
+                        }*@
 
                         if (CanSeeCategoryURL)
                         {

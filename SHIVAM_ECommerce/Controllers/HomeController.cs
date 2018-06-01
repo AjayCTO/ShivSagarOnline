@@ -27,7 +27,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 var userClaims = db.AspNetUserClaims.Where(x => x.User.Id == CurrentUserData.UserID).ToList();
                 HttpContext.Cache["UserClaims"] = userClaims;
-
+                Session["UserClaims"] = userClaims;
                 var CanSeeCategoryURL = userClaims.FirstOrDefault(x => x.User.Id == CurrentUserData.UserID && x.ClaimValue == "URL:/Category" && x.IsActive == true);
                 if (CanSeeCategoryURL != null)
                 {

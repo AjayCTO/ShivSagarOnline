@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Attributes;
 using System.Linq.Dynamic;
+using SHIVAM_ECommerce.Extensions;
 using System.IO;
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -112,6 +113,7 @@ namespace SHIVAM_ECommerce.Controllers
                 featuredsupplier.UpdatedDate = DateTime.Now;
                 db.FeaturedSuppliers.Add(featuredsupplier);
                 db.SaveChanges();
+                this.AddNotification("Featured supplier added successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
 
@@ -160,6 +162,7 @@ namespace SHIVAM_ECommerce.Controllers
                 }
                 db.Entry(featuredsupplier).State = EntityState.Modified;
                 db.SaveChanges();
+                this.AddNotification("Featured supplier updated successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
             ViewBag.SupplierID = new SelectList(db.Suppliers, "Id", "CompanyName", featuredsupplier.SupplierID);

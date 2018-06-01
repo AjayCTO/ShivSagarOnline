@@ -100,15 +100,21 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 ctx.Database.Connection.Open();
                 cmd.CommandText = "EXEC SP_GetAllSortedProducts 5,0,'productName','ASC',NULL, " + SupplierId + "";
-                using (var reader = cmd.ExecuteReader())
+
+                var _xdta = cmd.ExecuteReader();
+                if (_xdta != null)
                 {
-                    var model = Read(reader).ToList();
-                    TempData["cols"] = newcolumns;
-                    return View(model);
+
+                    using (var reader = _xdta)
+                    {
+                        var model = Read(reader).ToList();
+                        TempData["cols"] = newcolumns;
+                        return View(model);
+                    }
                 }
             }
 
-            return View();
+            return View(new List<object>());
         }
 
 

@@ -12,9 +12,11 @@ using System.Drawing;
 using System.IO;
 using SHIVAM_ECommerce.Repository;
 using SHIVAM_ECommerce.ViewModels;
+using SHIVAM_ECommerce.Attributes;
 
 namespace SHIVAM_ECommerce.Controllers
 {
+    [CustomAuthorize]
     public class AllImagesController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -35,7 +37,7 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /AllImages/
         public ActionResult Index()
         {
-            return View(_repository.GetAll().Where(a => a.UserID == CurrentUserData.UserID));
+            return View(db.AllProductImages.Where(a => a.SupplierID == CurrentUserData.SupplierID));
         }
 
 
@@ -44,13 +46,13 @@ namespace SHIVAM_ECommerce.Controllers
         {
             try
             {
-                var _data = _repository.GetAll().Where(a => a.UserID == CurrentUserData.UserID);
+                var _data = db.AllProductImages.Where(a => a.SupplierID == CurrentUserData.SupplierID);
                 int _TotalCount = _data.Count();
                 _data = !string.IsNullOrEmpty(model.SearchString) ? _data.Where(x => x.ImageName.Contains(model.SearchString)) : _data;
                 int _rowsSkip = model.pageSize * (model.page - 1);
-                var _Results = _data.Skip(_rowsSkip).Take(model.pageSize).OrderBy(x => x.Sort).ToList();
+                var _Results = _data.OrderBy(x => x.Sort).Skip(_rowsSkip).Take(model.pageSize).ToList();
 
-                return Json(new { Success = true, data = _Results, ex = "", TotalCount = _TotalCount }, JsonRequestBehavior.AllowGet);
+                return Json(new { Success = true, data = _Results.Select(x => new { x.Id, x.ImageName, x.ImagePath, x.Sort, x.Description }), ex = "", TotalCount = _TotalCount }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -98,6 +100,7 @@ namespace SHIVAM_ECommerce.Controllers
                     allproductimages.CreatedDate = DateTime.Now;
                     allproductimages.UpdatedDate = DateTime.Now;
                     allproductimages.UserID = curentUserID;
+                    allproductimages.SupplierID = CurrentUserData.SupplierID;
                     _repository.Insert(allproductimages);
                     _repository.Save();
                 }
@@ -122,7 +125,7 @@ namespace SHIVAM_ECommerce.Controllers
                     var oldPathAndName = _OldPath + _image;
                     var _NewPath = System.Web.Hosting.HostingEnvironment.MapPath("~/ProductImages/");
                     var newPathAndName = _NewPath + _imageName;
-                 
+
                     if (System.IO.File.Exists(oldPathAndName))
                         System.IO.File.Copy(oldPathAndName, newPathAndName);
 

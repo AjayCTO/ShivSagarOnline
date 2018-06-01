@@ -12,87 +12,49 @@
 </ol>
 
 
+
+
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-plus"></i> Create New User Claim</h3>
+        <h3 class="card-title"><i class="fa fa-plus"></i> Assign Claims</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-
-            <div class="form-horizontal">
-            
-                @Html.ValidationSummary(true)
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ClaimType, new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.ClaimType, new { @class = "form-control col-md-5" })
-                        @Html.ValidationMessageFor(model => model.ClaimType)
-                    </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Select Role</label>
                 </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ClaimValue, new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.ClaimValue, new { @class = "form-control col-md-5" })
-                        @Html.ValidationMessageFor(model => model.ClaimValue)
-                    </div>
+                <div class="col-md-4">
+                    @Html.DropDownList("Role", new SelectList(ViewBag.Roles, "Name", "Name"), new { @class = "form-control col-md-5", @name = "Role" })
                 </div>
+            </div>
+            <div class="row">
+                <br/>
+            </div>
+    <div class="row">
+        @foreach (var claim in ViewBag.AllClaims)
+        {
 
-                <div class="form-group">
-
-
-                    <div class="col-md-10">
-                        <label class="custom-control custom-checkbox">
-                            @Html.CheckBoxFor(model => model.IsActive,
-       new Dictionary<string, object> { { "class", "custom-control-input" } })
-
-
-                            <span class="custom-control-label">Active</span>
-                        </label>
-                        @Html.ValidationMessageFor(model => model.IsActive)
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Sort, new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Sort, new { @class = "form-control col-md-5" })
-                        @Html.ValidationMessageFor(model => model.Sort)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Role, new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownList("Role", new SelectList(ViewBag.Roles, "Name", "Name"), new { @class = "form-control col-md-5", @name = "Role" })
-
-                        @*@Html.TextBoxFor(model => model.Description, new { @class = "form-control col-md-5" })*@
-
-                        @Html.ValidationMessageFor(model => model.Role)
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="Notes">Display Label</label>
-
-                    @*@Html.LabelFor(model => model.Notes, new { @class = "control-label col-md-2" })*@
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Notes, new { @class = "form-control col-md-5" })
-                        @Html.ValidationMessageFor(model => model.Notes)
-                    </div>
-                </div>
+        @*<div class="col-md-6">
+                <label>@claim.Notes</label>
+            </div>*@
+        <div class="col-md-3">
+            <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="GetSelected custom-control-input" name="GetSelected" value="@claim.ClaimValue" notes="@claim.Notes" claimtype="@claim.ClaimType" />
 
 
 
+                <span class="custom-control-label">@claim.Notes</span>
+            </label>
+        </div>
 
-
-                <div class="form-group">
+        }
+    </div>
+            <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" value="Create" class="btn btn-primary">
+                        <button type="button" id="GetSelectedValue" value="Create" class="btn btn-primary">
                             <i class="fa fa-check"></i>
                             Save
                         </button>
@@ -102,17 +64,77 @@
                         </a>
                     </div>
                 </div>
-            </div>
+                        
+            
         }
     </div>
 </div>
 
+<script>
+    var SelectedClaims = [];
+
+    function GetSelectedValue() {
+
+       
+        SelectedClaims = [];
+
+        $('input:checkbox[name=GetSelected]').each(function () {
+            
+                SelectedClaims.push({
+                    'ClaimType': $(this).attr("claimType"),
+                    'ClaimValue': $(this).val(),
+                    'IsActive': $(this).is(':checked'),
+                    'Notes': $(this).attr("notes"),
+                    'Role': $('#Role :selected').text()
+                });
+           
+
+        });
+
+        console.log(SelectedClaims);
+    }
 
 
 
+    $(document).ready(function () {
+        $("#GetSelectedValue").click(function () {
+            GetSelectedValue();
+
+
+            $.ajax({
+                url: "/UserClaims/CreateFromAjax",
+                type: 'POST',
+                data: JSON.stringify({ "model": SelectedClaims }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (result) {
+                    if (result.Success == true) {
+
+                        alert("In");
+                        window.location.href = "/UserClaims/Index";
+                    }
+                    else {
+                        alert(result.ex);
+                        //toastr.error(result.ex);
+                    }
+                },
+                error: function (err) {
+                },
+                complete: function () {
+                }
+            });
+
+        })
+    });
 
 
 
+  
+</script>
 
 
 
+       
+
+
+      
