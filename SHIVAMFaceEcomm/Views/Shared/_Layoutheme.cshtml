@@ -1,5 +1,5 @@
 ﻿@using System.Web.Optimization;
-
+@using Microsoft.AspNet.Identity;
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/owl.theme.default.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/css/animate.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper.css" />
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/css/toastr.css" rel="stylesheet" />
     @*@Styles.Render("~/bundle/css")*@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,49 +36,43 @@
     
     </style>
 </head>
-<body>
+<body ng-app="MyApp">
 
 
-   
-
-
-
-
-
-        <div class="topBar">
-            <div class="container">
-                <ul class="topBarNav pull-left">
-                    <li class="linkdown">
-                        <a href="javascript:void(0);">
-                            <i class="fa fa-usd mr-5"></i>
-                            USD
+    <div class="topBar">
+        <div class="container">
+            <ul class="topBarNav pull-left">
+                <li class="linkdown">
+                    <a href="javascript:void(0);">
+                        <i class="fa fa-usd mr-5"></i>
+                        USD
+                        <i class="fa fa-angle-down ml-5"></i>
+                    </a>
+                    <ul class="w-100">
+                        <li><a href="javascript:void(0);"><i class="fa fa-eur mr-5"></i>EUR</a></li>
+                        <li class="active"><a href="javascript:void(0);"><i class="fa fa-usd mr-5"></i>USD</a></li>
+                        <li><a href="javascript:void(0);"><i class="fa fa-gbp mr-5"></i>GBP</a></li>
+                    </ul>
+                </li>
+                <li class="linkdown">
+                    <a href="javascript:void(0);">
+                        <img src="img/flags/flag-french.jpg" class="mr-5" alt="">
+                        <span class="hidden-xs">
+                            French
                             <i class="fa fa-angle-down ml-5"></i>
-                        </a>
-                        <ul class="w-100">
-                            <li><a href="javascript:void(0);"><i class="fa fa-eur mr-5"></i>EUR</a></li>
-                            <li class="active"><a href="javascript:void(0);"><i class="fa fa-usd mr-5"></i>USD</a></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-gbp mr-5"></i>GBP</a></li>
-                        </ul>
-                    </li>
-                    <li class="linkdown">
-                        <a href="javascript:void(0);">
-                            <img src="img/flags/flag-french.jpg" class="mr-5" alt="">
-                            <span class="hidden-xs">
-                                French
-                                <i class="fa fa-angle-down ml-5"></i>
-                            </span>
-                        </a>
-                        <ul class="w-100">
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-english.jpg" class="mr-5" alt="">English</a></li>
-                            <li class="active"><a href="javascript:void(0);"><img src="img/flags/flag-french.jpg" class="mr-5" alt="">French</a></li>
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-german.jpg" class="mr-5" alt="">German</a></li>
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-spain.jpg" class="mr-5" alt="">Spain</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                        </span>
+                    </a>
+                    <ul class="w-100">
+                        <li><a href="javascript:void(0);"><img src="img/flags/flag-english.jpg" class="mr-5" alt="">English</a></li>
+                        <li class="active"><a href="javascript:void(0);"><img src="img/flags/flag-french.jpg" class="mr-5" alt="">French</a></li>
+                        <li><a href="javascript:void(0);"><img src="img/flags/flag-german.jpg" class="mr-5" alt="">German</a></li>
+                        <li><a href="javascript:void(0);"><img src="img/flags/flag-spain.jpg" class="mr-5" alt="">Spain</a></li>
+                    </ul>
+                </li>
+            </ul>
 
-                <ul class="topBarNav pull-right">
-                    @*<li><a href="javascript:void(0);" data-toggle="modal" data-target=".loginModal"> Login</a></li>
+            <ul class="topBarNav pull-right">
+                @*<li><a href="javascript:void(0);" data-toggle="modal" data-target=".loginModal"> Login</a></li>
                     <li><a href="javascript:void(0);" data-toggle="modal" data-target=".registerModal"> Register</a></li>
                     <li class="linkdown">
                         <a href="javascript:void(0);">
@@ -94,13 +88,13 @@
                             <li><a href="checkout.html">Checkout</a></li>
                         </ul>
                     </li>*@
-                    @Html.Partial("_LoginPartial")
-                    
-                </ul>
-            </div><!-- end container -->
-        </div>
-        <!-- end topBar -->
+                @Html.Partial("_LoginPartial")
 
+            </ul>
+        </div><!-- end container -->
+    </div>
+    <!-- end topBar -->
+    <div ng-controller="layoutCtrl">
         <div class="middleBar">
             <div class="container">
                 <div class="row display-table">
@@ -111,47 +105,45 @@
                     </div><!-- end col -->
                     <div class="col-sm-7 vertical-align text-center">
                         <form>
+
+
+                        
+
                             <div class="row grid-space-1">
                                 <div class="col-sm-6">
                                     <input type="text" name="keyword" class="form-control input-lg" placeholder="Search">
                                 </div><!-- end col -->
                                 <div class="col-sm-3">
+
+                                    <div style="display:none;">
+                                        <ul class="nav navbar-nav">
+                                            <li class="dropdown active left">
+                                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Category<i class="fa fa-angle-down ml-5"></i></a>
+                                                <ul class="dropdown-menu">
+                                                    <li ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" class="dropdown-submenu">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}</a>
+                                                        <ul class="dropdown-menu">
+                                                            <li ng-repeat="subcat in cat.Categories1"><a href="#">{{cat.CategoryName}}</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories"><a href="#">{{cat.CategoryName}}</a></li>
+
+                                                </ul><!-- end ul dropdown-menu -->
+                                            </li><!-- end li dropdown -->
+
+
+                                        </ul>
+                                    </div>
+
                                     <select class="form-control input-lg" name="category">
                                         <option value="all">All Categories</option>
-                                        <optgroup label="Mens">
-                                            <option value="shirts">Shirts</option>
-                                            <option value="coats-jackets">Coats & Jackets</option>
-                                            <option value="underwear">Underwear</option>
-                                            <option value="sunglasses">Sunglasses</option>
-                                            <option value="socks">Socks</option>
-                                            <option value="belts">Belts</option>
+                                        <optgroup ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" label="{{cat.CategoryName}}">
+                                            <option ng-repeat="subcat in cat.Categories1" value="{{subcat.CategoryName}}">{{subcat.CategoryName}}</option>
+                                        
                                         </optgroup>
-                                        <optgroup label="Womens">
-                                            <option value="bresses">Bresses</option>
-                                            <option value="t-shirts">T-shirts</option>
-                                            <option value="skirts">Skirts</option>
-                                            <option value="jeans">Jeans</option>
-                                            <option value="pullover">Pullover</option>
-                                        </optgroup>
-                                        <option value="kids">Kids</option>
-                                        <option value="fashion">Fashion</option>
-                                        <optgroup label="Sportwear">
-                                            <option value="shoes">Shoes</option>
-                                            <option value="bags">Bags</option>
-                                            <option value="pants">Pants</option>
-                                            <option value="swimwear">Swimwear</option>
-                                            <option value="bicycles">Bicycles</option>
-                                        </optgroup>
-                                        <option value="bags">Bags</option>
-                                        <option value="shoes">Shoes</option>
-                                        <option value="hoseholds">HoseHolds</option>
-                                        <optgroup label="Technology">
-                                            <option value="tv">TV</option>
-                                            <option value="camera">Camera</option>
-                                            <option value="speakers">Speakers</option>
-                                            <option value="mobile">Mobile</option>
-                                            <option value="pc">PC</option>
-                                        </optgroup>
+                                    
+                                        <option ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories" value="{{cat.CategoryName}}">{{cat.CategoryName}}</option>
+                                    
                                     </select>
                                 </div><!-- end col -->
                                 <div class="col-sm-3">
@@ -161,16 +153,16 @@
                         </form>
                     </div><!-- end col -->
                     <div class="col-sm-2 vertical-align header-items hidden-xs">
-                    @*@if (User.Identity.IsAuthenticated)
-                    {*@
+                        @if (User.Identity.IsAuthenticated)
+                            {
                         <div class="header-item mr-5">
-                            <a href="/Home/CustomerWishList/?CustomerId=1" data-toggle="tooltip" data-placement="top" title="Wishlist">
+                            <a href="/Home/CustomerWishList/?CustomerId=@User.Identity.GetUserId()" data-toggle="tooltip" data-placement="top" title="Wishlist">
                                 <i class="fa fa-heart-o"></i>
                                 <sub>32</sub>
                             </a>
                         </div>
-                    @*}*@
-                        
+                        }
+
                         <div class="header-item">
                             <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Compare">
                                 <i class="fa fa-refresh"></i>
@@ -210,208 +202,180 @@
                                 <span class="hidden-sm">Categories</span><i class="fa fa-bars ml-5"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Mens</a>
+                                <li ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" class="dropdown-submenu">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="category.html">Shirts</a></li>
-                                        <li><a href="category.html">Coats & Jackets</a></li>
-                                        <li><a href="category.html">Underwear</a></li>
-                                        <li><a href="category.html">Sunglasses</a></li>
-                                        <li><a href="category.html">Socks</a></li>
-                                        <li><a href="category.html">Belts</a></li>
+                                        <li ng-repeat="subcat in cat.Categories1"><a href="#">{{subcat.CategoryName}}</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Womens</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="category.html">Bresses</a></li>
-                                        <li><a href="category.html">T-shirts</a></li>
-                                        <li><a href="category.html">Skirts</a></li>
-                                        <li><a href="category.html">Jeans</a></li>
-                                        <li><a href="category.html">Pullover</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="javascript:void(0);">Kids</a></li>
-                                <li><a href="javascript:void(0);">Fashion</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">SportWear</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="category.html">Shoes</a></li>
-                                        <li><a href="category.html">Bags</a></li>
-                                        <li><a href="category.html">Pants</a></li>
-                                        <li><a href="category.html">SwimWear</a></li>
-                                        <li><a href="category.html">Bicycles</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="javascript:void(0);">Bags</a></li>
-                                <li><a href="javascript:void(0);">Shoes</a></li>
-                                <li><a href="javascript:void(0);">HouseHolds</a></li>
-                                <li class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Technology</a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="category.html">TV</a></li>
-                                        <li><a href="category.html">Camera</a></li>
-                                        <li><a href="category.html">Speakers</a></li>
-                                        <li><a href="category.html">Mobile</a></li>
-                                        <li><a href="category.html">PC</a></li>
-                                    </ul>
-                                </li>
-                            </ul><!-- end ul dropdown-menu -->
+                                <li ng-if="cat.Categories1.length==0"  ng-repeat="cat in searchcategories"><a href="javascript:void(0);">{{cat.CategoryName}} </a></li>
+                             
+                            </ul>
+                        <!-- end ul dropdown-menu -->
                         </li><!-- end dropdown -->
                     </ul><!-- end navbar-right -->
                 </div><!-- end navbar collapse -->
             </div><!-- end container -->
         </div><!-- end navbar -->
-        @RenderBody()
-        <!-- start footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="icon-boxes style1">
-                            <div class="icon">
-                                <i class="fa fa-truck text-gray"></i>
-                            </div><!-- end icon -->
-                            <div class="box-content">
-                                <h6 class="alt-font text-light text-uppercase">Free Shipping</h6>
-                                <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
-                            </div>
-                        </div><!-- icon-box -->
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <div class="icon-boxes style1">
-                            <div class="icon">
-                                <i class="fa fa-life-ring text-gray"></i>
-                            </div><!-- end icon -->
-                            <div class="box-content">
-                                <h6 class="alt-font text-light text-uppercase">Support 24/7</h6>
-                                <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
-                            </div>
-                        </div><!-- icon-box -->
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <div class="icon-boxes style1">
-                            <div class="icon">
-                                <i class="fa fa-gift text-gray"></i>
-                            </div><!-- end icon -->
-                            <div class="box-content">
-                                <h6 class="alt-font text-light text-uppercase">Gift cards</h6>
-                                <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
-                            </div>
-                        </div><!-- icon-box -->
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <div class="icon-boxes style1">
-                            <div class="icon">
-                                <i class="fa fa-credit-card text-gray"></i>
-                            </div><!-- end icon -->
-                            <div class="box-content">
-                                <h6 class="alt-font text-light text-uppercase">Payment 100% Secure</h6>
-                                <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
-                            </div>
-                        </div><!-- icon-box -->
-                    </div><!-- end col -->
-                </div><!-- end row -->
-
-                <hr class="spacer-30">
-
-                <div class="row">
-                    <div class="col-sm-3">
-                        <h5 class="title">Plus</h5>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia mi.</p>
-
-                        <hr class="spacer-10 no-border">
-
-                        <ul class="social-icons">
-                            <li class="facebook"><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
-                            <li class="twitter"><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
-                            <li class="dribbble"><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a></li>
-                            <li class="linkedin"><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
-                            <li class="youtube"><a href="javascript:void(0);"><i class="fa fa-youtube"></i></a></li>
-                            <li class="behance"><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
-                        </ul>
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <h5 class="title">My Account</h5>
-                        <ul class="list alt-list">
-                            <li><a href="my-account.html"><i class="fa fa-angle-right"></i>My Account</a></li>
-                            <li><a href="wishlist.html"><i class="fa fa-angle-right"></i>Wishlist</a></li>
-                            <li><a href="cart.html"><i class="fa fa-angle-right"></i>My Cart</a></li>
-                            <li><a href="checkout.html"><i class="fa fa-angle-right"></i>Checkout</a></li>
-                        </ul>
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <h5 class="title">Information</h5>
-                        <ul class="list alt-list">
-                            <li><a href="about-us-v1.html"><i class="fa fa-angle-right"></i>About Us</a></li>
-                            <li><a href="faq.html"><i class="fa fa-angle-right"></i>FAQ</a></li>
-                            <li><a href="privacy-policy.html"><i class="fa fa-angle-right"></i>Privacy Policy</a></li>
-                            <li><a href="contact-v1.html"><i class="fa fa-angle-right"></i>Contact Us</a></li>
-                        </ul>
-                    </div><!-- end col -->
-                    <div class="col-sm-3">
-                        <h5 class="title">Payment Methods</h5>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                        <ul class="list list-inline">
-                            <li class="text-white"><i class="fa fa-cc-visa fa-2x"></i></li>
-                            <li class="text-white"><i class="fa fa-cc-paypal fa-2x"></i></li>
-                            <li class="text-white"><i class="fa fa-cc-mastercard fa-2x"></i></li>
-                            <li class="text-white"><i class="fa fa-cc-discover fa-2x"></i></li>
-                        </ul>
-                    </div><!-- end col -->
-                </div><!-- end row -->
-
-                <hr class="spacer-30">
-
-                <div class="row text-center">
-                    <div class="col-sm-12">
-                        <p class="text-sm">&COPY; 2017. Made with <i class="fa fa-heart text-danger"></i> by <a href="javascript:void(0);">DiamondCreative.</a></p>
-                    </div><!-- end col -->
-                </div><!-- end row -->
-            </div><!-- end container -->
-        </footer>
-        <!-- end footer -->
-        <!-- JavaScript Files -->
-        <script type="text/javascript" src="~/Content/js/jquery-3.1.1.min.js"></script>
-
-        <script src="~/Scripts/angular.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-        <script src="~/Scripts/AngularData/App.js"></script>
-        <script type="text/javascript" src="~/Content/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/owl.carousel.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/jquery.downCount.js"></script>
-        <script type="text/javascript" src="~/Content/js/nouislider.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/jquery.sticky.js"></script>
-        <script type="text/javascript" src="~/Content/js/pace.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/star-rating.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/wow.min.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-        <script type="text/javascript" src="~/Content/js/gmaps.js"></script>
-        <script type="text/javascript" src="~/Content/js/swiper.min.js"></script>
-        <script type="text/javascript" src="~/Content/js/main.js"></script>
+    </div>
+    @RenderBody()
 
 
-        <!-- Initialize Swiper slide -->
-        <script>
-            var swiperH = new Swiper('.swiper-coverflow', {
-                pagination: '.swiper-pagination',
-                nextButton: '.swiper-button-next',
-                prevButton: '.swiper-button-prev',
-                paginationClickable: true,
-                effect: 'coverflow',
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                loop: true,
-                coverflow: {
-                    rotate: 50,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows: true
-                }
-            });
-        </script>
+    <div id="overlay"></div>
 
-        @RenderSection("scripts", required: false)
-    </body>
+
+    <!-- start footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="icon-boxes style1">
+                        <div class="icon">
+                            <i class="fa fa-truck text-gray"></i>
+                        </div><!-- end icon -->
+                        <div class="box-content">
+                            <h6 class="alt-font text-light text-uppercase">Free Shipping</h6>
+                            <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
+                        </div>
+                    </div><!-- icon-box -->
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <div class="icon-boxes style1">
+                        <div class="icon">
+                            <i class="fa fa-life-ring text-gray"></i>
+                        </div><!-- end icon -->
+                        <div class="box-content">
+                            <h6 class="alt-font text-light text-uppercase">Support 24/7</h6>
+                            <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
+                        </div>
+                    </div><!-- icon-box -->
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <div class="icon-boxes style1">
+                        <div class="icon">
+                            <i class="fa fa-gift text-gray"></i>
+                        </div><!-- end icon -->
+                        <div class="box-content">
+                            <h6 class="alt-font text-light text-uppercase">Gift cards</h6>
+                            <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
+                        </div>
+                    </div><!-- icon-box -->
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <div class="icon-boxes style1">
+                        <div class="icon">
+                            <i class="fa fa-credit-card text-gray"></i>
+                        </div><!-- end icon -->
+                        <div class="box-content">
+                            <h6 class="alt-font text-light text-uppercase">Payment 100% Secure</h6>
+                            <p class="text-gray">Aenean semper lacus sed molestie sollicitudin.</p>
+                        </div>
+                    </div><!-- icon-box -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+
+            <hr class="spacer-30">
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h5 class="title">Plus</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia mi.</p>
+
+                    <hr class="spacer-10 no-border">
+
+                    <ul class="social-icons">
+                        <li class="facebook"><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
+                        <li class="twitter"><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
+                        <li class="dribbble"><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a></li>
+                        <li class="linkedin"><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
+                        <li class="youtube"><a href="javascript:void(0);"><i class="fa fa-youtube"></i></a></li>
+                        <li class="behance"><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
+                    </ul>
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <h5 class="title">My Account</h5>
+                    <ul class="list alt-list">
+                        <li><a href="my-account.html"><i class="fa fa-angle-right"></i>My Account</a></li>
+                        <li><a href="wishlist.html"><i class="fa fa-angle-right"></i>Wishlist</a></li>
+                        <li><a href="cart.html"><i class="fa fa-angle-right"></i>My Cart</a></li>
+                        <li><a href="checkout.html"><i class="fa fa-angle-right"></i>Checkout</a></li>
+                    </ul>
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <h5 class="title">Information</h5>
+                    <ul class="list alt-list">
+                        <li><a href="about-us-v1.html"><i class="fa fa-angle-right"></i>About Us</a></li>
+                        <li><a href="faq.html"><i class="fa fa-angle-right"></i>FAQ</a></li>
+                        <li><a href="privacy-policy.html"><i class="fa fa-angle-right"></i>Privacy Policy</a></li>
+                        <li><a href="contact-v1.html"><i class="fa fa-angle-right"></i>Contact Us</a></li>
+                    </ul>
+                </div><!-- end col -->
+                <div class="col-sm-3">
+                    <h5 class="title">Payment Methods</h5>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    <ul class="list list-inline">
+                        <li class="text-white"><i class="fa fa-cc-visa fa-2x"></i></li>
+                        <li class="text-white"><i class="fa fa-cc-paypal fa-2x"></i></li>
+                        <li class="text-white"><i class="fa fa-cc-mastercard fa-2x"></i></li>
+                        <li class="text-white"><i class="fa fa-cc-discover fa-2x"></i></li>
+                    </ul>
+                </div><!-- end col -->
+            </div><!-- end row -->
+
+            <hr class="spacer-30">
+
+            <div class="row text-center">
+                <div class="col-sm-12">
+                    <p class="text-sm">&COPY; 2017. Made with <i class="fa fa-heart text-danger"></i> by <a href="javascript:void(0);">DiamondCreative.</a></p>
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </footer>
+    <!-- end footer -->
+    <!-- JavaScript Files -->
+    <script type="text/javascript" src="~/Content/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
+
+    <script src="~/Scripts/AngularData/App.js"></script>
+    <script type="text/javascript" src="~/Content/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/owl.carousel.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/jquery.downCount.js"></script>
+    <script type="text/javascript" src="~/Content/js/nouislider.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/jquery.sticky.js"></script>
+    <script type="text/javascript" src="~/Content/js/pace.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/star-rating.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/wow.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+    <script type="text/javascript" src="~/Content/js/gmaps.js"></script>
+    <script type="text/javascript" src="~/Content/js/swiper.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/main.js"></script>
+
+
+    <!-- Initialize Swiper slide -->
+    <script>
+        //var swiperH = new Swiper('.swiper-coverflow', {
+        //    pagination: '.swiper-pagination',
+        //    nextButton: '.swiper-button-next',
+        //    prevButton: '.swiper-button-prev',
+        //    paginationClickable: true,
+        //    effect: 'coverflow',
+        //    centeredSlides: true,
+        //    slidesPerView: 'auto',
+        //    loop: true,
+        //    coverflow: {
+        //        rotate: 50,
+        //        stretch: 0,
+        //        depth: 100,
+        //        modifier: 1,
+        //        slideShadows: true
+        //    }
+        //});
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+
 </html>

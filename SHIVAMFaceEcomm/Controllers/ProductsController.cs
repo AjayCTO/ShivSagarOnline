@@ -50,12 +50,21 @@ namespace SHIVAMFaceEcomm.Controllers
 
             var result = db.Categories.Where(y => y.ParentCategory == null)
                                       .SelectMany(x => x.Categories1).ToList();
-            db.Categories.Where(p => p.ParentCategory != null).Select(p => new { cid = p.Id, pId = p.ParentCategory }).ToList();
+           
+            //db.Categories.Where(p => p.ParentCategory != null).Select(p => new { cid = p.Id, pId = p.ParentCategory }).ToList();
+
             var xitems = from c1 in db.Categories
                          where c1.ParentCategory != null
                          join c2 in db.Categories on 1 equals 1
                          where c1.ParentCategory != c2.Id && c1.Id != c2.Id
                          select c2;
+
+            //var xitems = from c1 in db.Categories
+            //             where c1.ParentCategory != null
+            //             join c2 in db.Categories on 1 equals 1
+            //             where c1.Id != c2.Id
+            //             select c2;
+
             result.AddRange(xitems.ToList());
             var nresult = new List<CategoryViewModel>();
             result.ForEach(c =>
@@ -67,7 +76,7 @@ namespace SHIVAMFaceEcomm.Controllers
                             CategoryName = c.CategoryName,
                             CategoryImage = c.CategoryImage,
                             Id = c.Id,
-                            Description=c.Description,
+                            Description = c.Description,
                             Categories1 = new List<CategoryViewModel>()
                         });
 
@@ -79,7 +88,7 @@ namespace SHIVAMFaceEcomm.Controllers
                            CategoryName = c.Category1.CategoryName,
                            CategoryImage = c.Category1.CategoryImage,
                            Id = c.Category1.Id,
-                           Description=c.Category1.Description,
+                           Description = c.Category1.Description,
                            Categories1 = GetChildren(c.Category1.Categories1.ToList(), c.Id)
                        });
                 }
@@ -141,7 +150,7 @@ namespace SHIVAMFaceEcomm.Controllers
         {
 
             // Filling the list with data here...
-            var result = db.Suppliers.Select(p => new { CompanyName = p.CompanyName, Id = p.Id, Logo=p.Logo });
+            var result = db.Suppliers.Select(p => new { CompanyName = p.CompanyName, Id = p.Id, Logo = p.Logo });
 
             // Then I return the list
             return Request.CreateResponse(HttpStatusCode.OK, result.ToList());

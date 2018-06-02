@@ -18,7 +18,7 @@ namespace SHIVAM_ECommerce.Models
     public class ApplicationUserClaim : IdentityUserClaim
     {
 
-        public int ClaimID { get; set; }
+        public int? ClaimID { get; set; }
         public bool IsActive { get; set; }
         public string DisplayLabel { get; set; }
 

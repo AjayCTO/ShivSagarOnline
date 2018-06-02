@@ -5,139 +5,10 @@
 }
 
 
-<div class="container" style="display:none;">
-    <br>
-    <div class="page-header">
-        <h3>Product Detail for @Model.Product.ProductName</h3>
-    </div>
-    <hr>
-
-    <div class="card">
-        <div class="row">
-            <aside class="col-sm-5 border-right">
-                <article class="gallery-wrap">
-                    <div class="img-big-wrap">
-                        <div> <a href="#"><img src="http://localhost:14988/ProductImages/@Model.Attributes.First().ImagePath" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" width="500px" height="100%"></a></div>
-                    </div> <!-- slider-product.// -->
-                    <div class="img-small-wrap">
-                        <div class="row">
-                            @for (int i = 0; i < Model.Attributes.Count(); i++)
-                            {
-                                <div class="column">
-                                    <img src="http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" style="width:100%" onclick="openModal();currentSlide(@(i+1))" class="hover-shadow cursor">
-                                </div>
-
-                            }
-
-
-                        </div>
-
-
-                    </div> <!-- slider-nav.// -->
-
-
-
-                    <div id="myModal" class="modal">
-                        <span class="close cursor" onclick="closeModal()">&times;</span>
-                        <div class="modal-content">
-                            @for (int i = 0; i < Model.Attributes.Count(); i++)
-                            {
-                                <div class="mySlides">
-                                    <div class="numbertext">@(i + 1) / @Model.Attributes.Count()</div>
-                                    <img src="http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" style="width:100%">
-                                </div>
-
-                            }
 
 
 
 
-                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-                            <div class="caption-container">
-                                <p id="caption"></p>
-                            </div>
-
-                            @for (int i = 0; i < Model.Attributes.Count(); i++)
-                            {
-                                <div class="column">
-                                    <img class="demo cursor" src="http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath" onerror="this.onerror = null; this.src = '/Content/images/no-image.png';" style="width:100%" onclick="currentSlide(@(i+1))" alt="@Model.Attributes[i].ImageName">
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-                </article> <!-- gallery-wrap .end// -->
-            </aside>
-            <aside class="col-sm-7">
-                <article class="card-body p-5">
-                    <h3 class="title mb-3">@Model.Product.ProductName</h3>
-                    <p class="price-detail-wrap">
-                        <span class="price h3 text-warning">
-                            <span class="currency">US $</span><span class="num">1299</span>
-                        </span>
-                        <span>/per kg</span>
-                    </p> <!-- price-detail-wrap .// -->
-                    <dl class="item-property">
-                        <dt>Description</dt>
-                        <dd>
-                            <p>
-                                @Model.Product.Description
-                            </p>
-                        </dd>
-                    </dl>
-                    <dl class="param param-feature">
-                        <dt>Model#</dt>
-                        <dd>@Model.Product.SKU</dd>
-                    </dl>  <!-- item-property-hor .// -->
-                    @for (int i = 0; i < allAttributes.Count(); i++)
-                    {
-                        <dl class="param param-feature">
-                            <dt>@allAttributes[i]</dt>
-                            @{
-                        var allattributeV = Model.Attributes.Where(p => p.AttributeName == allAttributes[i]).Select(p => p.AttributeValue).Distinct().ToList();
-                            }
-                            <dd>
-                                <select class="form-control form-control-sm" id="attribute@(i+1)" onchange="GetAttributeDate(@allAttributes[i])" attributename="@allAttributes[i]" style="width:70px;">
-                                    @for (int k = 0; k < allattributeV.Count(); k++)
-                                    {
-                                        <option value="@allattributeV[k]"> @allattributeV[k] </option>
-                                    }
-
-
-                                </select>
-                            </dd>
-                        </dl>  <!-- item-property-hor .// -->
-                    }
-
-
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <dl class="param param-inline">
-                                <dt>Quantity: </dt>
-                                <dd>
-                                    <select class="form-control form-control-sm">
-                                        <option> 1 </option>
-                                        <option> 2 </option>
-                                        <option> 3 </option>
-                                    </select>
-                                </dd>
-                            </dl>  <!-- item-property .// -->
-                        </div> <!-- col.// -->
-                        <!-- col.// -->
-                    </div> <!-- row.// -->
-                    <hr>
-                    <a href="#" class="btn btn-lg btn-primary text-uppercase" > Buy now </a>
-
-                    <a href="#" class="btn btn-lg btn-outline-primary text-uppercase"> <i class="fas fa-shopping-cart"></i> Add to cart </a>
-                </article> <!-- card-body.// -->
-            </aside> <!-- col.// -->
-        </div> <!-- row.// -->
-    </div> <!-- card.// -->
-
-</div>
 <section class="section white-backgorund">
     <div class="container">
         <div class="row">
@@ -151,7 +22,31 @@
                             {
                                 <div class='item active'>
                                     <figure>
-                                        <img src='http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
+
+                                        @if(Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
+                                        {
+                                            
+                                            <div class="magnify">
+
+                                           <!-- This is the magnifying glass which will contain the original/large version -->
+                                              <div class="large"></div>
+
+                                             <!-- This is the small image -->
+                                                <img class="small" src="http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath" width="200" />
+
+                                                </div>
+                                            
+                                            
+                                           
+                                        }
+                                        
+                                        
+                                           @if(Model.Attributes[i].ImagePath == null)
+                                        {
+                                            <img src="/Content/images/default-no-image.png" alt="">
+                                        }
+
+                                       
                                     </figure>
                                 </div><!-- end item -->
                             }
@@ -159,7 +54,24 @@
                             {
                                 <div class='item'>
                                     <figure>
-                                        <img src='http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
+                                        @if (Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
+                                        {
+                                         <div class="magnify">
+
+                                           <!-- This is the magnifying glass which will contain the original/large version -->
+                                              <div class="large"></div>
+
+                                             <!-- This is the small image -->
+                                                <img class="small" src="http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath" width="200" />
+
+                                                </div>
+                                        }
+
+
+                                        @if (Model.Attributes[i].ImagePath == null)
+                                        {
+                                            <img src="/Content/images/default-no-image.png" alt="">
+                                        }
                                     </figure>
                                 </div><!-- end item -->
                             }
@@ -180,7 +92,18 @@
                     <ol class='carousel-indicators mCustomScrollbar meartlab'>
                         @for (int i = 0; i < Model.Attributes.Count(); i++)
                         {
-                            <li data-target='.product-slider' data-slide-to='@i'><img src='http://localhost:14988/ProductImages/@Model.Attributes[i].ImagePath' alt='' /></li>
+                            <li data-target='.product-slider' data-slide-to='@i'>
+                                @if (Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
+                                {
+                                    <img src='http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
+                                }
+
+
+                                @if (Model.Attributes[i].ImagePath == null)
+                                {
+                                    <img src="/Content/images/default-no-image.png" alt="">
+                                }
+                            </li>
                         }
 
                     </ol><!-- end carousel-indicators -->
@@ -213,17 +136,13 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p>@Model.Product.Description</p>
-                        <ul class="list alt-list">
-                            <li><i class="fa fa-check"></i> Lorem Ipsum dolor sit amet</li>
-                            <li><i class="fa fa-check"></i> Cras aliquet venenatis sapien fringilla.</li>
-                            <li><i class="fa fa-check"></i> Duis luctus erat vel pharetra aliquet.</li>
-                        </ul>
+                    
                         <hr class="spacer-15">
                         <div class="row">
 
                             @for (int i = 0; i < allAttributes.Count(); i++)
                             {
-                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="col-md-3 col-sm-6 col-xs-12">
                                     <dl class="param param-feature">
                                         <dt>@allAttributes[i]</dt>
                                         @{
@@ -245,7 +164,7 @@
 
 
                             <!-- end col -->
-                            <div class="col-md-4 col-sm-12">
+                            <div class="col-md-3 col-sm-12">
                                 <dl class="param param-feature">
                                     <dt>QTY</dt>
 
@@ -769,11 +688,84 @@
                     dataType: "json",
                     success: function(resultData) {
 
-                        $scope.reviews=resultData; alert("Got all information");$scope.$apply(); }
+                        $scope.reviews=resultData; 
+                        $scope.$apply(); }
                 });
             };
             $scope.GetReviews();
         });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+
+            var native_width = 0;
+            var native_height = 0;
+            $(".large").css("background","url('" + $(".small").attr("src") + "') no-repeat");
+
+            //Now the mousemove function
+            $(".magnify").mousemove(function(e){
+                //When the user hovers on the image, the script will first calculate
+                //the native dimensions if they don't exist. Only after the native dimensions
+                //are available, the script will show the zoomed version.
+                if(!native_width && !native_height)
+                {
+                    //This will create a new image object with the same image as that in .small
+                    //We cannot directly get the dimensions from .small because of the 
+                    //width specified to 200px in the html. To get the actual dimensions we have
+                    //created this image object.
+                    var image_object = new Image();
+                    image_object.src = $(".small").attr("src");
+			
+                    //This code is wrapped in the .load function which is important.
+                    //width and height of the object would return 0 if accessed before 
+                    //the image gets loaded.
+                    native_width = image_object.width;
+                    native_height = image_object.height;
+                }
+                else
+                {
+                    //x/y coordinates of the mouse
+                    //This is the position of .magnify with respect to the document.
+                    var magnify_offset = $(this).offset();
+                    //We will deduct the positions of .magnify from the mouse positions with
+                    //respect to the document to get the mouse positions with respect to the 
+                    //container(.magnify)
+                    var mx = e.pageX - magnify_offset.left;
+                    var my = e.pageY - magnify_offset.top;
+			
+                    //Finally the code to fade out the glass if the mouse is outside the container
+                    if(mx < $(this).width() && my < $(this).height() && mx > 0 && my > 0)
+                    {
+                        $(".large").fadeIn(100);
+                    }
+                    else
+                    {
+                        $(".large").fadeOut(100);
+                    }
+                    if($(".large").is(":visible"))
+                    {
+                        //The background position of .large will be changed according to the position
+                        //of the mouse over the .small image. So we will get the ratio of the pixel
+                        //under the mouse pointer with respect to the image and use that to position the 
+                        //large image inside the magnifying glass
+                        var rx = Math.round(mx/$(".small").width()*native_width - $(".large").width()/2)*-1;
+                        var ry = Math.round(my/$(".small").height()*native_height - $(".large").height()/2)*-1;
+                        var bgp = rx + "px " + ry + "px";
+				
+                        //Time to move the magnifying glass with the mouse
+                        var px = mx - $(".large").width()/2;
+                        var py = my - $(".large").height()/2;
+                        //Now the glass moves with the mouse
+                        //The logic is to deduct half of the glass's width and height from the 
+                        //mouse coordinates to place it with its center at the mouse coordinates
+				
+                        //If you hover on the image now, you should see the magnifying glass in action
+                        $(".large").css({left: px, top: py, backgroundPosition: bgp});
+                    }
+                }
+            })
+        })
     </script>
 
 

@@ -77,3 +77,31 @@ app.factory("CartToCookieService", function () {
     };
 
 });
+
+app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
+    $scope.searchcategories = [];
+
+    $scope.GetCategories = function () {
+
+        $.ajax({
+            url: '/api/Products/GetCategories',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+         
+                $scope.searchcategories = data;
+                console.log("category123");
+                console.log($scope.searchcategories);
+
+                $scope.$apply();
+
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $scope.categories = [];
+            }
+        });
+    };
+    $scope.GetCategories();
+});

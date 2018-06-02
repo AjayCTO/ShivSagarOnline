@@ -40,41 +40,44 @@
         if (items != undefined) {
 
             $scope.AllCartItems = items;
+
+            console.log("cart items");
+            console.log($scope.AllCartItems);
+
             $scope.CartProductsCounter = $scope.AllCartItems.length;
         }
 
         var FilterText = "";
         var newcounter = 0;
-        for (var i = 0; i < $scope.AllAttributeFilters.length; i++) { 
+        for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
             if ($scope.AllAttributeFilters[i].Values.length > 0) {
-                if (newcounter == 0)
-                {
+                if (newcounter == 0) {
                     FilterText = FilterText + "(";
                     newcounter++;
                 }
                 FilterText = FilterText + " [" + $scope.AllAttributeFilters[i].Name + "]  in (";
                 for (var k = 0; k < $scope.AllAttributeFilters[i].Values.length; k++) {
-                    FilterText = FilterText +"'"+ $scope.AllAttributeFilters[i].Values[k] +"'" + ",";
+                    FilterText = FilterText + "'" + $scope.AllAttributeFilters[i].Values[k] + "'" + ",";
                 }
                 FilterText = FilterText.replace(/,\s*$/, "");
-                
-                    FilterText = FilterText + ") OR ";
-                 
-                
+
+                FilterText = FilterText + ") OR ";
+
+
             }
         }
         if (newcounter > 0) {
             FilterText = FilterText.substring(0, FilterText.length - 4);
             FilterText = FilterText + ") AND";
         }
-       
+
         $.ajax({
             url: '/Models/GetProducts.ashx',
             type: 'GET',
             dataType: 'json',
             data: { displayLength: limit, displayStart: offset, searchText: "", filtertext: FilterText },
             success: function (data, textStatus, xhr) {
-                
+
                 $scope.total = data.iTotalDisplayRecords;
                 $scope.pagedItems = $scope.pagedItems.concat(data.aaData);
 
@@ -84,38 +87,40 @@
                 return items = [];
             }
         });
-        
+
         $scope.loadFilters();
 
 
     };
 
-    $scope.AddAttrToFilter=function(ischecked,name,value)
-    {
-     
 
-        if (ischecked == 1)
-        {
+
+
+
+    $scope.AddAttrToFilter = function (ischecked, name, value) {
+
+
+        if (ischecked == 1) {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
                 if ($scope.AllAttributeFilters[i].Name === name) {
                     if ($scope.AllAttributeFilters[i].Values.indexOf(value) === -1) {
                         $scope.AllAttributeFilters[i].Values.push(value);
                     }
-                    
-                } 
+
+                }
             }
         } else {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
                 if ($scope.AllAttributeFilters[i].Name === name) {
                     if ($scope.AllAttributeFilters[i].Values.indexOf(value) === 1) {
-                       
+
                         $scope.AllAttributeFilters[i].Values.splice($scope.AllAttributeFilters[i].Values.indexOf(value), 1);
                     }
 
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -180,29 +185,50 @@
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
-                
+
                 $scope.categories = data;
 
 
                 console.log("category");
                 console.log($scope.categories);
 
-              $scope.showloader = false;
-              
+                $scope.showloader = false;
+
                 $scope.$apply();
-
-            
-
-             
+                setTimeout(function () {
 
 
-           
-              
+                    new Swiper('.swiper-coverflow', {
+                        pagination: '.swiper-pagination',
+                        nextButton: '.swiper-button-next',
+                        prevButton: '.swiper-button-prev',
+                        paginationClickable: true,
+                        effect: 'coverflow',
+                        centeredSlides: true,
+                        slidesPerView: 'auto',
+                        loop: true,
+                        coverflow: {
+                            rotate: 50,
+                            stretch: 0,
+                            depth: 100,
+                            modifier: 1,
+                            slideShadows: true
+                        }
+                    });
+                }, 100);
+
+
             },
             error: function (xhr, textStatus, errorThrown) {
                 $scope.categories = [];
             }
         });
+
+
+        function reinitSwiper(swiper) {
+
+        }
+
 
         $.ajax({
             url: '/api/Products/GetSupplier',
@@ -213,12 +239,12 @@
 
                 $scope.supplierlist = data;
                 $scope.$apply();
-             
-             
+
+
                 console.log($scope.supplierlist);
             },
             error: function (xhr, textStatus, errorThrown) {
-             
+
             }
         });
 
@@ -268,15 +294,36 @@
 
     $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     $scope.loadSuppliers();
-    $scope.addTowishList = function (productId,customerId) {
-       
+    $scope.addTowishList = function (productId, customerId) {
+
     };
+
+    $scope.DeleteCarttolist = function (Product) {
+
+        debugger;
+
+        if (confirm("are you sure you want to delete this item from cart ?") == true) {
+            for (var i = 0; i < $scope.AllCartItems.length; i++) {
+                if ($scope.AllCartItems[i].ProductId == Product.ProductId) {
+                    $scope.AllCartItems.splice($.inArray(Product, $scope.AllCartItems), 1);
+                }
+            }
+            debugger;
+            CartToCookieService.setCookieData($scope.AllCartItems);
+        }
+
+
+    };
+
+
 });
 
 $("#cart").on("click", function () {
     $(".shopping-cart").fadeToggle("fast");
+    document.getElementById("overlay").style.display = "block";
 });
 
 $(".fa-angle-double-right").on("click", function () {
     $(".shopping-cart").fadeToggle("fast");
+    document.getElementById("overlay").style.display = "none";
 });

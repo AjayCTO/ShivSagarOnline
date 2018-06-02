@@ -7,6 +7,9 @@
 
     $scope.CustomerDetails = {firstName:"",lastName:"",phone:"",email:"",cardType:0,CreditCard:"",CardExpMo:"",CardExpYr:"",userName:"",password:""};
 
+    
+
+   
     $scope.loadItemsFromCookie = function () {
        
         $scope.CartItems = CartToCookieService.getCookieData();
@@ -22,6 +25,17 @@
 
     $scope.updateQuantityOfCartItem = function (Product) { 
         CartToCookieService.setCookieData($scope.CartItems);
+
+        var total = 0;
+
+        for (var i = 0; i < $scope.CartItems.length; i++) {
+            var product = $scope.CartItems[i];
+            total += (product.Cost * product.Quantity);
+        }
+        $scope.TotalOfCartItems = total;
+
+        toastr.info("", "Updated");
+
     };
 
     $scope.DeleteCartItem = function (Product) {
@@ -34,6 +48,15 @@
             }
             debugger;
             CartToCookieService.setCookieData($scope.CartItems);
+
+            var total = 0;
+
+            for (var i = 0; i < $scope.CartItems.length; i++) {
+                var product = $scope.CartItems[i];
+                total += (product.Cost * product.Quantity);
+            }
+            $scope.TotalOfCartItems = total;
+
         }
         
           
@@ -61,4 +84,5 @@
 
     };
     $scope.loadItemsFromCookie();
+  
 });
