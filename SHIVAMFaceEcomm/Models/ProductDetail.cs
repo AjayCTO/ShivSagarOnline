@@ -9,7 +9,7 @@ namespace SHIVAMFaceEcomm.Models
     {
         public Product Product { get; set; }
         public List<ProductDetailAttributes> Attributes { get; set; }
-
+        //public List<ProductImage> Images { get; set; }
     }
 
     public class ProductDetailAttributes
@@ -22,6 +22,8 @@ namespace SHIVAMFaceEcomm.Models
 
         public string ImagePath { get; set; }
         public string ImageName { get; set; }
+        public int ProductQuantityId { get; set; }
+        
 
     }
 

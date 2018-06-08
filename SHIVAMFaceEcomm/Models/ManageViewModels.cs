@@ -14,6 +14,21 @@ namespace SHIVAMFaceEcomm.Models
         public bool BrowserRemembered { get; set; }
     }
 
+    public class WishListViewModel
+    {
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+
+        public string ProductName { get; set; }
+
+        public decimal ProductPrice { get; set; }
+
+        public string ProductDescription { get; set; }
+
+        public string Image { get; set; }
+
+        public int CustomerId { get; set; }
+    }
     public class ManageLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }

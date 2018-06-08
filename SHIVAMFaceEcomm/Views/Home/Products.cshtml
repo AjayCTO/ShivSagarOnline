@@ -1,7 +1,16 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+
+@{
     ViewBag.Title = "Products";
+    var _CurrentUserID = User.Identity.GetUserId();
+    
 }
 
+<style>
+    .active .fa {
+        color: #0cd4d2 !important;
+    }
+</style>
 
 <div class="breadcrumbs">
     <div class="container">
@@ -152,7 +161,7 @@
                                             </a>
                                         </figure>
                                         <div class="icons">
-                                            <a class="icon" href="javascript:void(0);"><i class="fa fa-heart-o"></i></a>
+                                            <a class="icon {{CheckisInWishList(x[8])}}" ng-click="addTowishList(x[8],'@_CurrentUserID')"><i class="fa fa-heart-o"></i></a>
                                             @*<a class="icon" href="javascript:void(0);"><i class="fa fa-gift"></i></a>*@
                                             <a class="icon" href="/home/productdetail/?productId={{x[8]}}"><i class="fa fa-search"></i></a>
                                             <a class="icon" href="javascript:void(0);" id="pid{{x[3]}}" ng-click="AddToCart(x[3],this)"><i class="fa fa-cart-plus mr-5"></i>Add to cart</a>
@@ -306,6 +315,9 @@
 {
 
     <script src="~/Scripts/AngularData/Products.js"></script>
+    <script>
+        var _customerID = '@_CurrentUserID';
+    </script>
 }
 <style>
     figure {

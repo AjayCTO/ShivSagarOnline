@@ -44,26 +44,25 @@ namespace SHIVAMFaceEcomm.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, nresult);
         }
 
-        public HttpResponseMessage GetCategories()
+        public HttpResponseMessage GetCategories1()
         {
-            // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();
-
+            var _results = db.Categories.ToList();
             var result = db.Categories.Where(y => y.ParentCategory == null)
                                       .SelectMany(x => x.Categories1).ToList();
-           
-            //db.Categories.Where(p => p.ParentCategory != null).Select(p => new { cid = p.Id, pId = p.ParentCategory }).ToList();
 
-            var xitems = from c1 in db.Categories
-                         where c1.ParentCategory != null
-                         join c2 in db.Categories on 1 equals 1
-                         where c1.ParentCategory != c2.Id && c1.Id != c2.Id
-                         select c2;
+            db.Categories.Where(p => p.ParentCategory != null).Select(p => new { cid = p.Id, pId = p.ParentCategory }).ToList();
 
             //var xitems = from c1 in db.Categories
             //             where c1.ParentCategory != null
             //             join c2 in db.Categories on 1 equals 1
-            //             where c1.Id != c2.Id
+            //             where c1.ParentCategory != c2.Id && c1.Id != c2.Id
             //             select c2;
+
+            var xitems = from c1 in db.Categories
+                         where c1.ParentCategory != null
+                         join c2 in db.Categories on 1 equals 1
+                         where c1.Id != c2.Id
+                         select c2;
 
             result.AddRange(xitems.ToList());
             var nresult = new List<CategoryViewModel>();
@@ -97,9 +96,36 @@ namespace SHIVAMFaceEcomm.Controllers
             });
 
 
-            return Request.CreateResponse(HttpStatusCode.OK, nresult);
+            return Request.CreateResponse(HttpStatusCode.OK, _results);
         }
 
+
+        public HttpResponseMessage GetCategories()
+        {
+            var _results = db.Categories.ToList();
+            var tree = _results.BuildTree().ToList();
+            var nresult = new List<CategoryViewModel>();
+            tree.ForEach(c =>
+            {
+
+                nresult.Add(new CategoryViewModel()
+                {
+                    CategoryName = c.CategoryName,
+                    CategoryImage = c.CategoryImage,
+                    Id = c.Id,
+                    Description = c.Description,
+                    ParentCategory = c.ParentCategory,
+                    Categories1 = c.Categories1.Count() == 0 ? new List<CategoryViewModel>() : GetChildren(c.Categories1.ToList(), c.Id)
+                });
+
+
+
+
+            });
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, nresult);
+        }
         public HttpResponseMessage GetWishList(Guid CustomerId)
         {
             // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();

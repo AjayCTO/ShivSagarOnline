@@ -1,1 +1,2 @@
-﻿Name,ProductCode,Description,categoryName,UnitOfMeasure,ManuFacturer,size,color,Quantity,Cost
+Name	ProductCode	Description	categoryName	UnitOfMeasure	ManuFacturer	HighQuantityThreshold	LowQuantityThreshold	IsFeatured	ProductStatus	Model	Color	Size	Quantity	Cost
+123	123	123	123	12	1	1	1111	TRUE	available	12312	red	xxl	22	2222

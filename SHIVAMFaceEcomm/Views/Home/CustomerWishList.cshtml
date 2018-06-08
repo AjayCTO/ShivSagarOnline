@@ -1,104 +1,72 @@
 ﻿@model Guid
 @{
     ViewBag.Title = "CustomerWishList";
-    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+    Layout = "~/Views/Shared/_Layoutheme.cshtml";
 }
+<div ng-app="MyApp">
 
+    <div ng-controller="PaginationCtrl">
+        @Html.Partial("shoppingcart")
 
+    </div>
+    <div class="container" ng-controller="CustomerCtrl">
+        <div class="row">
+            <div class="col-sm-12 text-left">
+                <h2 class="title">My Wishlist</h2>
+            </div><!-- end col -->
+        </div><!-- end row -->
 
-<div class="container-fluid" ng-app="MyApp" ng-controller="CustomerCtrl">
-    <div class="row">
-        <div class="col-sm-12 text-left">
-            <h2 class="title">My Wishlist</h2>
-        </div><!-- end col -->
-    </div><!-- end row -->
+        <hr class="spacer-5"><hr class="spacer-20 no-border">
 
-    <hr class="spacer-5"><hr class="spacer-20 no-border">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="obj in wishList track by obj.Id">
+                                <td>
+                                    <a href="/home/productdetail/?productId={{obj.ProductId}}">
+                                        <img width="60px" ng-if="obj.Image!=''" src="http://localhost:7080/ProductImages/{{obj.Image}}" alt="product">
+                                        <img width="60px" ng-if="obj.Image==''" src="@Url.Content("~/Content/images/nocategory.png")" alt="product">
+                                    </a>
+                                </td>
+                                <td>
+                                    <h6 class="regular"><a href="/home/productdetail/?productId={{obj.ProductId}}">{{obj.ProductName}}</a></h6>
+                                    <small>{{obj.ProductDescription}}</small>
+                                </td>
+                                <td>
+                                    <span class="text-primary">${{obj.ProductPrice}}</span>
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0)" id="pid_{{obj.ProductId}}" ng-click="AddToCart(obj.ProductId,obj)" class="btn btn-default round btn-sm"><i class="fa fa-cart-plus mr-5"></i> Add to cart</a>
+                                </td>
+                                <td>
+                                    <button type="button" ng-click="RemoveFromwishList(obj.Id)" class="close">×</button>
+                                </td>
+                            </tr>
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="table-responsive">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <a href="shop-single-product-v1.html">
-                                    <img width="60px" src="img/products/men_06.jpg" alt="product">
-                                </a>
-                            </td>
-                            <td>
-                                <h6 class="regular"><a href="shop-single-product-v1.html">Lorem Ipsum</a></h6>
-                                <small>12x1.5 L</small>
-                            </td>
-                            <td>
-                                <span class="text-primary">$59.99</span>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-default round btn-sm"><i class="fa fa-cart-plus mr-5"></i> Add to cart</a>
-                            </td>
-                            <td>
-                                <button type="button" class="close">×</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="shop-single-product-v1.html">
-                                    <img width="60px" src="img/products/shoes_01.jpg" alt="product">
-                                </a>
-                            </td>
-                            <td>
-                                <h6 class="regular"><a href="shop-single-product-v1.html">Lorem Ipsum</a></h6>
-                                <small>12x1.5 L</small>
-                            </td>
-                            <td>
-                                <span class="text-primary">$39.99</span>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-default round btn-sm"><i class="fa fa-cart-plus mr-5"></i> Add to cart</a>
-                            </td>
-                            <td>
-                                <button type="button" class="close">×</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a href="shop-single-product-v1.html">
-                                    <img width="60px" src="img/products/bags_07.jpg" alt="product">
-                                </a>
-                            </td>
-                            <td>
-                                <h6 class="regular"><a href="shop-single-product-v1.html">Lorem Ipsum</a></h6>
-                                <small>12x1.5 L</small>
-                            </td>
-                            <td>
-                                <span class="text-primary">$29.99</span>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0)" class="btn btn-default round btn-sm"><i class="fa fa-cart-plus mr-5"></i> Add to cart</a>
-                            </td>
-                            <td>
-                                <button type="button" class="close">×</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table><!-- end table -->
-            </div><!-- end table-responsive -->
+                        </tbody>
+                    </table><!-- end table -->
+                </div><!-- end table-responsive -->
 
-            <hr class="spacer-10 no-border">
+                <hr class="spacer-10 no-border">
 
-            <a href="shop-sidebar-left.html" class="btn btn-light semi-circle btn-md">
-                <i class="fa fa-arrow-left mr-5"></i> Continue shopping
-            </a>
-        </div><!-- end col -->
-    </div><!-- end row -->
+                <a href="shop-sidebar-left.html" class="btn btn-light semi-circle btn-md">
+                    <i class="fa fa-arrow-left mr-5"></i> Continue shopping
+                </a>
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div>
+
+    
 </div>
-
-
 @section scripts
 {
     <script>
-     var customerId='@Model' ; 
+        var customerId = '@Model';
+        var _customerID = customerId;
     </script>
-<script src="~/Scripts/AngularData/Customer.js"></script>
+   <script src="~/Scripts/AngularData/Products.js"></script>
 
-    }
+    <script src="~/Scripts/AngularData/Customer.js"></script>
+}

@@ -12,93 +12,109 @@ using SHIVAMFaceEcomm.Models;
 
 namespace SHIVAMFaceEcomm.Controllers
 {
+    [RoutePrefix("/api/WishLists/{actionName}")]
     public class WishListsController : ApiController
     {
         private SHIVAMECommerceDBNewEntities db = new SHIVAMECommerceDBNewEntities();
 
         // GET: api/WishLists
-        public IQueryable<WishList> GetWishLists()
+        public List<WishListViewModel> GetWishLists(string UserID)
         {
-            return db.WishLists;
-        }
-
-        // GET: api/WishLists/5
-        [ResponseType(typeof(WishList))]
-        public IHttpActionResult GetWishList(int id)
-        {
-            WishList wishList = db.WishLists.Find(id);
-            if (wishList == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(wishList);
-        }
-
-        // PUT: api/WishLists/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutWishList(int id, WishList wishList)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != wishList.Id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(wishList).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WishListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                var _Customer = db.Customers.Where(x => x.UserID == UserID).FirstOrDefault();
+                var _wishlistData = db.WishLists.Where(x => x.CustomerId == _Customer.Id).ToList();
+                var _newlistwm = new List<WishListViewModel>();
 
-            return StatusCode(HttpStatusCode.NoContent);
+                foreach (var _item in _wishlistData)
+                {
+                    var _productQuantity = db.ProductAttributeWithQuantities.Where(x => x.ProductId == _item.ProductId).ToList();
+                    var _imagePath="";
+                    
+                    if(_productQuantity!=null && _productQuantity.Count()>0)
+                    {
+                        var _productIDs=_productQuantity.Select(x=>x.Id);
+                        var _imagePathData=db.ProductImages.Where(x=>_productIDs.Contains(x.ProductQuantityId)).Select(x=>x.ImagePath);
+                        
+                        if(_imagePathData.Count()>0)
+                        {
+                            var _array=_imagePathData.ToArray();
+                            _imagePath =_array[0];
+                        }
+                    }
+                    _newlistwm.Add(new WishListViewModel() { Image = _imagePath, Id = _item.Id, ProductId = _item.ProductId, CustomerId = _item.CustomerId, ProductName = _item.Product.ProductName, ProductDescription = _item.Product.Description, ProductPrice = _productQuantity.Count() > 0 ? _productQuantity.FirstOrDefault().UnitPrice : 0 });
+                }
+
+                return _newlistwm;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
+
+       
 
         // POST: api/WishLists
         [ResponseType(typeof(WishList))]
-        public IHttpActionResult PostWishList(WishList wishList)
+        public APIResponse PostWishList(WishList wishList)
         {
-            if (!ModelState.IsValid)
+            var _newError = new APIResponse();
+
+            try
             {
-                return BadRequest(ModelState);
+
+
+                var _Customer = db.Customers.Where(x => x.UserID == wishList.UserID).FirstOrDefault();
+
+                wishList.CustomerId = _Customer.Id;
+                db.WishLists.Add(wishList);
+                db.SaveChanges();
+                _newError.ID = wishList.Id;
+                _newError.Success = true;
+                _newError.Ex = "";
+                return _newError;
             }
+            catch (Exception Ex)
+            {
 
-            db.WishLists.Add(wishList);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = wishList.Id }, wishList);
+                _newError.ID = -1;
+                _newError.Success = false;
+                _newError.Ex = Ex.Message.ToString();
+                return _newError;
+            }
         }
 
         // DELETE: api/WishLists/5
-        [ResponseType(typeof(WishList))]
-        public IHttpActionResult DeleteWishList(int id)
+        [HttpPost]
+        [ActionName("DeleteWishList")]
+        public APIResponse DeleteWishList(int id)
         {
-            WishList wishList = db.WishLists.Find(id);
-            if (wishList == null)
+
+            var _newError = new APIResponse();
+
+            try
             {
-                return NotFound();
+
+
+                WishList wishList = db.WishLists.Find(id);
+                db.WishLists.Remove(wishList);
+                db.SaveChanges();
+                _newError.ID = wishList.Id;
+                _newError.Success = true;
+                _newError.Ex = "";
+                return _newError;
+            }
+            catch (Exception Ex)
+            {
+
+                _newError.ID = -1;
+                _newError.Success = false;
+                _newError.Ex = Ex.Message.ToString();
+                return _newError;
             }
 
-            db.WishLists.Remove(wishList);
-            db.SaveChanges();
-
-            return Ok(wishList);
         }
 
         protected override void Dispose(bool disposing)

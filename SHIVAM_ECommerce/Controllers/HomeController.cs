@@ -16,6 +16,7 @@ using SHIVAM_ECommerce.Repository;
 using SHIVAM_ECommerce.Attributes;
 using System.Collections;
 using System.Web.Caching;
+using SHIVAM_ECommerce.ViewModels;
 
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -25,9 +26,18 @@ namespace SHIVAM_ECommerce.Controllers
         {
             if (HttpContext.Cache["UserClaims"] == null)
             {
-                var userClaims = db.AspNetUserClaims.Where(x => x.User.Id == CurrentUserData.UserID).ToList();
+                var userClaims = db.AspNetUserClaims.Include(x => x.claims).Where(x => x.User.Id == CurrentUserData.UserID).ToList();
+              
+                var results = userClaims.GroupBy(
+    p => p.claims.ClaimGroup,
+    p => p.claims,
+    (key, g) => new ClaimsViewModel { Group = key, AllClaims = g.ToList() }).ToList();
+
+                results = GetSplittedData(results);
+
                 HttpContext.Cache["UserClaims"] = userClaims;
-                Session["UserClaims"] = userClaims;
+                Session["UserClaims"] = results;
+
                 var CanSeeCategoryURL = userClaims.FirstOrDefault(x => x.User.Id == CurrentUserData.UserID && x.ClaimValue == "URL:/Category" && x.IsActive == true);
                 if (CanSeeCategoryURL != null)
                 {
@@ -98,10 +108,31 @@ namespace SHIVAM_ECommerce.Controllers
                 {
                     HttpContext.Cache["CanSeeSupplierUserURL"] = CanSeeSupplierUserURL.ClaimValue;
                 }
-            }     
+            }
         }
 
+        private List<ClaimsViewModel> GetSplittedData(List<ClaimsViewModel> Claims)
+        {
+            if (Claims != null)
+            {
 
+                foreach (var _item in Claims.ToList())
+                {
+                    foreach (var _childitem in _item.AllClaims.ToList())
+                    {
+                        var _stringArray = _childitem.ClaimValue.Split('/');
+                        if (_stringArray != null)
+                        {
+                            _childitem.ClaimValue = _stringArray[1];
+
+                        }
+                    }
+                }
+            }
+
+            return Claims;
+
+        }
 
         private void ManageSession()
         {
@@ -207,9 +238,9 @@ namespace SHIVAM_ECommerce.Controllers
             //supplier.Password = "testtestteststeest";
             supplier.UpdatedDate = DateTime.Now;
             supplier.CreatedDate = DateTime.Now;
-           
-            
-           if (ModelState.IsValid)
+
+
+            if (ModelState.IsValid)
             {
 
                 if (file != null)
@@ -239,7 +270,7 @@ namespace SHIVAM_ECommerce.Controllers
                 db.SaveChanges();
                 ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
                 return View(supplier);
-           }
+            }
             ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
             return View(supplier);
         }

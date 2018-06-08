@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+@{
     ViewBag.Title = "Index";
+    var _CurrentUserID = User.Identity.GetUserId();
+    
 }
 
  <!-- Swiper slider-->
@@ -119,9 +122,10 @@
 
             <div class="row column-4">
                 <div class="col-sm-6 col-md-3" ng-repeat="x in pagedItems">
-                    <div class="thumbnail store style3">
+                    <div class="thumbnail store style2">
                         <div class="header">
                             <div class="badges">
+                                <span class="product-badge top left white-backgorund text-primary semi-circle">{{x[3]}}</span>
                                 <span class="product-badge top right text-warning">
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
@@ -135,22 +139,22 @@
                                     <img ng-show="x[2]!=null" src="http://localhost:7080/ProductImages/{{x[2]}}" alt="">
 
                                     <img ng-show="x[2]==null" src="~/Content/images/default-no-image.png" alt="Alternate Text" />
+
                                 </a>
                             </figure>
                             <div class="icons">
-                                <a class="icon semi-circle" href="javascript:void(0);"><i class="fa fa-heart-o"></i></a>
-                                <a class="icon semi-circle" href="/home/productdetail/?productId={{x[8]}}" ><i class="fa fa-search"></i></a>
-                                <a class="icon semi-circle" href="javascript:void(0);" id="pid{{x[3]}}" ng-click="AddToCart(x[3],this)"><i class="fa fa-cart-plus"></i></a>
-
+                                <a class="icon {{CheckisInWishList(x[8])}}" ng-click="addTowishList(x[8],'@_CurrentUserID')"><i class="fa fa-heart-o"></i></a>
+                                <a class="icon" href="/home/productdetail/?productId={{x[8]}}"><i class="fa fa-search"></i></a>
+                                <a class="icon" href="javascript:void(0);" id="pid{{x[3]}}" ng-click="AddToCart(x[3],this)"><i class="fa fa-cart-plus mr-5"></i>Add to cart</a>
                             </div>
                         </div>
                         <div class="caption">
-                            <h6 class="regular"><a href="/home/productdetail/?productId={{x[8]}}">{{x[3]}}</a></h6>
+                            <h6 class="regular"><a href="shop-single-product-v1.html">{{x[3]}}</a></h6>
                             <div class="price">
-                                <span class="amount text-primary">{{x[4]}}</span>
+                                <span class="amount text-primary">${{x[4]}}</span>
                             </div>
                         </div><!-- end caption -->
-                    </div><!-- end thumbnail -->
+                    </div>
                 </div><!-- end col -->
 
             </div><!-- end row -->
@@ -236,6 +240,9 @@
 @section scripts
 {
 <script src="~/Scripts/AngularData/Products.js"></script>
+<script>
+        var _customerID = '@_CurrentUserID';
+</script>
 }
 
 <style>
@@ -250,4 +257,8 @@
     .rotate {
         transform: translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) !important;
     }
+    .active .fa {
+        color: #0cd4d2 !important;
+    }
+
 </style>

@@ -25,10 +25,9 @@
         <li ng-repeat="item in AllCartItems track by $index" class="">
             <div class="row">
                 <div class="col-md-3">
+                    <img ng-hide="item.Image==null || item.Image==''" class="responsive-img" style="width:50px;height:50px;" src="http://localhost:7080/ProductImages/{{item.Image}}">
 
-                    <img ng-hide="item.Image==null" class="responsive-img" style="width:50px;height:50px;" src="http://localhost:7080/ProductImages/{{item.Image}}" >
-
-                    <img ng-show="item.Image==null" class="responsive-img" style="width:50px;height:50px;" src="/Content/images/no-image.png">
+                    <img ng-show="item.Image==null || item.Image==''" class="responsive-img" style="width:50px;height:50px;" src="/Content/images/no-image.png">
                 </div>
                 <div class="col-md-9">
                     <h5>{{item.ProductName}}</h5>

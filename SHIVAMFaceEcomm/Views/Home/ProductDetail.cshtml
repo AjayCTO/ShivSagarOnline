@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "ProductDetail";
     var allAttributes = Model.Attributes.Select(p => p.AttributeName).Distinct().ToList();
+    var _AllProductImages = Model.Attributes.GroupBy(test => test.ProductQuantityId)
+                    .Select(grp => grp.First())
+                    .ToList();
+  
 }
 
 
@@ -16,23 +20,22 @@
             <div class="col-sm-4">
                 <div class='carousel slide product-slider' data-ride='carousel' data-interval="false">
                     <div class='carousel-inner'>
-                        @for (int i = 0; i < Model.Attributes.Count(); i++)
+                        @for (int i = 0; i < _AllProductImages.Count(); i++)
                         {
                             if (i == 0)
                             {
                                 <div class='item active'>
                                     <figure>
 
-                                        @if(Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
-                                        {
-                                            
+                                       @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
+{
                                             <div class="magnify">
 
                                            <!-- This is the magnifying glass which will contain the original/large version -->
                                               <div class="large"></div>
 
                                              <!-- This is the small image -->
-                                                <img class="small" src="http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath" width="200" />
+                                                <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
 
                                                 </div>
                                             
@@ -41,10 +44,10 @@
                                         }
                                         
                                         
-                                           @if(Model.Attributes[i].ImagePath == null)
+                                           @*@if (_AllProductImages[i].ImagePath == null)
                                         {
                                             <img src="/Content/images/default-no-image.png" alt="">
-                                        }
+                                        }*@
 
                                        
                                     </figure>
@@ -54,24 +57,24 @@
                             {
                                 <div class='item'>
                                     <figure>
-                                        @if (Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
-                                        {
+                                       @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
+{
                                          <div class="magnify">
 
                                            <!-- This is the magnifying glass which will contain the original/large version -->
                                               <div class="large"></div>
 
                                              <!-- This is the small image -->
-                                                <img class="small" src="http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath" width="200" />
+                                                <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
 
                                                 </div>
                                         }
 
 
-                                        @if (Model.Attributes[i].ImagePath == null)
+                                        @*@if (_AllProductImages[i].ImagePath == null)
                                         {
                                             <img src="/Content/images/default-no-image.png" alt="">
-                                        }
+                                        }*@
                                     </figure>
                                 </div><!-- end item -->
                             }
@@ -90,19 +93,19 @@
                     </div><!-- end carousel-inner -->
                     <!-- thumbs -->
                     <ol class='carousel-indicators mCustomScrollbar meartlab'>
-                        @for (int i = 0; i < Model.Attributes.Count(); i++)
+                        @for (int i = 0; i < _AllProductImages.Count(); i++)
                         {
                             <li data-target='.product-slider' data-slide-to='@i'>
-                                @if (Model.Attributes[i].ImagePath != null || Model.Attributes[i].ImagePath != "")
+                                @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
                                 {
                                     <img src='http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
                                 }
 
 
-                                @if (Model.Attributes[i].ImagePath == null)
+                                @*@if (_AllProductImages[i].ImagePath == null)
                                 {
                                     <img src="/Content/images/default-no-image.png" alt="">
-                                }
+                                }*@
                             </li>
                         }
 

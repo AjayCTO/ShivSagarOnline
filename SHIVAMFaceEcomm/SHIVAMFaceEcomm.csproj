@@ -190,6 +190,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
+    <Compile Include="Controllers\WishListDeleteController.cs" />
     <Compile Include="Controllers\WishListsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -217,6 +218,7 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>ShivamMart.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BuildTree.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>ShivamMart.tt</DependentUpon>
     </Compile>

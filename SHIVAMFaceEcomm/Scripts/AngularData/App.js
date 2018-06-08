@@ -80,7 +80,8 @@ app.factory("CartToCookieService", function () {
 
 app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
     $scope.searchcategories = [];
-
+    $scope.wishlistCounter = 0;
+    $scope.CustomerId= _CustomerIDLayout;
     $scope.GetCategories = function () {
 
         $.ajax({
@@ -104,4 +105,24 @@ app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
         });
     };
     $scope.GetCategories();
+
+    $scope.GetWishListCounter = function () {
+        $.ajax({
+            url: '/api/WishLists/GetWishLists',
+            type: 'GET',
+            dataType: 'json',
+            data: { UserID: $scope.CustomerId },
+            success: function (data, textStatus, xhr) {
+
+                $scope.wishlistCounter = data.length;
+
+                $scope.$apply();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+            }
+        });
+    };
+
+    $scope.GetWishListCounter();
+
 });

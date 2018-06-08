@@ -1,4 +1,4 @@
-﻿app.controller("PaginationCtrl", function ($scope, AddToCart, CartToCookieService) {
+﻿app.controller("PaginationCtrl", function ($scope,$rootScope, AddToCart, CartToCookieService) {
 
     $scope.itemsPerPage = 12;
     $scope.currentPage = 0;
@@ -14,6 +14,8 @@
     $scope.Suppliers = [];
     $scope.selectedAttribute = "";
     $scope.showloader = true;
+    $scope.CurrentWishList = [];
+    $scope.CustomerID = _customerID == undefined ? -1 : _customerID;
     $scope.category = {
         "id": 0,
         "categoryName": null,
@@ -34,6 +36,16 @@
         $scope.pagedItems = [];
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     };
+
+
+    $rootScope.$on("CallGetCookieData", function () {
+        var items = CartToCookieService.getCookieData();
+        if (items != undefined) {
+
+            $scope.AllCartItems = items;
+            $scope.CartProductsCounter = $scope.AllCartItems.length;
+        }
+    });
 
     $scope.loadData = function (offset, limit) {
         var items = CartToCookieService.getCookieData();
@@ -267,7 +279,7 @@
     $scope.AddToCart = function (productId, product) {
 
 
-
+        debugger;
 
         var item = $scope.AllCartItems.filter(function (item) {
             if (item.ProductId === product.x[8]) {
@@ -281,7 +293,7 @@
                 'scrollTop': $(".cart_anchor").position().top
             });
             var itemImg = $("#pid" + productId).parent().parent().find('img').eq(0);
-            AddToCart.flyToElement($(itemImg), $('.cart_anchor'));
+            //AddToCart.flyToElement($(itemImg), $('.cart_anchor'));
             $scope.AllCartItems.push({ ProductId: product.x[8], Image: product.x[2], Quantity: 1, ProductName: product.x[3], Cost: product.x[4], discount: 0 });
 
 
@@ -294,13 +306,89 @@
 
     $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     $scope.loadSuppliers();
+
+    $scope.RemoveFromwishList = function (ID) {
+
+        $.ajax({
+            url: '/Home/DeleteWishList?id=' + ID,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+                if (data.Success == true) {
+
+                    $scope.GetWishList($scope.CustomerID);
+                    $scope.$apply();
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("into error");
+            }
+        });
+    };
     $scope.addTowishList = function (productId, customerId) {
 
+        debugger;
+        if ($scope.CheckisInWishList(productId) == "active") {
+            for (var i = 0; i < $scope.CurrentWishList.length; i++) {
+                if ($scope.CurrentWishList[i].ProductId == productId) {
+                    $scope.RemoveFromwishList($scope.CurrentWishList[i].Id);
+                    break;
+                }
+
+            }
+
+        }
+        else {
+
+
+            var wishListmodel = { ProductId: productId, CustomerId: -1, UserID: customerId };
+            $.ajax({
+                url: '/api/WishLists/PostWishList',
+                type: 'POST',
+                data: wishListmodel,
+                dataType: 'json',
+                success: function (data, textStatus, xhr) {
+                    $scope.GetWishList($scope.CustomerID);
+                    $scope.$apply();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert("into error");
+                }
+            });
+        }
     };
 
+
+
+    $scope.GetWishList = function (customerId) {
+        $.ajax({
+            url: '/api/WishLists/GetWishLists?UserID=' + customerId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
+                $scope.CurrentWishList = data;
+                $scope.$apply();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("into error");
+            }
+        });
+
+    }
+    $scope.GetWishList($scope.CustomerID);
+
+    $scope.CheckisInWishList = function (ProductID) {
+        for (var i = 0; i < $scope.CurrentWishList.length; i++) {
+            if ($scope.CurrentWishList[i].ProductId == ProductID) {
+                return "active";
+            }
+
+        }
+
+        return "";
+    }
     $scope.DeleteCarttolist = function (Product) {
 
-        debugger;
 
         if (confirm("are you sure you want to delete this item from cart ?") == true) {
             for (var i = 0; i < $scope.AllCartItems.length; i++) {
@@ -308,8 +396,8 @@
                     $scope.AllCartItems.splice($.inArray(Product, $scope.AllCartItems), 1);
                 }
             }
-            debugger;
             CartToCookieService.setCookieData($scope.AllCartItems);
+            $scope.CartProductsCounter = $scope.AllCartItems.length;
         }
 
 

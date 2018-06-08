@@ -79,4 +79,12 @@ namespace SHIVAMFaceEcomm.Models
         public String Review { get; set; }
          
     }
+
+    public class APIResponse
+    {
+        public int ID { get; set; }
+        public bool Success { get; set; }
+
+        public string Ex { get; set; }
+    }
 }

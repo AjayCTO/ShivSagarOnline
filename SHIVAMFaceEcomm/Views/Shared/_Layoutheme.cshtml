@@ -1,9 +1,12 @@
 ﻿@using System.Web.Optimization;
 @using Microsoft.AspNet.Identity;
+@{
+    var _CurrentUserID = User.Identity.GetUserId();
+}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Shivam Megamart</title>
+    <title>ShivaSaagar Online</title>
     <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
@@ -29,11 +32,11 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800&amp;subset=latin-ext" rel="stylesheet">
     <style>
-     
 
-   
 
-    
+
+
+
     </style>
 </head>
 <body ng-app="MyApp">
@@ -107,7 +110,7 @@
                         <form>
 
 
-                        
+
 
                             <div class="row grid-space-1">
                                 <div class="col-sm-6">
@@ -120,13 +123,13 @@
                                             <li class="dropdown active left">
                                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Category<i class="fa fa-angle-down ml-5"></i></a>
                                                 <ul class="dropdown-menu">
-                                                    <li ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" class="dropdown-submenu">
-                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}</a>
-                                                        <ul class="dropdown-menu">
+                                                    <li ng-repeat="cat in searchcategories" class="dropdown-submenu">
+                                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}} sdf asdf </a>
+                                                        <ul class="dropdown-menu" ng-if="cat.Categories1.length>0">
                                                             <li ng-repeat="subcat in cat.Categories1"><a href="#">{{cat.CategoryName}}</a></li>
                                                         </ul>
                                                     </li>
-                                                    <li ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories"><a href="#">{{cat.CategoryName}}</a></li>
+                                                    @*<li ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories"><a href="#">{{cat.CategoryName}}</a></li>*@
 
                                                 </ul><!-- end ul dropdown-menu -->
                                             </li><!-- end li dropdown -->
@@ -139,11 +142,11 @@
                                         <option value="all">All Categories</option>
                                         <optgroup ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" label="{{cat.CategoryName}}">
                                             <option ng-repeat="subcat in cat.Categories1" value="{{subcat.CategoryName}}">{{subcat.CategoryName}}</option>
-                                        
+
                                         </optgroup>
-                                    
+
                                         <option ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories" value="{{cat.CategoryName}}">{{cat.CategoryName}}</option>
-                                    
+
                                     </select>
                                 </div><!-- end col -->
                                 <div class="col-sm-3">
@@ -154,13 +157,13 @@
                     </div><!-- end col -->
                     <div class="col-sm-2 vertical-align header-items hidden-xs">
                         @if (User.Identity.IsAuthenticated)
-                            {
-                        <div class="header-item mr-5">
-                            <a href="/Home/CustomerWishList/?CustomerId=@User.Identity.GetUserId()" data-toggle="tooltip" data-placement="top" title="Wishlist">
-                                <i class="fa fa-heart-o"></i>
-                                <sub>32</sub>
-                            </a>
-                        </div>
+                        {
+                            <div class="header-item mr-5">
+                                <a href="/Home/CustomerWishList/?CustomerId=@User.Identity.GetUserId()" data-toggle="tooltip" data-placement="top" title="Wishlist">
+                                    <i class="fa fa-heart-o"></i>
+                                    <sub>{{wishlistCounter}}</sub>
+                                </a>
+                            </div>
                         }
 
                         <div class="header-item">
@@ -202,16 +205,16 @@
                                 <span class="hidden-sm">Categories</span><i class="fa fa-bars ml-5"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" class="dropdown-submenu">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}</a>
-                                    <ul class="dropdown-menu">
+                                <li ng-repeat="cat in searchcategories" ng-class="{'dropdown-submenu':cat.Categories1.length!=0}">
+                                    <a href="javascript:void(0);" ng-if="cat.Categories1.length>0" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}  </a>
+                                    <a href="javascript:void(0);" ng-if="cat.Categories1.length==0">{{cat.CategoryName}}  </a>
+                                    <ul class="dropdown-menu" ng-if="cat.Categories1.length>0">
                                         <li ng-repeat="subcat in cat.Categories1"><a href="#">{{subcat.CategoryName}}</a></li>
                                     </ul>
                                 </li>
-                                <li ng-if="cat.Categories1.length==0"  ng-repeat="cat in searchcategories"><a href="javascript:void(0);">{{cat.CategoryName}} </a></li>
-                             
+
                             </ul>
-                        <!-- end ul dropdown-menu -->
+                            <!-- end ul dropdown-menu -->
                         </li><!-- end dropdown -->
                     </ul><!-- end navbar-right -->
                 </div><!-- end navbar collapse -->
@@ -326,7 +329,7 @@
 
             <div class="row text-center">
                 <div class="col-sm-12">
-                    <p class="text-sm">&COPY; 2017. Made with <i class="fa fa-heart text-danger"></i> by <a href="javascript:void(0);">DiamondCreative.</a></p>
+                    <p class="text-sm">&COPY; @DateTime.Now.Year. Made with <i class="fa fa-heart text-danger"></i> by <a href="javascript:void(0);">DiamondCreative.</a></p>
                 </div><!-- end col -->
             </div><!-- end row -->
         </div><!-- end container -->
@@ -356,6 +359,7 @@
 
     <!-- Initialize Swiper slide -->
     <script>
+        var _CustomerIDLayout = '@_CurrentUserID';
         //var swiperH = new Swiper('.swiper-coverflow', {
         //    pagination: '.swiper-pagination',
         //    nextButton: '.swiper-button-next',
