@@ -126,6 +126,8 @@ namespace SHIVAMFaceEcomm.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, nresult);
         }
+
+
         public HttpResponseMessage GetWishList(Guid CustomerId)
         {
             // var result = db.Categories.Where(p => p.IsActive == true).Select(p => new CategoryViewModel() {CategoryName=p.CategoryName,CategoryImage=p.CategoryImage,Id=p.Id,Categories1=p.Categories1.Select(x=>new CategoryViewModel() {CategoryName=x.CategoryName,CategoryImage=x.CategoryImage,Id=x.Id }).ToList() }).ToList();

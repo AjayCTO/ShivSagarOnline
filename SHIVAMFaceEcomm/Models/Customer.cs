@@ -11,7 +11,6 @@ namespace SHIVAMFaceEcomm.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
     
     public partial class Customer
     {
@@ -37,8 +36,7 @@ namespace SHIVAMFaceEcomm.Models
         public int Sort { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
-
-        [ForeignKey("UserID")]
+    
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }

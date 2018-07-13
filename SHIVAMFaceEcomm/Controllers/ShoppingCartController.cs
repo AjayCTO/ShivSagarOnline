@@ -123,20 +123,24 @@ namespace SHIVAMFaceEcomm.Controllers
                 //Add Customer as User
                 var user = new ApplicationUser() { UserName = CartDetails.CustomerData.userName, Email = CartDetails.CustomerData.email };
                  var store=new UserStore<ApplicationUser>(con);
-                 var manager = new UserManager<ApplicationUser>(store);
-                IdentityResult result = manager.Create(user, CartDetails.CustomerData.password);
-                if (result.Succeeded)
-                {
-                    newCustomer.UserID = user.Id;
-                    // context.SaveChanges();
-                    UserManager.AddToRole(user.Id, "Customer");
-                    // return RedirectToAction("Index");
-                }
-                else
-                {
-                    AddErrors(result);
-                }
+                 if (!User.Identity.IsAuthenticated)
+                 {
 
+
+                     var manager = new UserManager<ApplicationUser>(store);
+                     IdentityResult result = manager.Create(user, CartDetails.CustomerData.password);
+                     if (result.Succeeded)
+                     {
+                         newCustomer.UserID = user.Id;
+                         // context.SaveChanges();
+                         UserManager.AddToRole(user.Id, "Customer");
+                         // return RedirectToAction("Index");
+                     }
+                     else
+                     {
+                         AddErrors(result);
+                     }
+                 }
                 //Create Customer details
 
                 newCustomer.CardExpMo = CartDetails.CustomerData.CardExpMo;
@@ -180,6 +184,7 @@ namespace SHIVAMFaceEcomm.Controllers
                 order.RequiredDate = DateTime.Now;
                 order.ShipDate = DateTime.Now.AddDays(7);
                 order.TotalDiscount = 0;
+                order.OrderStatusID = 2;
                 order.TransactionStatus = "1";//Should be status of order
                 order.UpdatedDate = DateTime.Now;
                 context.Orders.Add(order);

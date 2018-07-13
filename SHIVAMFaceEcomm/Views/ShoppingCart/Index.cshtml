@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+
+@{
     ViewBag.Title = "Index";
 }
 
@@ -16,19 +18,17 @@
 
                         <ul class="list list-unstyled">
                             <li>
-                                <a href="#">My Account</a>
+                                <a href="/UserAccount/MyAccount/?CustomerId=@User.Identity.GetUserId()">My Account</a>
                             </li>
-                            <li class="active">
-                                <a href="#">My Cart <span class="text-primary">(3)</span></a>
+                        
+                            <li>
+                                <a href="/CustomerOdersDetail/Index">My Order</a>
                             </li>
                             <li>
-                                <a href="#">My Order</a>
+                                <a href="/Home/CustomerWishList/?CustomerId=@User.Identity.GetUserId()">Wishlist <span class="text-primary">{{}}</span></a>
                             </li>
                             <li>
-                                <a href="#">Wishlist <span class="text-primary">(5)</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Settings</a>
+                                <a href="/UserAccount/Setting/?CustomerId=@User.Identity.GetUserId()">Settings</a>
                             </li>
                         </ul>
                     </div>
@@ -43,7 +43,8 @@
                         <ul class="items">
                             <li ng-repeat="item in CartItems track by $index">
                                 <a href="shop-single-product-v1.html" class="product-image">
-                                    <img src="http://diamondcreative.net/plus-v1.3.0/img/products/men_01.jpg" alt="Sample Product ">
+                                    <img ng-hide="item.Image==null" src="http://localhost:7080/ProductImages/{{item.Image}}" alt="Sample Product ">
+                                    <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
                                 </a>
                                 <div class="product-details">
                                     <p class="product-name">
@@ -52,9 +53,10 @@
                                     <p class="product-name">
                                         <a>Quantity - {{item.Quantity}}</a>
                                     </p>
-                                    <span class="price text-primary">{{item.Cost}}</span>
-                              
-                                </div>
+                                    <p class="product-name">
+                                        <a>${{item.Cost}}</a>
+                                    </p>
+</div>
                             </li><!-- end item -->
 
                          
@@ -137,13 +139,13 @@
                                                             </div>
                                                             <div class="col-sm-10">
                                                                 <h6 class="regular"><a href="javascript:void(0);">{{item.ProductName}}</a></h6>
-                                                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                                                                <p>{{item.ProductDiscription}}.</p>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td data-th="Price">${{item.Cost}}</td>
                                                     <td data-th="Quantity">
-                                                        <input type="number" ng-model="item.Quantity" class="form-control text-center" value="{{item.Quantity}}">
+                                                        <input type="number" ng-model="item.Quantity" class="form-control text-center" ng-change="updateQuantityOfCartItem(item)" value="{{item.Quantity}}">
                                                     </td>
                                                     <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
                                                     <td class="actions" data-th="">
@@ -228,4 +230,5 @@
     <script src="~/Scripts/AngularData/ShoppingCart.js"></script>
 
      
+
 }

@@ -146,7 +146,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                         db.Claims.Add(claim);
                     }
-                    else
+                    else if (_obj != null)
                     {
                         _obj.IsActive = claim.IsActive;
                     }

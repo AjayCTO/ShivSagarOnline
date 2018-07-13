@@ -27,7 +27,10 @@ namespace SHIVAMFaceEcomm.Models
             //string sortDir = context.Request["sSortDir_0"];
             string search = context.Request["searchText"];
             string filterText = context.Request["filtertext"];
-
+            string categories = context.Request["Categories"];
+            string Lowprice = context.Request["lowprice"];
+            string Highprice = context.Request["highprice"];
+       
             string cs = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var allProducts = new List<object[]>();
             using (SqlConnection con = new SqlConnection(cs))
@@ -77,6 +80,27 @@ namespace SHIVAMFaceEcomm.Models
                     //"([Color] in ('Red','Green') OR [Size] in ('X','L')) AND"
                 };
                 cmd.Parameters.Add(paramFilterText);
+                SqlParameter paramCategoriesText = new SqlParameter()
+                {
+                    ParameterName = "@Categories",
+
+                    Value = string.IsNullOrEmpty(categories) ? "" : categories
+                };
+                cmd.Parameters.Add(paramCategoriesText);
+                SqlParameter paramlowpriceText = new SqlParameter()
+                {
+                    ParameterName = "@LowPrice",
+
+                    Value = string.IsNullOrEmpty(Lowprice) ? "" : Lowprice
+                };
+                cmd.Parameters.Add(paramlowpriceText);
+                SqlParameter paramhighpriceText = new SqlParameter()
+                {
+                    ParameterName = "@HighPrice",
+
+                    Value = string.IsNullOrEmpty(Highprice) ? "" : Highprice
+                };
+                cmd.Parameters.Add(paramhighpriceText);
                
 
                 con.Open();

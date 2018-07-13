@@ -851,7 +851,7 @@
     <Content Include="SupplierImage\images.png" />
     <Content Include="SupplierImage\logo.png" />
     <Content Include="SupplierImage\no-image.png" />
-    <Content Include="SupplierImage\Symbole-Reebok.jpg" />
+    <Content Include="SupplierImage\reebok.jpg" />
     <Content Include="Unity.Mvc4.README.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -42,8 +42,8 @@
             </div>*@
         <div class="col-md-3">
             <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="GetSelected custom-control-input" name="GetSelected" value="@claim.ClaimValue" notes="@claim.Notes" claimtype="@claim.ClaimType" />
-
+                <input type="checkbox" title="@claim.Title" claim-group="@claim.ClaimGroup" class=" getselected custom-control-input" name="GetSelected" value="@claim.ClaimValue" notes="@claim.Notes" claimtype="@claim.ClaimType" />
+          
 
 
                 <span class="custom-control-label">@claim.Notes</span>
@@ -85,13 +85,14 @@
                     'ClaimValue': $(this).val(),
                     'IsActive': $(this).is(':checked'),
                     'Notes': $(this).attr("notes"),
-                    'Role': $('#Role :selected').text()
+                    'Role': $('#Role :selected').text(),
+                    'Title':$(this).attr("title"),
+                    'ClaimGroup': $(this).attr("claim-group"),
                 });
            
 
         });
 
-        console.log(SelectedClaims);
     }
 
 

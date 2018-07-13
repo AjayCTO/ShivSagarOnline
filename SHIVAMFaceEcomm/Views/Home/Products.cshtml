@@ -37,7 +37,7 @@
                     <h6 class="subtitle">Search</h6>
 
                     <form>
-                        <input type="text" id="lastname" class="form-control input-sm" placeholder="Search">
+                        <input type="text" id="lastname" class="form-control input-sm" ng-change="myFunc()" ng-model="search" placeholder="search">
                     </form>
                 </div><!-- end widget -->
                 <div class="widget">
@@ -61,17 +61,23 @@
                                     </ul>
 
                                     <script type="text/ng-template" id="categoryTree">
-                                        <div class="checkbox-input">
-                                            <input type="checkbox" id="name{{ category.CategoryName }}" name="name{{ category.CategoryName }}" class="styled" value=" " /><label for="name{{ category.CategoryName }}">
+                                        <div class="checkbox-input" id="cat_{{category.Id}}">
+                                            <input type="checkbox" ng-click="AddCatArray(category.Id)" ng-checked="categoriesarraySelect.indexOf(category.Id) > -1" id="name{{ category.CategoryName }}" name="name{{ category.CategoryName }}" class="styled" value=" " /><label for="name{{ category.CategoryName }}">
                                                 {{ category.CategoryName }}
                                             </label>
+
                                         </div>
-                                        <ul style="margin-left: 26px;
-    margin-top: 10px;" ng-if="category.Categories1" class="list list-unstyled">
+                                        <ul style="margin-left: 26px; margin-top: 10px;" ng-if="category.Categories1" class="list list-unstyled">
                                             <li ng-repeat="category in category.Categories1" class="dropdown-submenu" ng-include="'categoryTree'">
                                             </li>
                                         </ul>
                                     </script>
+                                    @*<div ng-repeat="category in categoriesarraySelect" class="selected-item">
+                                        {{category}}
+                                    </div>*@
+                                    <input type="hidden" id="lowpricevalue" class="_slider">
+                                    <input type="hidden" id="highpricevalue" class="_slider">
+                             
                                 </div><!-- end panel-body -->
                             </div><!-- end panel-collapse -->
                         </div><!-- end panel -->
@@ -82,11 +88,11 @@
                     <h6 class="subtitle">Prices</h6>
                     <form method="post" class="price-range" data-start-min="250" data-start-max="650" data-min="0" data-max="1000" data-step="1">
                         <div class="ui-range-values">
-                            <div class="ui-range-value-min">
+                            <div class="ui-range-value-min" >
                                 $<span></span>
                                 <input type="hidden">
                             </div> -
-                            <div class="ui-range-value-max">
+                            <div class="ui-range-value-max" >
                                 $<span></span>
                                 <input type="hidden">
                             </div>
@@ -117,7 +123,7 @@
                     </ul>
                 </div>
 
-                <button type="submit" class="btn btn-default btn-block btn-md"> <i class="fa fa-search"></i> Filter</button>
+                <button type="submit"  class="btn btn-default btn-block btn-md"> <i class="fa fa-search"></i> Filter</button>
              
 
             </div><!-- end col -->
@@ -125,7 +131,13 @@
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-sm-12 text-left">
-                        <h2 class="title">Products</h2>
+                        <h2 class="title">Products</h2> 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span> <button type="button" ng-click="Clearfilter()" class="btn btn-default btn-md">Clear Filter</button></span><span style="" class="pull-right">showing {{pagedItems.length}} of {{total}} Products</span> 
+                        </div>
+                    </div>
+                     
                     </div><!-- end col -->
 
                 </div><!-- end row -->

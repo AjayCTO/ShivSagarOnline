@@ -1,8 +1,14 @@
 ﻿app.controller("PaginationCtrl", function ($scope,$rootScope, AddToCart, CartToCookieService) {
 
-    $scope.itemsPerPage = 12;
+
+    $scope.itemsPerPage = 6;
     $scope.currentPage = 0;
     $scope.total = 0;
+    $scope.alltotalproduct = 0;
+    $scope.search = '';
+    $scope.value = '';
+    $scope.categoriesarraySelect = [];
+    $scope.categoriesobj = '';
     $scope.pagedItems = [];
     $scope.CartProductsCounter = 0;
     $scope.CartItem = { ProductId: 0, Image: '', Quantity: 0, ProductName: "" };
@@ -16,6 +22,9 @@
     $scope.showloader = true;
     $scope.CurrentWishList = [];
     $scope.CustomerID = _customerID == undefined ? -1 : _customerID;
+    var minpriceval;
+    var maxpriceval;
+    var searchtext;
     $scope.category = {
         "id": 0,
         "categoryName": null,
@@ -28,15 +37,33 @@
         "categoryImage": null,
         "categories1": null
     };
-
+   
     $scope.FilterProducts = function () {
         $scope.itemsPerPage = 5;
         $scope.currentPage = 0;
         $scope.total = 0;
         $scope.pagedItems = [];
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
+
     };
 
+    $scope.Clearfilter = function () {
+    debugger
+        $scope.search='',
+        FilterText='',
+        $scope.categoriesobj='',
+        minpriceval='',
+        maxpriceval = ''
+        $scope.categoriesarraySelect = [];
+      
+        $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
+   
+    }
+    $scope.myFunc = function () {
+        debugger;
+
+        $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
+    };
 
     $rootScope.$on("CallGetCookieData", function () {
         var items = CartToCookieService.getCookieData();
@@ -47,7 +74,10 @@
         }
     });
 
+
+
     $scope.loadData = function (offset, limit) {
+        debugger;
         var items = CartToCookieService.getCookieData();
         if (items != undefined) {
 
@@ -82,17 +112,24 @@
             FilterText = FilterText.substring(0, FilterText.length - 4);
             FilterText = FilterText + ") AND";
         }
+        debugger;
+        if ($.trim($scope.categoriesobj) != "" || $.trim(minpriceval) != "" || $.trim(maxpriceval) != "" || $.trim(FilterText) != "" ||$.trim.searchtext!="")
+        {
+            $scope.pagedItems = [];
+        }
+
+        
 
         $.ajax({
             url: '/Models/GetProducts.ashx',
             type: 'GET',
             dataType: 'json',
-            data: { displayLength: limit, displayStart: offset, searchText: "", filtertext: FilterText },
+            data: { displayLength: limit, displayStart: offset, searchText: $scope.search, filtertext: FilterText, Categories: $scope.categoriesobj, lowprice: minpriceval, highprice: maxpriceval },
             success: function (data, textStatus, xhr) {
-
+           
                 $scope.total = data.iTotalDisplayRecords;
                 $scope.pagedItems = $scope.pagedItems.concat(data.aaData);
-
+                debugger;
                 $scope.$apply();
             },
             error: function (xhr, textStatus, errorThrown) {
@@ -108,10 +145,9 @@
 
 
 
-
     $scope.AddAttrToFilter = function (ischecked, name, value) {
 
-
+        debugger;
         if (ischecked == 1) {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
                 if ($scope.AllAttributeFilters[i].Name === name) {
@@ -133,7 +169,8 @@
             }
         }
 
-        return true;
+ 
+        $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     }
 
     $scope.loadSuppliers = function () {
@@ -193,11 +230,12 @@
         });
 
         $.ajax({
+           
             url: '/api/Products/GetCategories',
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
-
+                debugger;
                 $scope.categories = data;
 
 
@@ -263,6 +301,7 @@
 
     };
     $scope.loadMore = function () {
+        debugger;
         $scope.currentPage++;
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
 
@@ -387,31 +426,80 @@
 
         return "";
     }
+
+    $scope.AddCatArray=function(CategoryId)
+    {
+        debugger;
+        var idx = $scope.categoriesarraySelect.indexOf(CategoryId);
+        if (idx > -1) {
+            // is currently selected
+            $scope.categoriesarraySelect.splice(idx, 1);
+        }
+        else {
+            // is newly selected
+            $scope.categoriesarraySelect.push(CategoryId);
+        }
+        
+        
+  
+        $scope.categoriesobj = $scope.categoriesarraySelect.join();
+
+        $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
+
+    }
+
+    //function in remove in cart 
     $scope.DeleteCarttolist = function (Product) {
-
-
-        if (confirm("are you sure you want to delete this item from cart ?") == true) {
-            for (var i = 0; i < $scope.AllCartItems.length; i++) {
-                if ($scope.AllCartItems[i].ProductId == Product.ProductId) {
-                    $scope.AllCartItems.splice($.inArray(Product, $scope.AllCartItems), 1);
+        debugger;
+        bootbox.confirm("Are you sure you want to delete this Item ?", function (result) {
+            if (result) {
+                debugger;
+       
+                for (var i = 0; i < $scope.AllCartItems.length; i++) {
+                    if ($scope.AllCartItems[i].ProductId == Product.ProductId) {
+                        $scope.AllCartItems.splice($.inArray(Product, $scope.AllCartItems), 1);
+                    }
                 }
+                CartToCookieService.setCookieData($scope.AllCartItems);
+                $scope.CartProductsCounter = $scope.AllCartItems.length;
+                $scope.$apply();
             }
-            CartToCookieService.setCookieData($scope.AllCartItems);
-            $scope.CartProductsCounter = $scope.AllCartItems.length;
+       
+      
+        });
+    };
+    $("._slider").on("change", function () {
+        debugger;
+
+        minpriceval = $("#lowpricevalue").val();
+        maxpriceval = $("#highpricevalue").val();
+        if (minpriceval != "" || maxpriceval != "") {
+            $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
         }
 
+    });
 
-    };
 
 
 });
 
 $("#cart").on("click", function () {
+    debugger;
     $(".shopping-cart").fadeToggle("fast");
     document.getElementById("overlay").style.display = "block";
 });
 
 $(".fa-angle-double-right").on("click", function () {
+    debugger;
+    $(".shopping-cart").fadeToggle("fast");
+    document.getElementById("overlay").style.display = "none";
+
+});
+
+$("#overlay").on("click", function () {
+    debugger;
     $(".shopping-cart").fadeToggle("fast");
     document.getElementById("overlay").style.display = "none";
 });
+
+

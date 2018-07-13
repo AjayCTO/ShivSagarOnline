@@ -1,11 +1,26 @@
 ﻿@model SHIVAMFaceEcomm.Models.ProductDetail
 @{
-    ViewBag.Title = "ProductDetail";
-    var allAttributes = Model.Attributes.Select(p => p.AttributeName).Distinct().ToList();
-    var _AllProductImages = Model.Attributes.GroupBy(test => test.ProductQuantityId)
-                    .Select(grp => grp.First())
+    ViewBag.Title = "Product Detail";
+    var allAttributes = Model.Attributes.Select(p =>p.AttributeName).Distinct().ToList();
+    var _AllProductImages = Model.Attributes.GroupBy(test =>test.ProductQuantityId)
+                    .Select(grp =>grp.First())
                     .ToList();
-  
+    var _ImagePath = "";
+    if (_AllProductImages.Count() > 0)
+    {
+        _ImagePath = _AllProductImages[0].ImagePath;
+    }
+
+    if (!string.IsNullOrEmpty(_ImagePath))
+    {
+        _ImagePath = "";
+    }
+
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model.Attributes);
+    var jsonModel1 = serializer.Serialize(allAttributes);
+
 }
 
 
@@ -14,74 +29,91 @@
 
 
 <section class="section white-backgorund">
-    <div class="container">
+    <div ng-controller="PaginationCtrl">
+        @Html.Partial("shoppingcart")
+
+    </div>
+    <div class="container" ng-app="MyApp" ng-controller="CustomerReviewController">
         <div class="row">
             <!-- start sidebar -->
             <div class="col-sm-4">
                 <div class='carousel slide product-slider' data-ride='carousel' data-interval="false">
                     <div class='carousel-inner'>
-                        @for (int i = 0; i < _AllProductImages.Count(); i++)
+                        @if (_AllProductImages.Count() != 0)
                         {
-                            if (i == 0)
+
+                            for (int i = 0; i < _AllProductImages.Count(); i++)
                             {
-                                <div class='item active'>
-                                    <figure>
+                                if (i == 0)
+                                {
+                                    <div class='item active'>
+                                        <figure>
 
-                                       @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
-{
-                                            <div class="magnify">
+                                            @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
+                                            {
+                                                <div class="magnify1">
 
-                                           <!-- This is the magnifying glass which will contain the original/large version -->
-                                              <div class="large"></div>
+                                                    <div class="large"></div>
 
-                                             <!-- This is the small image -->
-                                                <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
+                                                    <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
 
                                                 </div>
-                                            
-                                            
-                                           
-                                        }
-                                        
-                                        
-                                           @*@if (_AllProductImages[i].ImagePath == null)
-                                        {
-                                            <img src="/Content/images/default-no-image.png" alt="">
-                                        }*@
 
-                                       
-                                    </figure>
-                                </div><!-- end item -->
-                            }
-                            else
-                            {
-                                <div class='item'>
-                                    <figure>
-                                       @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
-{
-                                         <div class="magnify">
 
-                                           <!-- This is the magnifying glass which will contain the original/large version -->
-                                              <div class="large"></div>
 
-                                             <!-- This is the small image -->
-                                                <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
+                                            }
+
+
+
+
+
+                                        </figure>
+                                    </div><!-- end item -->
+                                }
+                                else
+                                {
+                                    <div class='item'>
+                                        <figure>
+                                            @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
+                                            {
+                                                <div class="magnify1">
+
+                                                    <div class="large"></div>
+
+                                                    <img class="small" src="http://localhost:7080/ProductImages/@_AllProductImages[i].ImagePath" width="200" />
 
                                                 </div>
-                                        }
+                                            }
 
 
-                                        @*@if (_AllProductImages[i].ImagePath == null)
-                                        {
-                                            <img src="/Content/images/default-no-image.png" alt="">
-                                        }*@
-                                    </figure>
-                                </div><!-- end item -->
+
+                                        </figure>
+                                    </div><!-- end item -->
+                                }
+
+
+
                             }
-
-
-
                         }
+                        else
+                        {
+                            <div class='item active'>
+                                <figure>
+                                    <div class="magnify1">
+
+                                        <div class="large"></div>
+
+                                        <img src="/Content/images/default-no-image.png" alt="" width="200">
+
+
+                                    </div>
+
+
+
+                                </figure>
+                            </div>
+                        }
+
 
                         <!-- Arrows -->
                         <a class='left carousel-control' href='.product-slider' data-slide='prev'>
@@ -93,19 +125,24 @@
                     </div><!-- end carousel-inner -->
                     <!-- thumbs -->
                     <ol class='carousel-indicators mCustomScrollbar meartlab'>
-                        @for (int i = 0; i < _AllProductImages.Count(); i++)
+                        @if (_AllProductImages.Count() != 0)
                         {
-                            <li data-target='.product-slider' data-slide-to='@i'>
-                                @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
-                                {
-                                    <img src='http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
-                                }
+                            for (int i = 0; i < _AllProductImages.Count(); i++)
+                            {
+                                <li data-target='.product-slider' data-slide-to='@i'>
+                                    @if (!string.IsNullOrEmpty(_AllProductImages[i].ImagePath))
+                                    {
+                                        <img src='http://localhost:7080/ProductImages/@Model.Attributes[i].ImagePath' alt='' />
+                                    }
 
 
-                                @*@if (_AllProductImages[i].ImagePath == null)
-                                {
-                                    <img src="/Content/images/default-no-image.png" alt="">
-                                }*@
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li data-target='.product-slider' data-slide-to='0'>
+                                <img src="/Content/images/default-no-image.png" alt="">
                             </li>
                         }
 
@@ -139,33 +176,47 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p>@Model.Product.Description</p>
-                    
+
                         <hr class="spacer-15">
                         <div class="row">
 
-                            @for (int i = 0; i < allAttributes.Count(); i++)
-                            {
-                                <div class="col-md-3 col-sm-6 col-xs-12">
-                                    <dl class="param param-feature">
-                                        <dt>@allAttributes[i]</dt>
-                                        @{
-                                var allattributeV = Model.Attributes.Where(p => p.AttributeName == allAttributes[i]).Select(p => p.AttributeValue).Distinct().ToList();
-                                        }
-                                        <dd>
-                                            <select class="form-control" id="attribute@(i+1)" onchange="GetAttributeDate(@allAttributes[i])" attributename="@allAttributes[i]">
-                                                @for (int k = 0; k < allattributeV.Count(); k++)
-                                                {
+                            @*  @for (int i = 0; i < allAttributes.Count(); i++)
+                                {
+                                   <div class="col-md-3 col-sm-6 col-xs-12">
+                                        <dl class="param param-feature">
+                                            <dt>@allAttributes[i]</dt>
+                                            @{
+                                    var allattributeV = Model.Attributes.Where(p => p.AttributeName == allAttributes[i]).Select(p => p.AttributeValue).Distinct().ToList();
+                                            }
+                                            <dd>
+                                                <select class="form-control" id="attribute@(i+1)" onchange="GetAttributeDate(@allAttributes[i])" attributename="@allAttributes[i]">
+                                                    @for (int k = 0; k < allattributeV.Count(); k++)
+                                                    {
                                                     <option value="@allattributeV[k]"> @allattributeV[k] </option>
-                                                }
+                                                    }
 
 
-                                            </select>
-                                        </dd>
-                                    </dl>  <!-- item-property-hor .// -->
-                                </div>
-                            }
+                                                </select>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                                        }*@
 
 
+                            <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="obj in AttributesName track by $index">
+                                <dl class="param param-feature">
+                                    <dt>{{obj.Label}}</dt>
+
+                                    <dd>
+                                        <select class="form-control" ng-model="obj.Value" ng-change="GetPrice(obj.Value,obj.Label)" id="attribute{{$index+1}}" attributename="{{obj.Label}}">
+
+                                            <option value="{{innerobject}}" ng-repeat="innerobject in GetAttributesData(obj.Label) track by $index"> {{innerobject}} </option>
+
+
+                                        </select>
+                                    </dd>
+                                </dl>  <!-- item-property-hor .// -->
+                            </div>
                             <!-- end col -->
                             <div class="col-md-3 col-sm-12">
                                 <dl class="param param-feature">
@@ -189,7 +240,7 @@
                         <hr class="spacer-15">
 
                         <ul class="list list-inline">
-                            <li><button type="button" class="btn btn-default btn-md round"><i class="fa fa-shopping-basket mr-5"></i>Add to Cart</button></li>
+                            <li><button type="button" ng-click="AddToCart()" class="btn btn-default btn-md round"><i class="fa fa-shopping-basket mr-5"></i>Add to Cart</button></li>
                             <li><button type="button" id="rzp-button1" class="btn btn-gray btn-md round"><i class="fa fa-heart mr-5"></i>Buy Now</button></li>
                             <li>Share this product: </li>
                             <li>
@@ -207,7 +258,7 @@
 
         <hr class="spacer-60">
 
-        <div class="row" ng-app="MyApp" ng-controller="CustomerReviewController">
+        <div class="row">
             <div class="col-xs-12 col-sm-3">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs style2 tabs-left">
@@ -243,9 +294,9 @@
 
                                                 @for (int k = 0; k < allattributeV.Count(); k++)
                                                 {
-                                                    if ((allattributeV.Count()-1)==k)
+                                                    if ((allattributeV.Count() - 1) == k)
                                                     {
-                                                        @allattributeV[k] 
+                                                        @allattributeV[k]
                                                     }
                                                     else
                                                     {
@@ -317,10 +368,15 @@
 
                         <hr class="spacer-5 no-border">
 
-                        <form>
-                            <input type="text" class="rating rating-loading" value="5" data-size="sm" title="">
-                        </form>
+                        @*<form>
+                                <input type="text" class="rating rating-loading" value="5" data-size="sm" title="">
+                            </form>*@
 
+                        <i class="fa fa-star {{GetSelectedClass(1)}}" ng-click="review.Rating=1"></i>
+                        <i class="fa fa-star {{GetSelectedClass(2)}}" ng-click="review.Rating=2"></i>
+                        <i class="fa fa-star {{GetSelectedClass(3)}}" ng-click="review.Rating=3"></i>
+                        <i class="fa fa-star {{GetSelectedClass(4)}}" ng-click="review.Rating=4"></i>
+                        <i class="fa fa-star {{GetSelectedClass(5)}}" ng-click="review.Rating=5"></i>
                         <hr class="spacer-10 no-border">
 
                         <div class="form-group">
@@ -336,7 +392,7 @@
                             <textarea id="reviewMessage" rows="5" ng-model="review.Review" class="form-control" placeholder="Your review"></textarea>
                         </div><!-- end form-group -->
                         <div class="form-group">
-                            <input type="submit" class="btn btn-default round btn-md" ng-click="AddReview()" value="Submit Review">
+                            <input type="button" ng-disabled="IsDisabled()" class="btn btn-default round btn-md" ng-click="AddReview()" value="Submit Review">
                         </div><!-- end form-group -->
                     </div><!-- end tab-pane -->
                 </div><!-- end tab-content -->
@@ -489,7 +545,7 @@
 </section>
 @section scripts
 {
-    <style>
+    @*<style>
         .row > .column {
             padding: 0 8px;
         }
@@ -622,7 +678,7 @@
         .hover-shadow:hover {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
-    </style>
+    </style>*@
     <script>
         function openModal() {
             document.getElementById('myModal').style.display = "block";
@@ -662,17 +718,112 @@
         }
     </script>
     <script src="~/Scripts/AngularData/App.js"></script>
+    <script src="~/Scripts/AngularData/Products.js"></script>
     <script>
-        var ProductId=@Model.Product.Id;
-        app.controller("CustomerReviewController", function ($scope, AddToCart, CartToCookieService) {
+        var _customerID = "";
 
+        var _AttributesData='@Html.Raw(jsonModel)';
+        var _Data= '@Html.Raw(jsonModel1)';
+        console.log(JSON.parse(_AttributesData));
+        console.log(_Data);
+        var _ProductData={ ProductId: '@Model.Product.Id', Image: '@_ImagePath', Quantity: 1, ProductName: '@Model.Product.ProductName', Cost: 0, discount: 0 };
+        var ProductId=@Model.Product.Id;
+        app.controller("CustomerReviewController", function ($scope,$rootScope, AddToCart, CartToCookieService) {
+            $scope.AttributesName=[];
+            $scope.AttributesData=JSON.parse(_AttributesData);
+            var _AttributesName=JSON.parse(_Data);
+
+            for (var i = 0; i < _AttributesName.length; i++) {
+                $scope.AttributesName.push({Label:_AttributesName[i],Value:""});
+            }
+
+            console.log($scope.AttributesName);
+            var items = CartToCookieService.getCookieData();
+            if (items != undefined) {
+
+                $scope.AllCartItems = items;
+
+
+                $scope.CartProductsCounter = $scope.AllCartItems.length;
+            }
             $scope.reviews=[];
             $scope.review={
                 "ProductId": ProductId,
                 "Name": null,
                 "Email": null,
-                "Review": null
+                "Review": null,
+                "Rating":0
             };
+            $scope.AddToCart = function () {
+
+
+                product=_ProductData;
+
+                var item = $scope.AllCartItems.filter(function (item) {
+                    if (item.ProductId === product.ProductId) {
+                        item.Quantity = item.Quantity + 1;
+                    }
+                    return item.ProductId === product.ProductId;
+                })[0];
+                if (item == undefined) {
+                    $scope.CartProductsCounter++;
+                    $('html, body').animate({
+                        'scrollTop': $(".cart_anchor").position().top
+                    });
+                    $scope.AllCartItems.push({ ProductId: product.ProductId, Image: product.Image, Quantity: 1, ProductName: product.ProductName, Cost: product.ProductPrice, discount: 0 });
+
+                }
+                CartToCookieService.setCookieData($scope.AllCartItems);
+                $rootScope.$emit("CallGetCookieData", {});
+
+            };
+
+
+            $scope.GetPrice=function(Value,Label)
+            {
+
+            }
+            $scope.GetAttributesData=function(Data){
+                var _array=[];
+                for (var i = 0; i < $scope.AttributesData.length; i++) {
+                    if($scope.AttributesData[i].AttributeName==Data)
+                    {
+                        if($.trim($scope.AttributesData[i].AttributeValue))
+                        {
+                            var itemdata = _array.filter(function (item) {
+
+                                return item === $scope.AttributesData[i].AttributeValue;
+                            })[0];
+
+                            if(itemdata==undefined || itemdata==null)
+                            {
+                                _array.push($scope.AttributesData[i].AttributeValue);
+
+                            }
+
+                        }
+                    }
+
+                }
+
+                return _array;
+            }
+
+            $scope.GetSelectedClass=function(rating)
+            {
+                if($scope.review.Rating==rating || $scope.review.Rating>rating)
+                {
+                    return "text-warning";
+                }
+                return "";
+            }
+            $scope.IsDisabled=function(){
+                if($.trim($scope.review.Name)=="" || $.trim($scope.review.Email)=="" ||$.trim($scope.review.Review)=="")
+                {
+                    return true;
+                }
+                return false;
+            }
             $scope.AddReview=function()
             {
                 $.ajax({
@@ -691,7 +842,7 @@
                     dataType: "json",
                     success: function(resultData) {
 
-                        $scope.reviews=resultData; 
+                        $scope.reviews=resultData;
                         $scope.$apply(); }
                 });
             };
@@ -714,14 +865,14 @@
                 if(!native_width && !native_height)
                 {
                     //This will create a new image object with the same image as that in .small
-                    //We cannot directly get the dimensions from .small because of the 
+                    //We cannot directly get the dimensions from .small because of the
                     //width specified to 200px in the html. To get the actual dimensions we have
                     //created this image object.
                     var image_object = new Image();
                     image_object.src = $(".small").attr("src");
-			
+
                     //This code is wrapped in the .load function which is important.
-                    //width and height of the object would return 0 if accessed before 
+                    //width and height of the object would return 0 if accessed before
                     //the image gets loaded.
                     native_width = image_object.width;
                     native_height = image_object.height;
@@ -732,11 +883,11 @@
                     //This is the position of .magnify with respect to the document.
                     var magnify_offset = $(this).offset();
                     //We will deduct the positions of .magnify from the mouse positions with
-                    //respect to the document to get the mouse positions with respect to the 
+                    //respect to the document to get the mouse positions with respect to the
                     //container(.magnify)
                     var mx = e.pageX - magnify_offset.left;
                     var my = e.pageY - magnify_offset.top;
-			
+
                     //Finally the code to fade out the glass if the mouse is outside the container
                     if(mx < $(this).width() && my < $(this).height() && mx > 0 && my > 0)
                     {
@@ -750,19 +901,19 @@
                     {
                         //The background position of .large will be changed according to the position
                         //of the mouse over the .small image. So we will get the ratio of the pixel
-                        //under the mouse pointer with respect to the image and use that to position the 
+                        //under the mouse pointer with respect to the image and use that to position the
                         //large image inside the magnifying glass
                         var rx = Math.round(mx/$(".small").width()*native_width - $(".large").width()/2)*-1;
                         var ry = Math.round(my/$(".small").height()*native_height - $(".large").height()/2)*-1;
                         var bgp = rx + "px " + ry + "px";
-				
+
                         //Time to move the magnifying glass with the mouse
                         var px = mx - $(".large").width()/2;
                         var py = my - $(".large").height()/2;
                         //Now the glass moves with the mouse
-                        //The logic is to deduct half of the glass's width and height from the 
+                        //The logic is to deduct half of the glass's width and height from the
                         //mouse coordinates to place it with its center at the mouse coordinates
-				
+
                         //If you hover on the image now, you should see the magnifying glass in action
                         $(".large").css({left: px, top: py, backgroundPosition: bgp});
                     }
