@@ -17,6 +17,7 @@ using System.Configuration;
 using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.Attributes;
 using System.Linq.Dynamic;
+using System.Data.SqlClient;
 namespace SHIVAM_ECommerce.Controllers
 {
 
@@ -177,19 +178,51 @@ namespace SHIVAM_ECommerce.Controllers
 
                     //Add Claims to the AspNetUserClaims table for the supplier registerd.
                     var Claims = db.Claims.Where(x => x.Role == "Supplier").ToList();
-
-                    foreach (var claim in Claims)
+                    var _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString.ToString();
+                    using (SqlConnection connection = new SqlConnection(_connectionString))
                     {
-                        ApplicationUserClaim UserClaim = new ApplicationUserClaim();
-                        //_controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue)); 
-                        UserClaim.ClaimType = claim.ClaimType;
-                        UserClaim.ClaimValue = claim.ClaimValue;
-                        UserClaim.User = db.Users.FirstOrDefault(x => x.Id == user.Id);
-                        UserClaim.IsActive = true;
-                        UserClaim.DisplayLabel = claim.Notes;
-                        db.AspNetUserClaims.Add(UserClaim);
+                        connection.Open();
+
+                        foreach (var claim in Claims)
+                        {
+                            String query = "INSERT INTO [dbo].[AspNetUserClaims]([ClaimType],[ClaimValue],[UserId],[ClaimID],[IsActive],[DisplayLabel],[Discriminator],[User_Id]) VALUES(@ClaimType,@ClaimValue,@UserId,@ClaimID,@IsActive,@DisplayLabel,@Discriminator,@User_Id)";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                command.Parameters.AddWithValue("@ClaimType", claim.ClaimType);
+                                command.Parameters.AddWithValue("@ClaimValue", claim.ClaimValue);
+                                command.Parameters.AddWithValue("@UserId", user.Id);
+                                command.Parameters.AddWithValue("@ClaimID", claim.Id);
+
+                                command.Parameters.AddWithValue("@IsActive", "True");
+                                command.Parameters.AddWithValue("@DisplayLabel", "abc");
+                                command.Parameters.AddWithValue("@Discriminator", "ApplicationUserClaim");
+                                command.Parameters.AddWithValue("@User_Id", user.Id);
+
+                                int _result = command.ExecuteNonQuery();
+
+                                // Check Error
+                                if (_result < 0)
+                                    Console.WriteLine("Error inserting data into Database!");
+                            }
+                        }
+                        connection.Close();
+
                     }
-                    db.SaveChanges();
+
+                    //foreach (var claim in Claims)
+                    //{
+                    //    ApplicationUserClaim UserClaim = new ApplicationUserClaim();
+                    //    //_controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue)); 
+                    //    UserClaim.ClaimType = claim.ClaimType;
+                    //    UserClaim.ClaimValue = claim.ClaimValue;
+                    //    UserClaim.User = db.Users.FirstOrDefault(x => x.Id == user.Id);
+                        
+                    //    UserClaim.IsActive = true;
+                    //    UserClaim.User_Id = user.Id;
+
+                    //    db.AspNetUserClaims.Add(UserClaim);
+                    //}
+                    //db.SaveChanges();
 
 
                     //Send confirmation mail to user and admin
