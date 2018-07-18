@@ -189,6 +189,7 @@
     <Compile Include="App_Start\WebApiConfig2.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryViewModel.cs" />
+    <Compile Include="Controllers\CustomerInfoViewModel.cs" />
     <Compile Include="Controllers\CustomerOdersDetailController.cs" />
     <Compile Include="Controllers\CustomerReviewsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -1263,6 +1264,8 @@
     <Content Include="Views\UserAccount\Setting.cshtml" />
     <Content Include="Views\CustomerOdersDetail\Index.cshtml" />
     <Content Include="Views\Shared\_NewLayout.cshtml" />
+    <Content Include="Views\CustomerOdersDetail\CustomerOrderDetail.cshtml" />
+    <Content Include="Views\CustomerOdersDetail\OrderdDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

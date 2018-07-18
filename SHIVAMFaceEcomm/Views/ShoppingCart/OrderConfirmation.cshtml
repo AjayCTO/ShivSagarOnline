@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<SHIVAMFaceEcomm.Models.CartItems>
 @{
     ViewBag.Title = "OrderConfirmation";
-    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
     var Data = TempData["CartItems"] as IEnumerable<SHIVAMFaceEcomm.Models.CartItems>;
+     Layout = "~/Views/Shared/_NewLayout.cshtml";
+
 }
 
  <div class="col-sm-9">
@@ -47,4 +48,3 @@
     </div><!-- end row -->
 </div><!-- end col -->
 
- 

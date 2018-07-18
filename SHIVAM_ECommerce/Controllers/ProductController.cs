@@ -19,6 +19,7 @@ using System.Data.Entity.Validation;
 using System.Configuration;
 using System.Data.SqlClient;
 using SHIVAM_ECommerce.Attributes;
+using Syncfusion.XlsIO;
 namespace SHIVAM_ECommerce.Controllers
 {
     [CustomAuthorize]
@@ -44,7 +45,7 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("GetAllProducts");
         }
 
 
@@ -159,7 +160,21 @@ namespace SHIVAM_ECommerce.Controllers
 
             return _string;
         }
+        private string GetAttributeValuesForSqlSync(IRange a, List<ProductAttributesRelation> Columns, IRange _headerRow)
+        {
+            var _string = "";
 
+
+            foreach (var _columnData in Columns)
+            {
+
+                _string += _columnData.ProductAttributesId.ToString() + "@@" + a.Cells[GetColumnIndex(_headerRow, _columnData.ProductAttributes.AttributeName)].Value.ToString() + "##";
+
+            }
+
+
+            return _string;
+        }
         [HttpPost]
         public JsonResult UploadExcel()
         {
@@ -182,65 +197,48 @@ namespace SHIVAM_ECommerce.Controllers
                         FileUpload.SaveAs(targetpath + filename);
                         string pathToExcelFile = targetpath + filename;
                         var connectionString = "";
-                        if (filename.EndsWith(".xls"))
-                        {
-                            // connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=\"Excel 8.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
-                            //connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.4.0;Data Source={0}; Extended Properties=\"Excel 8.0;HDR=YES;IMEX=1\";", pathToExcelFile);
-                            connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathToExcelFile + ";Extended Properties=\"Excel 8.0;HDR=YES;\"";
-                            // connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + pathToExcelFile + ";Extended Properties=\"Excel 8.0;HDR=YES;\"";
-
-                        }
-                        else if (filename.EndsWith(".xlsx"))
-                        {
-                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
-                        }
-                        OleDbConnection oledbconnection = new OleDbConnection(connectionString);
-                        oledbconnection.Open();
-                        DataTable Sheets = oledbconnection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                        string sht = "";
 
 
-                        String[] excelSheets = new String[Sheets.Rows.Count];
-                        int i = 0;
+                        ExcelEngine excelEngine = new ExcelEngine();
+                        IApplication application = excelEngine.Excel;
 
-                        // Add the sheet name to the string array.
-                        foreach (DataRow row in Sheets.Rows)
-                        {
-                            excelSheets[i] = row["TABLE_NAME"].ToString();
-                            i++;
-                        }
+                        string fileName = Guid.NewGuid().ToString() + ".xlsx";
+                        IWorkbook workbook = application.Workbooks.Create(1);
+                        workbook.Version = ExcelVersion.Excel2007;
+                        workbook.DetectDateTimeInValue = true;
 
-                        sht = excelSheets[0];
-                        oledbconnection.Close();
-                        var adapter = new OleDbDataAdapter("SELECT * FROM [" + sht + "]", connectionString);
-                        var ds = new DataSet();
 
-                        adapter.Fill(ds, "ExcelTable");
+                        workbook = excelEngine.Excel.Workbooks.Open(pathToExcelFile, ExcelOpenType.Automatic, ExcelParseOptions.Default);
+                        IWorksheet worksheet = workbook.Worksheets[0];
+                        var _colRow = worksheet.Rows[0];
+                        var _ColCount = _colRow.Cells.Count();
+                        var _headerRow = worksheet.Rows[0];
 
-                        DataTable dtable = ds.Tables["ExcelTable"];
-
-                        var excelFile = new ExcelQueryFactory(pathToExcelFile);
-                        var worksheet = excelFile.GetWorksheetNames();
-                        var columnNames = excelFile.GetColumnNames(worksheet.FirstOrDefault());
-
-                        var records = from a in excelFile.Worksheet(0) select a;
-
-                        List<ImportProductVM> allProducts = new List<ImportProductVM>();
                         var _count = 0;
-                        foreach (var a in records)
+                        var _RowCount = worksheet.Rows.Count();
+                        for (int i = 1; i < _RowCount; i++)
                         {
+                            var _Row = worksheet.Rows[i];
 
 
-                            var _validityChecker = IsValidObject(a, _count + 1);
-                            if (!_validityChecker.IsValid)
+                            if (!_Row.IsBlank)
                             {
 
-                                _ErrorString = _ErrorString + "<br/>" + _validityChecker.ErrorString;
+
+                                var _validityChecker = IsValidObjectSync(_Row, _count + 1, _headerRow);
+                                if (!_validityChecker.IsValid)
+                                {
+
+                                    _ErrorString = _ErrorString + "<br/>" + _validityChecker.ErrorString;
+
+                                }
+
+                                _count = _count + 1;
 
                             }
-
-                            _count = _count + 1;
                         }
+
+
 
                         if (_ErrorString.Length > 0)
                         {
@@ -253,26 +251,31 @@ namespace SHIVAM_ECommerce.Controllers
                             var NewconnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
                             using (SqlConnection connection = new SqlConnection(NewconnectionString))
                             {
-
-                                foreach (var a in records)
+                                for (int i = 1; i < _RowCount; i++)
                                 {
+                                    var a = worksheet.Rows[i];
 
-                                    string _Query = "DECLARE @return_value int,@ProductID int;";
-                                    _Query += "SELECT	@ProductID = -1;";
-                                    _Query += "EXEC	@return_value = [dbo].[InsertProduct] @Name='" + a["Name"] + "',@ProductCode = '" + a["ProductCode"] + "',@Description = '" + a["Description"] + "',@categoryName = '" + a["categoryName"] + "',@UnitOfMeasure = '" + a["UnitOfMeasure"] + "',@ManuFacturer = '" + a["ManuFacturer"] + "',@SupplierID = '" + SupplierId + "',@ProductID = @ProductID OUTPUT;";
-                                    _Query += "SELECT	@ProductID as N'ProductID'";
-                                    SqlCommand command = new SqlCommand(_Query, connection);
-                                    command.CommandTimeout = 640;
-                                    command.Connection.Open();
-                                    var _productID = command.ExecuteScalar();
 
-                                    _Query = "EXEC [dbo].[InsertProductAttributes] @AttributeValues='" + GetAttributeValuesForSql(a, _Customcolumns) + "', @ProductPrice = '" + a["Cost"] + "', @ProductQuantity = '" + a["Quantity"] + "', @ProductId = '" + _productID.ToString() + "', @UnitInStock = '" + a["Quantity"] + "', @UnitWeight = '0',@HighQuantityThreshold='" + a["HighQuantityThreshold"] + "',@LowQuantityThreshold='" + a["LowQuantityThreshold"] + "',@ProductStatus='" + a["ProductStatus"] + "';";
+                                    if (!a.IsBlank)
+                                    {
 
-                                    command = new SqlCommand(_Query, connection);
-                                    command.ExecuteNonQuery();
+                                        string _Query = "DECLARE @return_value int,@ProductID int;";
+                                        _Query += "SELECT	@ProductID = -1;";
+                                        _Query += "EXEC	@return_value = [dbo].[InsertProduct] @Name='" + a.Cells[GetColumnIndex(_headerRow, "Name")].Value.ToString() + "',@ProductCode = '" + a.Cells[GetColumnIndex(_headerRow, "ProductCode")].Value.ToString() + "',@Description = '" + a.Cells[GetColumnIndex(_headerRow, "Description")].Value.ToString() + "',@categoryName = '" + a.Cells[GetColumnIndex(_headerRow, "categoryName")].Value.ToString() + "',@UnitOfMeasure = '" + a.Cells[GetColumnIndex(_headerRow, "UnitOfMeasure")].Value.ToString() + "',@ManuFacturer = '" + a.Cells[GetColumnIndex(_headerRow, "ManuFacturer")].Value.ToString() + "',@SupplierID = '" + SupplierId + "',@ProductID = @ProductID OUTPUT;";
+                                        _Query += "SELECT	@ProductID as N'ProductID'";
+                                        SqlCommand command = new SqlCommand(_Query, connection);
+                                        command.CommandTimeout = 640;
+                                        command.Connection.Open();
+                                        var _productID = command.ExecuteScalar();
 
-                                    command.CommandTimeout = 640;
-                                    command.Connection.Close();
+                                        _Query = "EXEC [dbo].[InsertProductAttributes] @AttributeValues='" + GetAttributeValuesForSqlSync(a, _Customcolumns, _headerRow) + "', @ProductPrice = '" + a.Cells[GetColumnIndex(_headerRow, "Cost")].Value.ToString() + "', @ProductQuantity = '" + a.Cells[GetColumnIndex(_headerRow, "Quantity")].Value.ToString() + "', @ProductId = '" + _productID.ToString() + "', @UnitInStock = '" + a.Cells[GetColumnIndex(_headerRow, "Quantity")].Value.ToString() + "', @UnitWeight = '0',@HighQuantityThreshold='" + a.Cells[GetColumnIndex(_headerRow, "HighQuantityThreshold")].Value.ToString() + "',@LowQuantityThreshold='" + a.Cells[GetColumnIndex(_headerRow, "LowQuantityThreshold")].Value.ToString() + "',@ProductStatus='" + a.Cells[GetColumnIndex(_headerRow, "ProductStatus")].Value.ToString() + "';";
+
+                                        command = new SqlCommand(_Query, connection);
+                                        command.ExecuteNonQuery();
+
+                                        command.CommandTimeout = 640;
+                                        command.Connection.Close();
+                                    }
                                 }
 
                             }
@@ -354,6 +357,65 @@ namespace SHIVAM_ECommerce.Controllers
         }
 
 
+        private int GetColumnIndex(IRange row, string _Column)
+        {
+            int count = 0;
+            foreach (var item in row.Cells)
+            {
+                if (row.Cells[count].Value.ToString() == _Column)
+                {
+                    return count;
+                }
+                count = count + 1;
+            }
+
+            return count;
+
+        }
+        private ImportValid IsValidObjectSync(IRange a, int _Index, IRange _headerRow)
+        {
+            var _ValidObj = new ImportValid();
+            _ValidObj.IsValid = true;
+            _ValidObj.ErrorString = "";
+            try
+            {
+
+
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "Name")].Value.ToString())) _ValidObj.ErrorString += "<br/> Product name is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "categoryName")].Value.ToString())) _ValidObj.ErrorString += "<br/> category name is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "UnitOfMeasure")].Value.ToString())) _ValidObj.ErrorString += "<br/> UnitofMasure is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "ManuFacturer")].Value.ToString())) _ValidObj.ErrorString += "<br/> Manufacturer name is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "HighQuantityThreshold")].Value.ToString())) _ValidObj.ErrorString += "<br/> High Quantity Threshold is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "LowQuantityThreshold")].Value.ToString())) _ValidObj.ErrorString += "<br/>  Low Quantity Threshold is Required";
+                if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, "ProductStatus")].Value.ToString())) _ValidObj.ErrorString += "<br/> Product Status is Required";
+
+                foreach (var item in _columns.ToList())
+                {
+                    var _column = item.ToString();
+                    decimal _checkDecimal = -1;
+                    if (string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, _column)].Value.ToString())) _ValidObj.ErrorString += "<br/> " + _column + " is Required";
+
+                    if (!string.IsNullOrEmpty(a.Cells[GetColumnIndex(_headerRow, _column)].Value.ToString()) && (_column.ToLower() == "quantity" || _column.ToLower() == "cost" || _column.ToLower() == "HighQuantityThreshold" || _column.ToLower() == "LowQuantityThreshold"))
+                    {
+                        if (!decimal.TryParse(a.Cells[GetColumnIndex(_headerRow, _column)].Value.ToString(), out _checkDecimal)) _ValidObj.ErrorString += "<br/> " + _column + " is not a valid number";
+                    }
+                }
+
+                if (_ValidObj.ErrorString.Length > 0)
+                {
+                    _ValidObj.IsValid = false;
+                        var TempIndex=_Index + 1;
+                        _ValidObj.ErrorString = "<b>Row " + TempIndex.ToString() + "</b>" + _ValidObj.ErrorString;
+
+                }
+                return _ValidObj;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         public ActionResult AssignProductImages(int ProductID)
         {
             ViewBag.ProductID = ProductID;
@@ -581,7 +643,7 @@ namespace SHIVAM_ECommerce.Controllers
                         _productRel = _tempProductRel;
                         _productRel.IsAvailable = true;
                         _productRel.AttributeValues = GetAttributeValues(_item.ColumnsData);
-                        _productRel.ProductPrice = Model.ProductPrice;
+                        _productRel.ProductPrice = _item.price;
                         _productRel.ProductQuantity = _item.Quantity;
                         _productRel.ProductId = Model.ProductID;
                         _productRel.UnitInStock = _item.Quantity;

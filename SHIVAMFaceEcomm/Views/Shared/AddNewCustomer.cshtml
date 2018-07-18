@@ -21,7 +21,7 @@
 
                         <div class="form-group">
                             <label for="firstName">First name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="firstName" name="firstName" ng-model="CustomerDetails.firstName" placeholder="" required value="">
+                            <input type="text" class="form-control" id="firstName" name="firstName" ng-model="CustomerDetails.firstName" placeholder="First Name" required value="">
                             <span ng-show="form1.firstName.$error.required">The First Name is required!</span>
                         </div>
 
@@ -32,7 +32,7 @@
 
                         <div class="form-group">
                             <label for="lastName">Last name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" ng-model="CustomerDetails.lastName" value="" required>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="LastName" ng-model="CustomerDetails.lastName" value="" required>
                             <span ng-show="form1.lastName.$error.required">The Last Name is required!</span>
                         </div>
 
@@ -80,8 +80,9 @@
 
                             <div class="form-group">
                                 <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                                <input type="email" class="form-control" id="email" name="email" ng-model="CustomerDetails.email" placeholder="you@example.com">
+                                <input type="email" class="form-control" id="email" ng-pattern="emailvalidation" required name="email" ng-model="CustomerDetails.email" placeholder="you@example.com">
                                 <span ng-show="form1.email.$error.required">The Email is required!</span>
+                                <span ng-show="form1.email.$error.pattern">The Email is not valid!</span>
                             </div>
 
 
@@ -92,7 +93,9 @@
 
                             <div class="form-group">
                                 <label for="Phone">Phone <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="Phone" ng-model="CustomerDetails.phone" placeholder="phone">
+                                <input type="text" class="form-control"  ng-model="CustomerDetails.phone" placeholder="phone">
+                                <span ng-show="form1.email.$error.required">Phone Number  is required!</span>
+                             
                             </div>
 
 
@@ -224,16 +227,12 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label for="cc-number">Credit card number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cc-number" name="cnumber" ng-model="CustomerDetails.CreditCard" placeholder="" required
-                                       data-ng-pattern="/^[0-9]+$/"
-
-                                       data-ng-minlength="15"
-                                       maxlength="19">{{ccinfo.type}}
-                                <span ng-show="form1.cnumber.$error.required">Credit card required</span>
+                                <input type="text" class="form-control" id="cc-number" name="cnumber" ng-model="CustomerDetails.CreditCard" placeholder=""     data-ng-pattern="/^[0-9]+$/ "   data-ng-minlength="15"  maxlength="19" required>
+                              
                                 <span ng-show="form1.cnumber.$error.pattern">Credit card must consist of only numbers</span>
-                                <span ng-show="form1.cnumber.$error.invalid">Credit card must be a valid Amex, Visa, Discover, or Master Card</span>
+                            
                                 <span ng-show="form1.cnumber.$error.minlength">Credit card must be 15-19 digits</span>
-                                    
+                                <span ng-show="form1.cnumber.$error.required">Credit card required</span>
     
                                 </div>
                             

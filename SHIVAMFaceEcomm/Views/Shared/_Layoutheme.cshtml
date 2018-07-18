@@ -20,8 +20,9 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/animate.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/css/toastr.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" rel="stylesheet"/>
-          @*@Styles.Render("~/bundle/css")*@<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" rel="stylesheet" />
+    @*@Styles.Render("~/bundle/css")*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- this is default skin you can replace that with: dark.css, yellow.css, red.css ect -->
     <link id="pagestyle" rel="stylesheet" type="text/css" href="~/Content/css/default.css" />
@@ -31,77 +32,27 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800&amp;subset=latin-ext" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-            <link href="https://cdn.datatables.net/responsive/2.2.0/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-        <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.2.0/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
 
-        <link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet" />
-        <style>
-
-
-
-
-
-        </style>
-    </head>
-    <body ng-app="MyApp">
+    <link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <style>
+    </style>
+</head>
+<body ng-app="MyApp" ng-controller="layoutCtrl">
 
 
-        <div class="topBar">
-            <div class="container">
-                <ul class="topBarNav pull-left">
-                    <li class="linkdown">
-                        <a href="javascript:void(0);">
-                            <i class="fa fa-usd mr-5"></i>
-                            USD
-                            <i class="fa fa-angle-down ml-5"></i>
-                        </a>
-                        <ul class="w-100">
-                            <li><a href="javascript:void(0);"><i class="fa fa-eur mr-5"></i>EUR</a></li>
-                            <li class="active"><a href="javascript:void(0);"><i class="fa fa-usd mr-5"></i>USD</a></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-gbp mr-5"></i>GBP</a></li>
-                        </ul>
-                    </li>
-                    <li class="linkdown">
-                        <a href="javascript:void(0);">
-                            <img src="img/flags/flag-french.jpg" class="mr-5" alt="">
-                            <span class="hidden-xs">
-                                French
-                                <i class="fa fa-angle-down ml-5"></i>
-                            </span>
-                        </a>
-                        <ul class="w-100">
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-english.jpg" class="mr-5" alt="">English</a></li>
-                            <li class="active"><a href="javascript:void(0);"><img src="img/flags/flag-french.jpg" class="mr-5" alt="">French</a></li>
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-german.jpg" class="mr-5" alt="">German</a></li>
-                            <li><a href="javascript:void(0);"><img src="img/flags/flag-spain.jpg" class="mr-5" alt="">Spain</a></li>
-                        </ul>
-                    </li>
-            </ul>
-
+    <div class="topBar">
+        <div class="container">
             <ul class="topBarNav pull-right">
-                @*<li><a href="javascript:void(0);" data-toggle="modal" data-target=".loginModal"> Login</a></li>
-                    <li><a href="javascript:void(0);" data-toggle="modal" data-target=".registerModal"> Register</a></li>
-                    <li class="linkdown">
-                        <a href="javascript:void(0);">
-                            <i class="fa fa-user mr-5"></i>
-                            <span class="hidden-xs">
-                                My Account
-                                <i class="fa fa-angle-down ml-5"></i>
-                            </span>
-                        </a>
-                        <ul class="w-150">
-                            <li><a href="wishlist.html">Wishlist (5)</a></li>
-                            <li><a href="cart.html">My Cart</a></li>
-                            <li><a href="checkout.html">Checkout</a></li>
-                        </ul>
-                    </li>*@
+
                 @Html.Partial("_LoginPartial")
 
             </ul>
         </div><!-- end container -->
     </div>
     <!-- end topBar -->
-    <div ng-controller="layoutCtrl">
+    <div>
         <div class="middleBar">
             <div class="container">
                 <div class="row display-table">
@@ -117,9 +68,6 @@
 
 
                             <div class="row grid-space-1">
-                                <div class="col-sm-6">
-                                    <input type="text" name="keyword" class="form-control input-lg" placeholder="Search">
-                                </div><!-- end col -->
                                 <div class="col-sm-3">
 
                                     <div style="display:none;">
@@ -142,20 +90,25 @@
                                         </ul>
                                     </div>
 
-                                    <select class="form-control input-lg" name="category">
+                                    <select class="form-control input-lg" name="category" id="SearchCategoryID">
                                         <option value="all">All Categories</option>
                                         <optgroup ng-if="cat.Categories1.length>0" ng-repeat="cat in searchcategories" label="{{cat.CategoryName}}">
-                                            <option ng-repeat="subcat in cat.Categories1" value="{{subcat.CategoryName}}">{{subcat.CategoryName}}</option>
+                                            <option ng-repeat="subcat in cat.Categories1" value="{{subcat.Id}}">{{subcat.CategoryName}}</option>
 
                                         </optgroup>
 
-                                        <option ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories" value="{{cat.CategoryName}}">{{cat.CategoryName}}</option>
+                                        <option ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories" value="{{cat.Id}}">{{cat.CategoryName}}</option>
 
                                     </select>
                                 </div><!-- end col -->
-                                <div class="col-sm-3">
-                                    <input type="submit" class="btn btn-default btn-block btn-lg" value="Search">
+                                <div class="col-sm-6">
+                                    <input type="text" name="keyword" id="SearchText" class="form-control input-lg" placeholder="Search">
                                 </div><!-- end col -->
+                                <div class="col-sm-3">
+                                    <input type="button" class="btn btn-default btn-block btn-lg" id="SearchBtn" value="Search">
+                                </div><!-- end col -->
+
+
                             </div><!-- end row -->
                         </form>
                     </div><!-- end col -->
@@ -170,7 +123,7 @@
                             </div>
                         }
 
-                        
+
                     </div><!-- end col -->
                 </div><!-- end  row -->
             </div><!-- end container -->
@@ -198,6 +151,28 @@
                         <li><a href="/Home/products">Products</a></li>
 
                     </ul><!-- end navbar-nav -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                                    <span class="hidden-sm">Account</span>
+                                </a>
+                                <ul class="dropdown-menu">
+
+
+                                    <li>
+                                        <a href="/CustomerOdersDetail/Index">My Order</a>
+                                    </li>
+                                    <li>
+                                        <a href="/Home/CustomerWishList/?CustomerId=@User.Identity.GetUserId()">Wishlist <span class="text-primary badge badge-danger">{{wishlistCounter}}</span></a>
+                                    </li>
+
+
+                                </ul>
+                            </li>
+                        </ul>
+                    }
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown right">
                             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
@@ -279,50 +254,50 @@
             <hr class="spacer-30">
 
             @*<div class="row">
-                <div class="col-sm-3">
-                    <h5 class="title">Plus</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia mi.</p>
+                    <div class="col-sm-3">
+                        <h5 class="title">Plus</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit, libero a molestie consectetur, sapien elit lacinia mi.</p>
 
-                    <hr class="spacer-10 no-border">
+                        <hr class="spacer-10 no-border">
 
-                    <ul class="social-icons">
-                        <li class="facebook"><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
-                        <li class="twitter"><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
-                        <li class="dribbble"><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a></li>
-                        <li class="linkedin"><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
-                        <li class="youtube"><a href="javascript:void(0);"><i class="fa fa-youtube"></i></a></li>
-                        <li class="behance"><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
-                    </ul>
-                </div><!-- end col -->
-                <div class="col-sm-3">
-                    <h5 class="title">My Account</h5>
-                    <ul class="list alt-list">
-                        <li><a href="my-account.html"><i class="fa fa-angle-right"></i>My Account</a></li>
-                        <li><a href="wishlist.html"><i class="fa fa-angle-right"></i>Wishlist</a></li>
-                        <li><a href="cart.html"><i class="fa fa-angle-right"></i>My Cart</a></li>
-                        <li><a href="checkout.html"><i class="fa fa-angle-right"></i>Checkout</a></li>
-                    </ul>
-                </div><!-- end col -->
-                <div class="col-sm-3">
-                    <h5 class="title">Information</h5>
-                    <ul class="list alt-list">
-                        <li><a href="about-us-v1.html"><i class="fa fa-angle-right"></i>About Us</a></li>
-                        <li><a href="faq.html"><i class="fa fa-angle-right"></i>FAQ</a></li>
-                        <li><a href="privacy-policy.html"><i class="fa fa-angle-right"></i>Privacy Policy</a></li>
-                        <li><a href="contact-v1.html"><i class="fa fa-angle-right"></i>Contact Us</a></li>
-                    </ul>
-                </div><!-- end col -->
-                <div class="col-sm-3">
-                    <h5 class="title">Payment Methods</h5>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <ul class="list list-inline">
-                        <li class="text-white"><i class="fa fa-cc-visa fa-2x"></i></li>
-                        <li class="text-white"><i class="fa fa-cc-paypal fa-2x"></i></li>
-                        <li class="text-white"><i class="fa fa-cc-mastercard fa-2x"></i></li>
-                        <li class="text-white"><i class="fa fa-cc-discover fa-2x"></i></li>
-                    </ul>
-                </div><!-- end col -->
-            </div><!-- end row -->*@
+                        <ul class="social-icons">
+                            <li class="facebook"><a href="javascript:void(0);"><i class="fa fa-facebook"></i></a></li>
+                            <li class="twitter"><a href="javascript:void(0);"><i class="fa fa-twitter"></i></a></li>
+                            <li class="dribbble"><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a></li>
+                            <li class="linkedin"><a href="javascript:void(0);"><i class="fa fa-linkedin"></i></a></li>
+                            <li class="youtube"><a href="javascript:void(0);"><i class="fa fa-youtube"></i></a></li>
+                            <li class="behance"><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
+                        </ul>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <h5 class="title">My Account</h5>
+                        <ul class="list alt-list">
+                            <li><a href="my-account.html"><i class="fa fa-angle-right"></i>My Account</a></li>
+                            <li><a href="wishlist.html"><i class="fa fa-angle-right"></i>Wishlist</a></li>
+                            <li><a href="cart.html"><i class="fa fa-angle-right"></i>My Cart</a></li>
+                            <li><a href="checkout.html"><i class="fa fa-angle-right"></i>Checkout</a></li>
+                        </ul>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <h5 class="title">Information</h5>
+                        <ul class="list alt-list">
+                            <li><a href="about-us-v1.html"><i class="fa fa-angle-right"></i>About Us</a></li>
+                            <li><a href="faq.html"><i class="fa fa-angle-right"></i>FAQ</a></li>
+                            <li><a href="privacy-policy.html"><i class="fa fa-angle-right"></i>Privacy Policy</a></li>
+                            <li><a href="contact-v1.html"><i class="fa fa-angle-right"></i>Contact Us</a></li>
+                        </ul>
+                    </div><!-- end col -->
+                    <div class="col-sm-3">
+                        <h5 class="title">Payment Methods</h5>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                        <ul class="list list-inline">
+                            <li class="text-white"><i class="fa fa-cc-visa fa-2x"></i></li>
+                            <li class="text-white"><i class="fa fa-cc-paypal fa-2x"></i></li>
+                            <li class="text-white"><i class="fa fa-cc-mastercard fa-2x"></i></li>
+                            <li class="text-white"><i class="fa fa-cc-discover fa-2x"></i></li>
+                        </ul>
+                    </div><!-- end col -->
+                </div><!-- end row -->*@
 
             @*<hr class="spacer-30">*@
 
@@ -360,11 +335,32 @@
     <script type="text/javascript" src="~/Content/js/swiper.min.js"></script>
     <script type="text/javascript" src="~/Content/js/main.js"></script>
 
-     
+
     <script src="~/Scripts/bootbox.min.js"></script>
     <!-- Initialize Swiper slide -->
     <script>
         var _CustomerIDLayout = '@_CurrentUserID';
+        var _GlobalSearchText = '';
+        var _GlobalCatID = '';
+
+        $(document).ready(function () {
+            $("#SearchBtn").click(function () {
+                var _searchValue = $.trim($("#SearchText").val());
+                var _searchCat = $.trim($("#SearchCategoryID").val());
+
+                if (_searchValue != "") {
+
+                    var _url = "/Home/Products?ProductName=" + _searchValue;
+
+                    if (_searchCat != "" && _searchCat != "all") {
+
+                        _url = _url + "&CategoryID=" + _searchCat;
+                    }
+                    window.location.href = _url;
+                }
+
+            });
+        });
         //var swiperH = new Swiper('.swiper-coverflow', {
         //    pagination: '.swiper-pagination',
         //    nextButton: '.swiper-button-next',

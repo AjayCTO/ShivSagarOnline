@@ -42,7 +42,7 @@
                         @Html.ValidationMessageFor(model => model.ParentCategory)
                     </div>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <div class="col-md-10">
                         <label class="custom-control custom-checkbox">
                             @Html.CheckBoxFor(model => model.IsTopCategory,
@@ -51,6 +51,26 @@
 
                             <span class="custom-control-label">Show at home</span>
                         </label>
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="custom-control custom-checkbox">
+                                    @Html.CheckBoxFor(model => model.IsTopCategory, new Dictionary<string, object> { { "class", "custom-control-input" } })
+
+
+                                    <span class="custom-control-label">Show at home</span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="custom-control custom-checkbox">
+                                    @Html.CheckBoxFor(model => model.IsActive, new Dictionary<string, object> { { "class", "custom-control-input" } })
+                                    <span class="custom-control-label">IsActive</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 @*<div class="form-group">

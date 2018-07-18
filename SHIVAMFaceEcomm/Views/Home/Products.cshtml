@@ -100,8 +100,6 @@
                         <div class="ui-range-slider"></div>
 
                     </form>
-
-
                 </div><!-- end widget -->
 
                 <div class="widget" ng-repeat="item in Attributes">
@@ -110,8 +108,7 @@
                     <ul class="list list-unstyled">
                         <li ng-repeat="itemvalue in AttributesValue | filter:{AttributeId:item.Id}|unique:AttributeValue">
                             <div ng-if="itemvalue.AttributeValue !=null" class="checkbox-input">
-
-                                <input id="red-color{{itemvalue.AttributeValue}}" ng-model="selectedAttribute" ng-true-value="1" ng-false-value="0" ng-change="AddAttrToFilter(selectedAttribute,item.AttributeName,itemvalue.AttributeValue)" class="styled" type="checkbox">
+                                <input id="red-color{{itemvalue.AttributeValue}}" ng-checked="IsFilterChecked(item.AttributeName,itemvalue.AttributeValue)" ng-model="selectedAttribute" ng-true-value="1" ng-false-value="0" ng-click="AddAttrToFilter(selectedAttribute,item.AttributeName,itemvalue.AttributeValue)" class="styled" type="checkbox">
                                 <label for="red-color{{itemvalue.AttributeValue}}">
 
                                     <span ng-if="item.AttributeName=='Color'" class="color" style="background-color:{{itemvalue.AttributeValue}}"></span>  {{itemvalue.AttributeValue}}
@@ -122,7 +119,7 @@
 
                     </ul>
                 </div>
-
+            {{AllAttributeFilters.value}}
                 <button type="submit"  class="btn btn-default btn-block btn-md"> <i class="fa fa-search"></i> Filter</button>
              
 
@@ -192,9 +189,9 @@
                         </div><!-- end row -->
 
                         <hr class="spacer-10 no-border" />
-                        <div class="card-footer text-muted">
+                        @*<div class="card-footer text-muted">
                             <button class="btn btn-success" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
-                        </div>
+                        </div>*@
 
 
 
@@ -326,10 +323,13 @@
 @section scripts
 {
 
-    <script src="~/Scripts/AngularData/Products.js"></script>
     <script>
         var _customerID = '@_CurrentUserID';
+         _GlobalSearchText = "@ViewBag.ProductName";
+         _GlobalCatID = "@ViewBag.CategoryID";
     </script>
+   <script src="~/Scripts/AngularData/Products.js"></script>
+
 }
 <style>
     figure {

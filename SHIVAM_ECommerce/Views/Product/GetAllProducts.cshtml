@@ -20,15 +20,19 @@
             <div class="card-header">
                 <h3 class="card-title"> <i class="fe fe-box"></i> Products</h3>
                 <div class="card-options">
-                    <div class="item-action dropdown">
-                        <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a href="/Product/ExportProducts" class="dropdown-item"> <i class="dropdown-icon fe fe-file-plus"></i> Export As Excel</a>
-                            <a href="/Product/Create" class="dropdown-item"><i class="dropdown-icon fe fe-plus"></i> Add New</a>
-                            <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Upload Products</a>
-                        </div>
-                    </div>
+                    @if (_CurrentUser.SupplierID != -1)
+                    {
 
+                        <div class="item-action dropdown">
+                            <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>
+                            <div class="dropdown-menu dropdown-menu-right">
+
+                                <a href="/Product/ExportProducts" class="dropdown-item"> <i class="dropdown-icon fe fe-file-plus"></i> Export As Excel</a>
+                                <a href="/Product/Create" class="dropdown-item"><i class="dropdown-icon fe fe-plus"></i> Add New</a>
+                                <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Upload Products</a>
+                            </div>
+                        </div>
+                    }
                 </div>
 
             </div>
@@ -208,6 +212,7 @@
                 $("#btnSubmit").val("Upload file");
                 if (data.Success == true) {
                     alert("uploaded Successfully");
+                    window.location.reload();
                 }
                 else {
                     $("#ErrorString").show("slow");
@@ -418,7 +423,6 @@
                 },
                 rowCallback: function( row, data, index ) {
 
-                    console.log(data);
                     var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
                     var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
                     var html= '<div class="item-action dropdown">  <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>   <div class="dropdown-menu dropdown-menu-right">';

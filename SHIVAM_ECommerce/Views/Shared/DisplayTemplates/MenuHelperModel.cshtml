@@ -41,7 +41,7 @@
                             if (_item.AllClaims.Count() == 1)
                             {
                                 <li class="nav-item">
-                                    <a href="@_item.AllClaims[0].ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.AllClaims[0].Title</a>
+                                    <a href="/@_item.AllClaims[0].ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.AllClaims[0].Title</a>
                                 </li>
                             }
                             else
@@ -52,7 +52,7 @@
                                         <div></div>
                                         @foreach (var _childitem in _item.AllClaims.ToList())
                                         {
-                                            <a href="@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
+                                            <a href="/@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
                                         }
 
 

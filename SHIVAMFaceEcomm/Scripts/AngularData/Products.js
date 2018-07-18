@@ -1,7 +1,6 @@
-﻿app.controller("PaginationCtrl", function ($scope,$rootScope, AddToCart, CartToCookieService) {
+﻿app.controller("PaginationCtrl", function ($scope, $rootScope, AddToCart, CartToCookieService) {
 
-
-    $scope.itemsPerPage = 6;
+    $scope.itemsPerPage = 1000;
     $scope.currentPage = 0;
     $scope.total = 0;
     $scope.alltotalproduct = 0;
@@ -22,9 +21,10 @@
     $scope.showloader = true;
     $scope.CurrentWishList = [];
     $scope.CustomerID = _customerID == undefined ? -1 : _customerID;
-    var minpriceval;
-    var maxpriceval;
-    var searchtext;
+    var minpriceval = "";
+    var maxpriceval = "";
+    var searchtext = _GlobalSearchText;
+    $scope.search = _GlobalSearchText;
     $scope.category = {
         "id": 0,
         "categoryName": null,
@@ -37,9 +37,9 @@
         "categoryImage": null,
         "categories1": null
     };
-   
+
     $scope.FilterProducts = function () {
-        $scope.itemsPerPage = 5;
+        $scope.itemsPerPage = 1000;
         $scope.currentPage = 0;
         $scope.total = 0;
         $scope.pagedItems = [];
@@ -47,20 +47,50 @@
 
     };
 
+    function AddCatID(CategoryId) {
+        var idx = $scope.categoriesarraySelect.indexOf(CategoryId);
+        if (idx > -1) {
+            // is currently selected
+            $scope.pagedItems = [];
+            $scope.currentPage = 0;
+
+            $scope.categoriesarraySelect.splice(idx, 1);
+        }
+        else {
+            // is newly selected
+            $scope.categoriesarraySelect.push(CategoryId);
+        }
+
+
+
+        $scope.categoriesobj = $scope.categoriesarraySelect.join();
+    }
+    $scope.AddCatArray = function (CategoryId) {
+        debugger;
+
+        AddCatID(CategoryId);
+        $scope.loadData(0, $scope.itemsPerPage);
+
+    }
+
+
     $scope.Clearfilter = function () {
-    debugger
-        $scope.search='',
-        FilterText='',
-        $scope.categoriesobj='',
-        minpriceval='',
+        debugger
+        $scope.search = '',
+        FilterText = '',
+        $scope.categoriesobj = '',
+        minpriceval = '',
         maxpriceval = ''
         $scope.categoriesarraySelect = [];
-      
+        $scope.AllAttributeFilters = [];
+        $scope.pagedItems = [];
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
-   
+
     }
     $scope.myFunc = function () {
         debugger;
+        $scope.pagedItems = [];
+        $scope.currentPage = 0;
 
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     };
@@ -103,7 +133,7 @@
                 }
                 FilterText = FilterText.replace(/,\s*$/, "");
 
-                FilterText = FilterText + ") OR ";
+                FilterText = FilterText + ") AND ";
 
 
             }
@@ -113,12 +143,12 @@
             FilterText = FilterText + ") AND";
         }
         debugger;
-        if ($.trim($scope.categoriesobj) != "" || $.trim(minpriceval) != "" || $.trim(maxpriceval) != "" || $.trim(FilterText) != "" ||$.trim.searchtext!="")
-        {
+        if ($.trim($scope.categoriesobj) != "" || $.trim(minpriceval) != "" || $.trim(maxpriceval) != "" || $.trim(FilterText) != "" || $.trim($scope.search) != "") {
+            offset = 0;
             $scope.pagedItems = [];
         }
 
-        
+
 
         $.ajax({
             url: '/Models/GetProducts.ashx',
@@ -126,9 +156,10 @@
             dataType: 'json',
             data: { displayLength: limit, displayStart: offset, searchText: $scope.search, filtertext: FilterText, Categories: $scope.categoriesobj, lowprice: minpriceval, highprice: maxpriceval },
             success: function (data, textStatus, xhr) {
-           
+
                 $scope.total = data.iTotalDisplayRecords;
-                $scope.pagedItems = $scope.pagedItems.concat(data.aaData);
+                $scope.pagedItems = data.aaData;
+                //$scope.pagedItems = data.aaData;
                 debugger;
                 $scope.$apply();
             },
@@ -137,40 +168,108 @@
             }
         });
 
+
         $scope.loadFilters();
 
 
     };
 
 
+    $scope.IsFilterChecked = function (name, Value) {
 
+        for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
+            if ($scope.AllAttributeFilters[i].Name === name) {
+                if (CheckVarFromArray($scope.AllAttributeFilters[i].Values, Value)) {
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
+
+    }
+
+
+    function CheckVarFromArray(array, value) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     $scope.AddAttrToFilter = function (ischecked, name, value) {
 
-        debugger;
-        if (ischecked == 1) {
+        // if (ischecked == 1)
+        {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
                 if ($scope.AllAttributeFilters[i].Name === name) {
-                    if ($scope.AllAttributeFilters[i].Values.indexOf(value) === -1) {
-                        $scope.AllAttributeFilters[i].Values.push(value);
+                    if (ischecked == "1" || ischecked == 1) {
+                        if ($scope.AllAttributeFilters[i].Values.indexOf(value) === -1) {
+                            $scope.AllAttributeFilters[i].Values.push(value);
+                        }
                     }
-
-                }
-            }
-        } else {
-            for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
-                if ($scope.AllAttributeFilters[i].Name === name) {
-                    if ($scope.AllAttributeFilters[i].Values.indexOf(value) === 1) {
-
-                        $scope.AllAttributeFilters[i].Values.splice($scope.AllAttributeFilters[i].Values.indexOf(value), 1);
+                    else {
+                        if (CheckVarFromArray($scope.AllAttributeFilters[i].Values,value)==true) {
+                            $scope.AllAttributeFilters[i].Values.splice($scope.AllAttributeFilters[i].Values.indexOf(value), 1);
+                        }
                     }
-
                 }
             }
         }
 
- 
+        //else {
+        //    for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
+        //        if ($scope.AllAttributeFilters[i].Name === name) {
+        //            if ($scope.AllAttributeFilters[i].Values.indexOf(value) === 1) {
+
+        //                $scope.AllAttributeFilters[i].Values.splice($scope.AllAttributeFilters[i].Values.indexOf(value), 1);
+        //            }
+
+        //        }
+        //    }
+        //}
+
+
         $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
+    }
+
+  
+  
+
+    $scope.getValues = function (name) {
+
+        for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
+            if ($scope.AllAttributeFilters[i].Name === name) {
+                if ($.trim($scope.AllAttributeFilters[i].Values) != "") {
+
+
+                    return $scope.AllAttributeFilters[i].Values;
+                }
+
+            }
+        }
+
+        return [];
+
+    }
+
+    $scope.isAlreadyName = function (name) {
+
+        for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
+            if ($scope.AllAttributeFilters[i].Name === name) {
+
+
+                    return true;
+
+            }
+        }
+
+        return false;
+
     }
 
     $scope.loadSuppliers = function () {
@@ -191,7 +290,6 @@
     };
 
     $scope.loadFilters = function () {
-
         $.ajax({
             url: '/api/Products/GetAttributes',
             type: 'GET',
@@ -200,10 +298,13 @@
 
                 $scope.Attributes = data;
                 for (var i = 0; i < $scope.Attributes.length; i++) {
-                    $scope.AllAttributeFilters.push({
-                        Name: $scope.Attributes[i].AttributeName,
-                        Values: []
-                    });
+                    if ($scope.isAlreadyName($scope.Attributes[i].AttributeName)!=true) {
+
+                        $scope.AllAttributeFilters.push({
+                            Name: $scope.Attributes[i].AttributeName,
+                            Values: $scope.getValues($scope.Attributes[i].AttributeName)
+                        });
+                    }
                 }
 
 
@@ -230,7 +331,7 @@
         });
 
         $.ajax({
-           
+
             url: '/api/Products/GetCategories',
             type: 'GET',
             dataType: 'json',
@@ -266,6 +367,16 @@
                         }
                     });
                 }, 100);
+
+                if ($.trim(_GlobalCatID) != "") {
+
+                    //$scope.categoriesarraySelect.push(_GlobalCatID);
+                    //$scope.categoriesobj = $scope.categoriesarraySelect.join();
+                    //AddCatID(_GlobalCatID);
+                    $("#cat_" + _GlobalCatID).find("input").trigger("click");
+                    _GlobalCatID = "";
+
+                }
 
 
             },
@@ -342,6 +453,7 @@
 
 
     };
+
 
     $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
     $scope.loadSuppliers();
@@ -427,26 +539,7 @@
         return "";
     }
 
-    $scope.AddCatArray=function(CategoryId)
-    {
-        debugger;
-        var idx = $scope.categoriesarraySelect.indexOf(CategoryId);
-        if (idx > -1) {
-            // is currently selected
-            $scope.categoriesarraySelect.splice(idx, 1);
-        }
-        else {
-            // is newly selected
-            $scope.categoriesarraySelect.push(CategoryId);
-        }
-        
-        
-  
-        $scope.categoriesobj = $scope.categoriesarraySelect.join();
 
-        $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
-
-    }
 
     //function in remove in cart 
     $scope.DeleteCarttolist = function (Product) {
@@ -454,7 +547,7 @@
         bootbox.confirm("Are you sure you want to delete this Item ?", function (result) {
             if (result) {
                 debugger;
-       
+
                 for (var i = 0; i < $scope.AllCartItems.length; i++) {
                     if ($scope.AllCartItems[i].ProductId == Product.ProductId) {
                         $scope.AllCartItems.splice($.inArray(Product, $scope.AllCartItems), 1);
@@ -464,8 +557,8 @@
                 $scope.CartProductsCounter = $scope.AllCartItems.length;
                 $scope.$apply();
             }
-       
-      
+
+
         });
     };
     $("._slider").on("change", function () {
@@ -473,7 +566,13 @@
 
         minpriceval = $("#lowpricevalue").val();
         maxpriceval = $("#highpricevalue").val();
+
         if (minpriceval != "" || maxpriceval != "") {
+
+            $scope.currentPage = 0;
+            $scope.pagedItems = [];
+            $scope.$apply();
+
             $scope.loadData($scope.currentPage * $scope.itemsPerPage, $scope.itemsPerPage);
         }
 

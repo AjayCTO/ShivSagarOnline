@@ -32,8 +32,10 @@ namespace SHIVAMFaceEcomm.Controllers
             return View();
         }
 
-        public ActionResult Products()
+        public ActionResult Products(string ProductName, string CategoryID)
         {
+            ViewBag.ProductName = !string.IsNullOrEmpty(ProductName) ? ProductName : "";
+            ViewBag.CategoryID = !string.IsNullOrEmpty(CategoryID) ? CategoryID : ""; ;
 
             return View();
         }
@@ -76,7 +78,7 @@ namespace SHIVAMFaceEcomm.Controllers
             var _ProductData = db.ProductAttributeWithQuantities.Where(p => p.Id == ProductId).FirstOrDefault();
             productDetail.Product = db.Products.Where(p => p.Id == _ProductData.ProductId).FirstOrDefault();
             productDetail.Attributes = new List<ProductDetailAttributes>();
-            productDetail.Attributes = db.ProductValues_view.Where(p => p.productId == ProductId).Select(p => new ProductDetailAttributes() { AttributeName = p.AttributeName, AttributeValue = p.AttributeValue, Cost = p.Cost, ImageName = p.ImageName, ImagePath = p.ImagePath, Quantity = p.Quantity,ProductQuantityId=p.ProductQuantityID }).ToList();
+            productDetail.Attributes = db.ProductValues_view.Where(p => p.productId == ProductId).Select(p => new ProductDetailAttributes() { AttributeName = p.AttributeName, AttributeValue = p.AttributeValue, Cost = p.Cost, ImageName = p.ImageName, ImagePath = p.ImagePath, Quantity = p.Quantity, ProductQuantityId = p.ProductQuantityID }).ToList();
             return View(productDetail);
         }
 

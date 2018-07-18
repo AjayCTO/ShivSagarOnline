@@ -1,6 +1,4 @@
-﻿
-
-using SHIVAMFaceEcomm.Models;
+﻿using SHIVAMFaceEcomm.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Razorpay.Api;
 using Microsoft.AspNet.Identity.EntityFramework;
+using SHIVAMFaceEcomm.ViewModels;
 
 namespace SHIVAMFaceEcomm.Controllers
 {
@@ -20,7 +19,7 @@ namespace SHIVAMFaceEcomm.Controllers
     public class ShoppingCartController : Controller
     {
         SHIVAMECommerceDBNewEntities context = new SHIVAMECommerceDBNewEntities();
-        ApplicationDbContext con=new ApplicationDbContext();
+        ApplicationDbContext con = new ApplicationDbContext();
         //public ShoppingCartController()
         //    : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         //{
@@ -49,9 +48,9 @@ namespace SHIVAMFaceEcomm.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -66,7 +65,7 @@ namespace SHIVAMFaceEcomm.Controllers
                 _userManager = value;
             }
         }
-       // public UserManager<ApplicationUser> UserManager { get; private set; }
+        // public UserManager<ApplicationUser> UserManager { get; private set; }
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -84,6 +83,22 @@ namespace SHIVAMFaceEcomm.Controllers
         }
         public ActionResult Index()
         {
+            var CustomerInfolist =new SHIVAMFaceEcomm.Models.Customer();
+            var Cust_Info = new CustomerInfoViewModel();
+            if (User.Identity.IsAuthenticated)
+            {
+          
+              
+                var Userid = User.Identity.GetUserId();
+                CustomerInfolist = context.Customers.Where(x => x.UserID == Userid).FirstOrDefault();
+                Cust_Info.FirstName = CustomerInfolist.FirstName;
+                Cust_Info.LastName = CustomerInfolist.LastName;
+                Cust_Info.Email= CustomerInfolist.Email;
+                Cust_Info.Phone = CustomerInfolist.Phone;
+           
+            }
+
+            ViewBag.Customer = Cust_Info;
             //MakeOnlinePayment();
             return View();
         }
@@ -103,7 +118,7 @@ namespace SHIVAMFaceEcomm.Controllers
             RazorpayClient client = new RazorpayClient(key, secret);
 
             Razorpay.Api.Order order = client.Order.Create(input);
-            
+
             var orderId = order["id"].ToString();
 
 
@@ -120,27 +135,37 @@ namespace SHIVAMFaceEcomm.Controllers
             {
                 var _controller = new AccountController();
                 SHIVAMFaceEcomm.Models.Customer newCustomer = new SHIVAMFaceEcomm.Models.Customer();
+                var _GlobaluserID = "";
                 //Add Customer as User
                 var user = new ApplicationUser() { UserName = CartDetails.CustomerData.userName, Email = CartDetails.CustomerData.email };
-                 var store=new UserStore<ApplicationUser>(con);
-                 if (!User.Identity.IsAuthenticated)
-                 {
+                var store = new UserStore<ApplicationUser>(con);
+                if (!User.Identity.IsAuthenticated)
+                {
 
 
-                     var manager = new UserManager<ApplicationUser>(store);
-                     IdentityResult result = manager.Create(user, CartDetails.CustomerData.password);
-                     if (result.Succeeded)
-                     {
-                         newCustomer.UserID = user.Id;
-                         // context.SaveChanges();
-                         UserManager.AddToRole(user.Id, "Customer");
-                         // return RedirectToAction("Index");
-                     }
-                     else
-                     {
-                         AddErrors(result);
-                     }
-                 }
+                    var manager = new UserManager<ApplicationUser>(store);
+                    IdentityResult result = manager.Create(user, CartDetails.CustomerData.password);
+                    if (result.Succeeded)
+                    {
+                        newCustomer.UserID = user.Id;
+                        _GlobaluserID = user.Id;
+                        // context.SaveChanges();
+                        UserManager.AddToRole(user.Id, "Customer");
+                        // return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+                }
+
+                else
+                {
+
+                    _GlobaluserID = User.Identity.GetUserId();
+                    newCustomer = context.Customers.Where(x => x.UserID == _GlobaluserID).FirstOrDefault();
+
+                }
                 //Create Customer details
 
                 newCustomer.CardExpMo = CartDetails.CustomerData.CardExpMo;
@@ -155,7 +180,11 @@ namespace SHIVAMFaceEcomm.Controllers
                 newCustomer.CreatedDate = DateTime.Now;
                 newCustomer.UpdatedDate = DateTime.Now;
                 newCustomer.Sort = 33;
-                context.Customers.Add(newCustomer);
+
+                if (!User.Identity.IsAuthenticated)
+                {
+                    context.Customers.Add(newCustomer);
+                }
                 context.SaveChanges();
                 //Add Customer Address
                 CustomerAddress address = new CustomerAddress();
@@ -238,12 +267,15 @@ namespace SHIVAMFaceEcomm.Controllers
                 // Send an email with this link
                 var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("SHIVAMFaceEcomm");
                 UserManager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var token = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
 
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                await SignInAsync(user, isPersistent: false);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = _GlobaluserID, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(_GlobaluserID, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                if (!User.Identity.IsAuthenticated)
+                {
+                    await SignInAsync(user, isPersistent: false);
+                }
                 // WebSecurity.Login(CartDetails.CustomerData.userName, CartDetails.CustomerData.password);\
                 TempData["orderId"] = order.Id;
                 TempData["CartItems"] = CartDetails.CartItems;
@@ -260,9 +292,9 @@ namespace SHIVAMFaceEcomm.Controllers
 
         public ActionResult OrderConfirmation()
         {
-            var orderId = TempData["orderId"];  
-           var CartItems= TempData["CartItems"] as IEnumerable<CartItems>;
-            
+            var orderId = TempData["orderId"];
+            var CartItems = TempData["CartItems"] as IEnumerable<CartItems>;
+
             return View(CartItems);
         }
         private void AddErrors(IdentityResult result)

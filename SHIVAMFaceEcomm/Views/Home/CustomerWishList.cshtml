@@ -1,15 +1,15 @@
 ﻿
 @{
     ViewBag.Title = "CustomerWishList";
-    Layout = "~/Views/Shared/_Layoutheme.cshtml";
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
 }
 <div ng-app="MyApp">
 
-    <div ng-controller="PaginationCtrl">
+    @*<div ng-controller="PaginationCtrl">
         @Html.Partial("shoppingcart")
 
-    </div>
-    <div class="container" ng-controller="CustomerCtrl">
+    </div>*@
+    <div ng-controller="CustomerCtrl">
         <div class="row">
             <div class="col-sm-12 text-left">
                 <h2 class="title">My Wishlist</h2>
@@ -58,8 +58,8 @@
         </div><!-- end row -->
     </div>
 
-    
 </div>
+
 @section scripts
 {
     <script>
