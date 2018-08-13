@@ -8,7 +8,7 @@
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <WebStackScaffolding_DbContextTypeFullName>SHIVAMFaceEcomm.Models.SHIVAMECommerceDBEntities1</WebStackScaffolding_DbContextTypeFullName>
     <NameOfLastUsedPublishProfile>shivamfrontface</NameOfLastUsedPublishProfile>
   </PropertyGroup>

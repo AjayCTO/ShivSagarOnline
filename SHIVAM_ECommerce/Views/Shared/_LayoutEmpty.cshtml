@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -15,84 +14,121 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
-    <link href="https://cdn.datatables.net/responsive/2.2.0/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
-
-    <link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet" />
-    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
-
-    @* Load DataTable js here *@
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
 
 
 
+    <link href="~/Newtheme/CSS/bootstrap.min.css" rel="stylesheet" />
 
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+    <!-- Custom CSS -->
 
-    <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Newtheme/CSS/semantic.ui.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
-    <script src="~/Content/TabularTheme/assets/js/require.min.js"></script>
-    <script>
-        requirejs.config({
-            baseUrl: '.'
-        });
-    </script>
-    <!-- Dashboard Core -->
-    <link href="~/Content/TabularTheme/assets/css/dashboard.css" rel="stylesheet" />
- 
-    <script src="~/Content/TabularTheme/assets/js/dashboard.js"></script>
-    <!-- c3.js Charts Plugin -->
-    <link href="~/Content/TabularTheme/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
-    <script src="~/Content/TabularTheme/assets/plugins/charts-c3/plugin.js"></script>
-    <!-- Google Maps Plugin -->
-    <link href="~/Content/TabularTheme/assets/plugins/maps-google/plugin.css" rel="stylesheet" />
-    <script src="~/Content/TabularTheme/assets/plugins/maps-google/plugin.js"></script>
-    <!-- Input Mask Plugin -->
-    <script src="~/Content/TabularTheme/assets/plugins/input-mask/plugin.js"></script>
+    <link href="~/Newtheme/CSS/pignose.calendar.min.css" rel="stylesheet" />
 
-    <style>
-        .field-validation-error {
-            width: 100%;
-            margin-top: 0.25rem;
-            font-size: 87.5%;
-            color: #cd201f;
-        }
-        .header .d-flex
-        {
-            color:white;
-        }
-    </style>
+    <link href="~/Newtheme/CSS/owl.carousel.min.css" rel="stylesheet" />
+
+    <link href="~/Newtheme/CSS/owl.theme.default.min.css" rel="stylesheet" />
+
+    <link href="~/Newtheme/CSS/helper.css" rel="stylesheet" />
+    <link href="~/Newtheme/CSS/style.css" rel="stylesheet" />
+    <link href="~/Content/toaster.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/dataTableStyles")
+    @Styles.Render("~/Content/JqueryUiCSS")
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 </head>
-<body class="">
-    <div class="page">
-        <div class="page-single">
-            
-            
-           
-                <div class="container">
-
-                    @Html.Partial("_Notifications")
-                    @RenderBody()
-                    
-                    
-                </div>
-
-           
-
-             
-
-        </div>
+<body class="fix-header fix-sidebar">
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
     </div>
-    @*@Scripts.Render("~/bundles/jquery")*@
+
+
+
+
+
+    <div id="main-wrapper">
+
+
+
+
+
+
+
+
+        
+
+       
+
+
+            @Html.Partial("_Notifications")
+
+
+            @RenderBody()
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <script src="~/Scripts/jquery-1.12.4.js"></script>
+
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script src="~/Scripts/bootbox.min.js"></script>
+
+
+    <script src="~/Scripts/toastr.js"></script>
+    @Scripts.Render("~/bundles/dataTableScripts")
+
+
+    <!-- Bootstrap tether Core JavaScript -->
+
+    <script src="~/Newtheme/JS/popper.min.js"></script>
+
+
+    <script src="~/Newtheme/JS/bootstrap.min.js"></script>
+
+    <!-- slimscrollbar scrollbar JavaScript -->
+
+    <script src="~/Newtheme/JS/jquery.slimscroll.js"></script>
+
+    <!--Menu sidebar -->
+    <script src="~/Newtheme/JS/sidebarmenu.js"></script>
+
+    <!--stickey kit -->
+
+    <script src="~/Newtheme/JS/sticky-kit.min.js"></script>
+
+
+
+    <script src="~/Newtheme/JS/semantic.ui.min.js"></script>
+ 
+
+    <script src="~/Newtheme/JS/scripts.js"></script>
+
+    <!-- scripit init-->
+
+
+    <script src="~/Newtheme/JS/custom.min.js"></script>
+
+
     @RenderSection("scripts", required: false)
 
 

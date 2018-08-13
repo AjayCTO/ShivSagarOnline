@@ -6,20 +6,28 @@
     ViewBag.Title = "Log in";
 
 }
-<div class="page">
-    <div class="page-single">
-        <div class="container">
-            <div class="row">
-                <div class="col col-login mx-auto">
-                    <div class="text-center">
 
-                    </div>
-                    <div class="card">
-                        <div class="card-body p-6">
-                            <div class="card-title">Login to your account</div>
+<div class="unix-login" style=" margin-top: -80px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <div class="login-content card">
+                    <div class="login-form">
+                        <div class="row">
+
+                            <div class="col-md-12 text-center">
+                                <img src="~/Content/Logo.png" class="img-circle img-thumbnail" height="160" width="160" />
+
+                            </div>
+                        </div>
+                        
+
                             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                             {
                                 @Html.AntiForgeryToken()
+                                <h4 style="margin-bottom:0px;">Login</h4>
+                                <br />
+
 
                                 @Html.ValidationSummary(true)
                                 <div class="form-group">
@@ -56,17 +64,17 @@
                                 </div>
 
                             }
-
-                        </div>
-                    </div>
-                    <div class="text-center text-muted">
-                        Don't have account yet? @Html.ActionLink("Register", "Create", "Supplier")
+                            <div class="register-link m-t-15 text-center">
+                                <p>Don't have account yet? @Html.ActionLink("Register", "Create", "Supplier")</p>
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 @section Scripts {

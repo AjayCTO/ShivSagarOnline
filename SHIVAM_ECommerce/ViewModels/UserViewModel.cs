@@ -26,7 +26,9 @@ namespace SHIVAM_ECommerce.ViewModels
         public int ProductCount { get; set; }
         public int UserCount { get; set; }
 
-
+        [Required]
+        [MinLength(8)]
+        public string UserName { get; set; }
         [Required]
         public string Email { get; set; }
 

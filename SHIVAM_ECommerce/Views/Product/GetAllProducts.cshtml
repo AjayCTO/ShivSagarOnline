@@ -46,13 +46,13 @@
                         </div>
                         <div class="col-md-4">
 
-                            <input type="text" alt="@ViewBag.SupplierID" class="form-control" style="position: absolute;top: 0px;z-index:10;" name="name" id="SupplierID" placeholder="Search By Supplier" />
+                            <input type="text" class="form-control" style="position: absolute;top:10px;z-index:10;" name="name" id="SupplierAuto" placeholder="Search By Supplier" />
                         </div>
                     </div>
                 }
 
 
-                <table class="table table-hover table-bordered table-outline table-vcenter text-nowrap card-table" id="products">
+                <table class="table table-hover table-bordered table-outline table-vcenter text-nowrap card-table" id="productlist">
                     <thead>
                         <tr id="Columns">
                             @foreach (var row in TempData["cols"] as List<object>)
@@ -191,6 +191,12 @@
 
 </div>
 
+<style>
+    .ui-autocomplete-loading {
+        background: url('../images/loading.gif') no-repeat right center;
+        background-size: 80px;
+    }
+</style>
 
 
 @section scripts
@@ -227,7 +233,9 @@
 
         });
 
-        $(document).on("click", ".listImages img", function (){
+        $(document).on("click", ".listImages img", function (e){
+            e.preventDefault();
+            e.stopPropagation();
             $("#mainImage").attr("src",$(this).attr("src"));
         });
         $(document).on("click", ".clearFile", function () {
@@ -302,19 +310,21 @@
                 {
                     var _columns="";
                     for (var i = 0; i < data.Data.length; i++) {
-                        if(i!=0 && i!=1 && i!=2 && i!=3){
-                            _columns+="<th>"+data.Data[i]+"</th>";
+                        if(i!=0 && i!=1 && i!=2 && i!=3 && i!=9){
+                            _columns+='<th class="sorting" tabindex="'+i+'" aria-controls="productlist" rowspan="1" colspan="1" aria-label="'+data.Data[i]+'": activate to sort column ascending">'+data.Data[i]+'</th>"';
+
+
 
                         }
                     }
 
-                    $("#Columns").html(_columns);
+                    $("#Columns").html(_columns+"<th>Actions</th>");
 
                     table.clear().draw();
 
                 }
                 else{
-                    alert("no data available");
+                    alert("The data returned from query stored procedure is zero.");
                 }
 
             });
@@ -323,27 +333,42 @@
         $(document).ready(function () {
 
 
-            $("#SupplierID").change(function () {
-                if ($.trim($(this).attr("alt")) != "") {
-                    GetColumns($(this).attr("alt"));
+            //$("#SupplierID").change(function () {
+            //    if ($.trim($(this).attr("alt")) != "") {
+            //        GetColumns($(this).attr("alt"));
 
+            //    }
+            //});
+
+            $("#SupplierAuto").change(function () {
+                if ($.trim($(this).attr("alt")) == "") {
+                    $(this).attr("alt", -1);
                 }
+
+            });
+
+            $("#SupplierAuto").blur(function () {
+                GetColumns($(this).attr("alt"));
+
             });
 
 
 
-
-
-            table=$('#products').DataTable({
+            table=$('#productlist').DataTable({
                 bServerSide: true,
 
-                //"sScrollX": "100%",
-                //"sScrollXInner": "100%",
-                //"bScrollCollapse": true,
+                "sScrollX": "100%",
+                "sScrollXInner": "100%",
+                "bScrollCollapse": true,
+                //oLanguage: {
+                //    sProcessing: '<div class="preloader" style="display:block !important;"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /></svg></div>'
+                //},
+                "processing": true, // for show progress bar
+                "serverSide": true,
 
                 sAjaxSource: '/Handler/GetProducts.ashx',
                 fnServerData: function (sSource, aoData, fnCallback, oSettings) {
-                    aoData.push( { name:"SupplierID",value: $("#SupplierID").attr("alt")} );
+                    aoData.push( { name:"SupplierID",value: $("#SupplierAuto").attr("alt")} );
 
                     oSettings.jqXHR = $.ajax({
                         "dataType": 'json',
@@ -434,16 +459,16 @@
 
 
 
-            table.columns().every(function () {
-                var that = this;
+            //table.columns().every(function () {
+            //    var that = this;
 
-                $('input', this.footer()).on('keyup change', function () {
+            //    $('input', this.footer()).on('keyup change', function () {
 
-                    if (that.search() !== this.value) {
-                        that.search(this.value).draw();
-                    }
-                });
-            });
+            //        if (that.search() !== this.value) {
+            //            that.search(this.value).draw();
+            //        }
+            //    });
+            //});
 
 
 
@@ -453,7 +478,7 @@
         if(_supplierID=='-1'){
 
 
-            $("#SupplierID").autocomplete({
+            $("#SupplierAuto").autocomplete({
                 source: function (request, response) {
                     $.ajax({
                         url: "/Order/SearchSupplier" + "/?SearchValue=" + this.element.val(),

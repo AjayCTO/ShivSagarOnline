@@ -1,0 +1,8 @@
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\bin\SHIVAMFaceEcomm.dll.config
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\bin\SHIVAMFaceEcomm.dll
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\bin\SHIVAMFaceEcomm.pdb
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\obj\Debug\SHIVAMFaceEcomm.csprojResolveAssemblyReference.cache
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\obj\Debug\SHIVAMFaceEcomm.Migrations.initial.resources
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\obj\Debug\SHIVAMFaceEcomm.csproj.GenerateResource.Cache
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\obj\Debug\SHIVAMFaceEcomm.dll
+E:\Shivam_Ecommerce\ShivSagarOnline\SHIVAMFaceEcomm\obj\Debug\SHIVAMFaceEcomm.pdb

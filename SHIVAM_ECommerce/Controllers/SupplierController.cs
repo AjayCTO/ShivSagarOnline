@@ -19,6 +19,7 @@ using SHIVAM_ECommerce.Attributes;
 using System.Linq.Dynamic;
 using System.Data.SqlClient;
 using SHIVAM_ECommerce.ViewModels;
+using System.Data.Entity.Validation;
 namespace SHIVAM_ECommerce.Controllers
 {
 
@@ -106,9 +107,11 @@ namespace SHIVAM_ECommerce.Controllers
         public ActionResult Create()
         {
 
-            var allplans = db.Plans.Include(x=>x.Features).ToList();
-            ViewBag.allplans = allplans;
-            return View(new Supplier());
+            //var allplans = db.Plans.Include(x => x.Features).ToList();
+            //ViewBag.allplans = allplans;
+            //return View(new Supplier());
+
+            return RedirectToAction("CreateNew");
         }
 
 
@@ -120,16 +123,123 @@ namespace SHIVAM_ECommerce.Controllers
 
         }
         [HttpPost]
-        public async Task<ActionResult> CreateNew([Bind(Include = "Id,Name,Email,Password,Address,PlanID")] SupplierVM supplier)
+        public async Task<ActionResult> CreateNew([Bind(Include = "Id,Name,Email,UserName,Password,Address,PlanID")] SupplierVM supplier)
         {
-            if (ModelState.IsValid)
-            { 
-            
+
+            try
+            {
+
+
+                if (ModelState.IsValid)
+                {
+                    var _controller = new AccountController();
+                    var _plan = db.Plans.Where(x => x.Id == supplier.PlanID).FirstOrDefault();
+                    var _supplier = new Supplier();
+                    _supplier.CreatedDate = DateTime.Now;
+                    _supplier.UpdatedDate = DateTime.Now;
+                    _supplier.Sort = 33;
+                    _supplier.ParentSupplierID = 0;
+                    _supplier.ProductCount = _plan.ProductBucketCount;
+                    _supplier.PlanStartDate = DateTime.Now;
+                    _supplier.PlanEndDate = DateTime.Now.AddDays(_plan.PlanFrequency == "1" ? 30 : 365);
+                    _supplier.UserCount = _plan.UserBucketCount;
+                    _supplier.FirstName = supplier.Name;
+                    _supplier.Email = supplier.Email;
+                    _supplier.Address1 = supplier.Address;
+                    _supplier.UserName = supplier.UserName;
+                    _supplier.LastName = "";
+                    _supplier.PlanID = supplier.PlanID;
+                    _supplier.Password = supplier.Password;
+                    db.Suppliers.Add(_supplier);
+                    var user = new ApplicationUser() { UserName = supplier.UserName, CreatedDate = DateTime.Now, UpdatedDate = DateTime.Now };
+                    IdentityResult result = await _controller.UserManager.CreateAsync(user, supplier.Password);
+                    if (result.Succeeded)
+                    {
+                        _supplier.UserID = user.Id;
+                        db.SaveChanges();
+                        _controller.UserManager.AddToRole(user.Id, "Supplier");
+
+
+                        //Add Claims to the AspNetUserClaims table for the supplier registerd.
+                        var Claims = db.Claims.Where(x => x.Role == "Supplier").ToList();
+                        var _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString.ToString();
+                        using (SqlConnection connection = new SqlConnection(_connectionString))
+                        {
+                            connection.Open();
+
+                            foreach (var claim in Claims)
+                            {
+                                String query = "INSERT INTO [dbo].[AspNetUserClaims]([ClaimType],[ClaimValue],[UserId],[ClaimID],[IsActive],[DisplayLabel],[Discriminator],[User_Id]) VALUES(@ClaimType,@ClaimValue,@UserId,@ClaimID,@IsActive,@DisplayLabel,@Discriminator,@User_Id)";
+                                using (SqlCommand command = new SqlCommand(query, connection))
+                                {
+                                    command.Parameters.AddWithValue("@ClaimType", claim.ClaimType);
+                                    command.Parameters.AddWithValue("@ClaimValue", claim.ClaimValue);
+                                    command.Parameters.AddWithValue("@UserId", user.Id);
+                                    command.Parameters.AddWithValue("@ClaimID", claim.Id);
+
+                                    command.Parameters.AddWithValue("@IsActive", "True");
+                                    command.Parameters.AddWithValue("@DisplayLabel", "abc");
+                                    command.Parameters.AddWithValue("@Discriminator", "ApplicationUserClaim");
+                                    command.Parameters.AddWithValue("@User_Id", user.Id);
+
+                                    int _result = command.ExecuteNonQuery();
+
+                                    // Check Error
+                                    if (_result < 0)
+                                        Console.WriteLine("Error inserting data into Database!");
+                                }
+                            }
+                            connection.Close();
+
+                        }
+
+                        //foreach (var claim in Claims)
+
+
+
+                        //Send confirmation mail to user and admin
+                        string email = supplier.Email;
+                        string username = _supplier.UserName;
+                        string adminemail = ConfigurationManager.AppSettings["adminemail"].ToString();
+                        string admintemple = ConfigurationManager.AppSettings["admintemple"].ToString();
+                        string subject = ConfigurationManager.AppSettings["subject"].ToString();
+                        string AdminUserName = ConfigurationManager.AppSettings["adminusername"].ToString();
+                        var sendemail = new EmailService.Service.EmailService();
+                        sendemail.SendEmail(email, "ForAdmin.html", "verfication", username);
+                        sendemail.SendEmail(adminemail, admintemple, subject, AdminUserName);
+                        this.AddNotification("Created successfully.", NotificationType.SUCCESS);
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
+
+
+                }
+                ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
+                var allplans = db.Plans.ToList();
+                ViewBag.allplans = allplans;
+                return View(supplier);
             }
-            ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
-            var allplans = db.Plans.ToList();
-            ViewBag.allplans = allplans;
-            return View(supplier);
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+                ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
+                var allplans = db.Plans.ToList();
+                ViewBag.allplans = allplans;
+                return View(supplier);
+            }
         }
         private void AddErrors(IdentityResult result)
         {
@@ -238,7 +348,7 @@ namespace SHIVAM_ECommerce.Controllers
                     //    UserClaim.ClaimType = claim.ClaimType;
                     //    UserClaim.ClaimValue = claim.ClaimValue;
                     //    UserClaim.User = db.Users.FirstOrDefault(x => x.Id == user.Id);
-                        
+
                     //    UserClaim.IsActive = true;
                     //    UserClaim.User_Id = user.Id;
 
@@ -413,7 +523,7 @@ namespace SHIVAM_ECommerce.Controllers
             {
                 var _products = db.Products.Where(x => x.SupplierID == id).Count();
                 var _fsupplier = db.FeaturedSuppliers.Where(x => x.SupplierID == id).Count();
-                if (_products == 0 && _fsupplier==0)
+                if (_products == 0 && _fsupplier == 0)
                 {
 
                     Supplier supplier = db.Suppliers.Find(id);
@@ -431,7 +541,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                 return Json(new { Success = false, ex = ex.Message.ToString() });
             }
-          
+
         }
 
         protected override void Dispose(bool disposing)

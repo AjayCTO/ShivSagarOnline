@@ -30,7 +30,7 @@ namespace SHIVAM_ECommerce.Controllers
         {
             try
             {
-                var suppliers = db.Suppliers.Where(p => p.FirstName.Contains(SearchValue) || p.LastName.Contains(SearchValue)).Select(p => new { SupplierName = p.FirstName + " " + p.LastName, SupplierID = p.Id });
+                var suppliers = db.Suppliers.Where(p => p.FirstName.ToLower().Contains(SearchValue.ToLower()) || p.LastName.ToLower().Contains(SearchValue.ToLower())).Select(p => new { SupplierName = p.FirstName + " " + p.LastName, SupplierID = p.Id });
                 return Json(suppliers.ToList(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
