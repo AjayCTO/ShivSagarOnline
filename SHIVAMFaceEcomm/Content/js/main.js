@@ -272,48 +272,7 @@ $(document).ready(function(){
         })
     )
     
-    $(".home1").append(
-        $('<img/>', {
-            'src': 'img/home_small_01.png',
-            'width': '100%'
-        })
-    );
-    $(".home2").append(
-        $('<img/>', {
-            'src': 'img/home_small_02.png',
-            'width': '100%'
-        })
-    );
-    $(".home3").append(
-        $('<img/>', {
-            'src': 'img/home_small_03.png',
-            'width': '100%'
-        })
-    );
-    $(".home4").append(
-        $('<img/>', {
-            'src': 'img/home_small_04.png',
-            'width': '100%'
-        })
-    );
-    $(".home5").append(
-        $('<img/>', {
-            'src': 'img/home_small_05.png',
-            'width': '100%'
-        })
-    );
-    $(".home6").append(
-        $('<img/>', {
-            'src': 'img/home_small_06.png',
-            'width': '100%'
-        })
-    );
-    $(".home7").append(
-        $('<img/>', {
-            'src': 'img/home_small_07.png',
-            'width': '100%'
-        })
-    );
+    
     
   
     

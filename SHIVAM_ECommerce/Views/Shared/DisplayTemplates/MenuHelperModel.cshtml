@@ -24,7 +24,7 @@
 
 }
 
-<div class="header-nav d-none d-lg-flex">
+@*<div class="header-nav d-none d-lg-flex">
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
@@ -35,174 +35,39 @@
 
                     @if (Request.IsAuthenticated)
                     {
-
-                        foreach (var _item in _AllClaims.ToList())
+                        if (_AllClaims != null)
                         {
-                            if (_item.AllClaims.Count() == 1)
+
+                            foreach (var _item in _AllClaims.ToList())
                             {
-                                <li class="nav-item">
-                                    <a href="/@_item.AllClaims[0].ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.AllClaims[0].Title</a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item dropdown">
-                                    <a href="javascript:void(0)" class="nav-link"><i class="fe fe-box"></i> @_item.Group</a>
-                                    <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                        <div></div>
-                                        @foreach (var _childitem in _item.AllClaims.ToList())
+                                if (_item.AllClaims.Count() == 1)
+                                {
+                                    <li class="nav-item">
+                                        <a href="/@_item.AllClaims[0].ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.AllClaims[0].Title</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-box"></i> @_item.Group</a>
+                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
+                                            <div></div>
+                                            @foreach (var _childitem in _item.AllClaims.ToList())
                                         {
-                                            <a href="/@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
+                                        <a href="/@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
                                         }
 
 
-                                    </div>
+                                        </div>
 
-                                </li>
+                                    </li>
+
+                                }
 
                             }
-
                         }
 
-                        @*if (CanSeeCategoryURL)
-                                                    {
-                                                        <li class="nav-item">
-                                                            <a href="/Category" class="nav-link"><i class="fe fe-box"></i> Category</a>
-                                                        </li>
-                                                    }
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-user"></i> Supplier</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                                            <div></div>
-
-                                                            @if (CanSeeSupplierURL)
-                                                            {
-                                                            <a href="/Supplier" class="nav-item ">Supplier</a>
-                                                            }
-
-
-                                                            <a href="/FeaturedSupplier/" class="nav-item ">Featured Suppliers</a>
-                                                        </div>
-
-                                                    </li>
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-list"></i> Plans</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                                            <div></div>
-
-                                                            @if (CanSeePlanURL)
-                                                            {
-                                                            <a href="/Plan" class="nav-item ">Plans</a>
-                                                            }
-
-
-                                                            <a href="/Features/" class="nav-item ">Features</a>
-                                                        </div>
-
-                                                    </li>
-
-
-
-
-                                                    if (CanSeeManufacturerURL)
-                                                    {
-                                                        <li class="nav-item">
-                                                            <a href="/Manufacturers" class="nav-link"><i class="fe fe-file-text"></i> Manufacturers</a>
-
-                                                        </li>
-                                                    }
-
-
-
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-layers"></i> Products</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                                            <div></div>
-
-                                                            @if (CanSeeProductURL)
-                                                            {
-                                                                <a href="/Product/GetAllProducts" class="nav-item ">Product</a>
-                                                            }
-
-                                                            @if (CanSeeProductStatusURL)
-                                                            {
-                                                                <a href="/ProductStatus" class="nav-item"> Product Status</a>
-                                                            }
-                                                            @if (CanSeeUOMURL)
-                                                            {
-                                                                <a href="/UnitOfMeasures" class="nav-item">Unit of Measure</a>
-                                                            }
-                                                            @if (CanSeeProductAttrURL)
-                                                            {
-                                                                <a href="/ProductAttributes" class="nav-item ">Product Attributes</a>
-                                                            }
-
-                                                            @if (CanSeeProductAttrSupplierURL)
-                                                            {
-                                                                <a href="/ProductAttributes/AddAttributesForSupplier" class="nav-item ">Add Attributes for Supplier</a>
-                                                            }
-                                                        </div>
-                                                    </li>
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="/Customer" class="nav-link"><i class="fe fe-users"></i> Customers</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-
-                                                            @if (CanSeeCustomerURL)
-                                                            {
-                                                                <a href="/Customer" class="nav-item">Customers</a>
-                                                            }
-                                                            @if (CanSeeOrderURL)
-                                                            {
-                                                                <a href="/Order" class="nav-item"> Orders</a>
-                                                            }
-                                                        </div>
-
-                                                    </li>
-
-
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-package"></i> Manage Others</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                                            <div></div>
-
-                                                            @if (CanSeeEmailRecordURL)
-                            {
-                                <a href="/EmailRecords" class="nav-item">Mail Records </a>
-                            }
-                                                            <a href="/AllImages" class="nav-item">Upload Images </a>
-
-
-                            </div>
-
-                                                    </li>
-
-
-                                                    <li class="nav-item dropdown">
-                                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-database"></i> Manage Users</a>
-                                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                                            <div></div>
-
-                                                            @if (CanSeeSupplierUserURL)
-                            {
-                                <a href="/SupplierUser" class="nav-item">Add Supplier User</a>
-                            }
-                                                            @if (_CurrentUser.IsSuperAdmin)
-                            {
-                                <a href="/UserClaims" class="nav-item">Claims Master</a>
-
-
-                            }
-                                                            <a href="/ManageClaims" class="nav-item">Manage Claims</a>
-
-
-                            </div>
-
-                                                    </li>*@
+                   
 
 
 
@@ -216,4 +81,84 @@
             </div>
         </div>
     </div>
+</div>*@
+
+<div class="scroll-sidebar">
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav">
+        <ul id="sidebarnav">
+            <li class="nav-devider"></li>
+            <li class="nav-label">Home</li>
+
+            <li>
+                <a class="has-arrow" href="/" aria-expanded="false"><i class="fa fa-home"></i><span class="hide-menu">Dashboard </span> </a>
+             
+            </li>
+
+
+            @if (Request.IsAuthenticated)
+            {
+                if (_AllClaims != null)
+                {
+
+                    foreach (var _item in _AllClaims.ToList())
+                    {
+                        if (_item.AllClaims.Count() == 1)
+                        {
+                            <li>
+
+                                <a class="has-arrow" href="/@_item.AllClaims[0].ClaimValue" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.AllClaims[0].Title </span> </a>
+
+                              
+                            </li>
+                        }
+                        else
+                        {
+                            
+                            
+                               <li class="nav-label">All @_item.Group</li>
+                            
+                            <li>
+                            
+
+
+                                <a class="has-arrow" href="#" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.Group </span> </a>
+
+                                <ul aria-expanded="false" class="collapse">
+
+                                    @foreach (var _childitem in _item.AllClaims.ToList())
+                                    {
+                                        
+                                          <li><a href="/@_childitem.ClaimValue"> <i class="fa fa-dot-circle"></i> @_childitem.Title </a></li>
+                                        
+                                      
+                                    }
+
+                                  
+                                 
+                                </ul>
+
+                                
+
+                            </li>
+
+                        }
+
+                    }
+                }
+
+
+
+
+
+
+
+            }
+
+
+          
+          
+        </ul>
+    </nav>
+    <!-- End Sidebar navigation -->
 </div>

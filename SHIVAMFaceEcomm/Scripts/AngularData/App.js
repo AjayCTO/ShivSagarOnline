@@ -6,7 +6,7 @@ app.filter('unique', function () {
         // we define our output and keys array;
         var output = [],
             keys = [];
-        
+
         // we utilize angular's foreach function
         // this takes in our original collection and an iterator function
         angular.forEach(collection, function (item) {
@@ -58,21 +58,21 @@ app.factory("AddToCart", function () {
     };
 });
 app.factory("CartToCookieService", function () {
-   
+
     var CartProducts = [];
     return {
         setCookieData: function (CartProducts) {
             Cookies.remove('Products');
             Cookies.set('Products', JSON.stringify(CartProducts), { expires: 7 });
-            
+
         },
         getCookieData: function () {
-            CartProducts = Cookies.get('Products');  
-            return CartProducts===undefined ? CartProducts : JSON.parse(CartProducts);
+            CartProducts = Cookies.get('Products');
+            return CartProducts === undefined ? CartProducts : JSON.parse(CartProducts);
         },
         clearCookieData: function () {
             CartProducts = "";
-           Cookies.remove('Products');
+            Cookies.remove('Products');
         }
     };
 
@@ -81,7 +81,16 @@ app.factory("CartToCookieService", function () {
 app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
     $scope.searchcategories = [];
     $scope.wishlistCounter = 0;
-    $scope.CustomerId= _CustomerIDLayout;
+    $scope.CustomerId = _CustomerIDLayout;
+    debugger;
+    var _localCategories = localStorage.getItem("Categories");
+    if (_localCategories != null && _localCategories != undefined) {
+        _localCategories = JSON.parse(_localCategories);
+
+    }
+    else {
+        _localCategories = [];
+    }
     $scope.GetCategories = function () {
 
         $.ajax({
@@ -89,10 +98,11 @@ app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
             type: 'GET',
             dataType: 'json',
             success: function (data, textStatus, xhr) {
-         
+
                 $scope.searchcategories = data;
-                console.log("category123");
-                console.log($scope.searchcategories);
+
+                localStorage.setItem("Categories", JSON.stringify(data));
+
 
                 $scope.$apply();
 
@@ -104,7 +114,14 @@ app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
             }
         });
     };
-    $scope.GetCategories();
+
+    if (_localCategories.length == 0) {
+        $scope.GetCategories();
+
+    }
+    else {
+        $scope.searchcategories = _localCategories;
+    }
 
     $scope.GetWishListCounter = function () {
         $.ajax({
@@ -123,6 +140,32 @@ app.controller("layoutCtrl", function ($scope, AddToCart, CartToCookieService) {
         });
     };
 
+
     $scope.GetWishListCounter();
 
 });
+//credit card directive
+app.directive
+ ('creditCardType'
+ , function () {
+
+     var directive =
+       {
+           require: 'ngModel'
+       , link: function (scope, elm, attrs, ctrl) {
+           ctrl.$parsers.unshift(function (value) {
+               scope.ccinfo.type =
+                 (/^5[1-5]/.test(value)) ? "fa fa-cc-mastercard"
+                 : (/^4/.test(value)) ? "fa fa-cc-visa"
+                 : (/^3[47]/.test(value)) ? 'fa fa-cc-amex'
+                 : (/^6011|65|64[4-9]|622(1(2[6-9]|[3-9]\d)|[2-8]\d{2}|9([01]\d|2[0-5]))/.test(value)) ? 'fa fa-cc-discover'
+                 : undefined
+               ctrl.$setValidity('invalid', !!scope.ccinfo.type)
+               return value
+           })
+       }
+       }
+     return directive
+ }
+   )
+

@@ -24,29 +24,39 @@
 
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    @Html.LabelFor(model => model.AttributeName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2">Attribute Name</label>
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.AttributeName, new { @class = "form-control col-md-5 customColumnData" })
+                        @Html.TextBoxFor(model => model.AttributeName, new { @class = "form-control col-md-5 customColumnData UniqueAttributes" })
                         @Html.ValidationMessageFor(model => model.AttributeName)
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group mb-0">
-                        <label class="form-label">Description</label>
-                        @Html.TextAreaFor(model => model.AttributeDescription, htmlAttributes: new { @class="form-control",row="6"})
-                       
+                @*<div class="form-group">
+                    <div class="co-mb-10">
+                        <label class="control-label col-md-2">Description</label>
+                        @Html.TextAreaFor(model => model.AttributeDescription, htmlAttributes: new { @class = "form-control col-md-5" })
+
                     </div>
-                </div>
-                <br />
+                    </div>*@
+
+
+
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" value="Create" class="btn btn-primary">
-                            <i class="fa fa-check"></i> Create
-                            </button>
-                        <a href="/ProductAttributes" class="btn btn-gray"> <i class="fa fa-times"></i> Cancel</a>
+                  <label class="control-label col-md-2">Attribute Description</label>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.AttributeDescription, new { @class = "form-control col-md-5" })
+                        @Html.ValidationMessageFor(model => model.AttributeDescription)
                     </div>
                 </div>
-            </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" value="Create" class="btn btn-primary">
+                                <i class="fa fa-check"></i> Create
+                            </button>
+                            <a href="/ProductAttributes" class="btn btn-gray"> <i class="fa fa-times"></i> Cancel</a>
+                        </div>
+                    </div>
+                </div>
 
         }
     </div>
@@ -54,4 +64,48 @@
 </div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+
+
+        $.validator.addMethod('UniqueAttributes', function (value) {
+
+
+            if ($.trim(value) != "") {
+                return UniqeProductAttributes(value);
+            }
+            else {
+                return true;
+            }
+
+        }, "Please enter a different Attribute Name ! It's already exist");
+
+    });
+    function UniqeProductAttributes(value) {
+        var _x = true;
+        $.ajax({
+            url: "/ProductAttributes/UniqueAttributes",
+            data: JSON.stringify({ Attributes: value }),
+            type: 'POST',
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (result) {
+                _x = !result.IsAlreadyExist;
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+
+        return _x;
+    }
+
+</script>
+
+
+
+
+
 }

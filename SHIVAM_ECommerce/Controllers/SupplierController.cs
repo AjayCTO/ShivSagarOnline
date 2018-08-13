@@ -18,6 +18,7 @@ using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.Attributes;
 using System.Linq.Dynamic;
 using System.Data.SqlClient;
+using SHIVAM_ECommerce.ViewModels;
 namespace SHIVAM_ECommerce.Controllers
 {
 
@@ -64,7 +65,7 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.CompanyName.Contains(searchitem));
+                v = v.Where(b => b.CompanyName != null && b.CompanyName.ToLower().Contains(searchitem.ToLower()) || b.FirstName != null && b.FirstName.ToLower().Contains(searchitem.ToLower()) || b.Phone != null && b.Phone.ToLower().Contains(searchitem.ToLower()) || b.City != null && b.City.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -108,6 +109,27 @@ namespace SHIVAM_ECommerce.Controllers
             var allplans = db.Plans.Include(x=>x.Features).ToList();
             ViewBag.allplans = allplans;
             return View(new Supplier());
+        }
+
+
+        public ActionResult CreateNew()
+        {
+            var allplans = db.Plans.Include(x => x.Features).ToList();
+            ViewBag.allplans = allplans;
+            return View(new SupplierVM());
+
+        }
+        [HttpPost]
+        public async Task<ActionResult> CreateNew([Bind(Include = "Id,Name,Email,Password,Address,PlanID")] SupplierVM supplier)
+        {
+            if (ModelState.IsValid)
+            { 
+            
+            }
+            ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
+            var allplans = db.Plans.ToList();
+            ViewBag.allplans = allplans;
+            return View(supplier);
         }
         private void AddErrors(IdentityResult result)
         {
@@ -253,7 +275,25 @@ namespace SHIVAM_ECommerce.Controllers
 
         }
 
-        
+
+        [HttpPost]
+        public ActionResult UniqueEmail(string Email)
+        {
+            try
+            {
+
+                var _user = db.Suppliers.Where(x => x.Email == Email).FirstOrDefault();
+                if (_user != null)
+                {
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
+        }
 
 
         [HttpPost]

@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Linq.Dynamic;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Repository;
@@ -56,12 +57,12 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.CategoryName.Contains(searchitem));
+                v = v.Where(b => b.CategoryName.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
+            if (!(string.IsNullOrEmpty(sortColumn)||sortColumn=="" && string.IsNullOrEmpty(sortColumnDir)))
             {
-                // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -125,8 +126,8 @@ namespace SHIVAM_ECommerce.Controllers
 
                 _repository.Insert(category);
                 _repository.Save();
-                this.AddNotification("Category Crated successfully.", NotificationType.SUCCESS);
-                return RedirectToAction("Index");
+                this.AddNotification("Category Created successfully.", NotificationType.SUCCESS);
+                return RedirectToAction("Index","Category");
             }
 
             ViewBag.ParentCategory = new SelectList(db.Cateogries, "Id", "CategoryName", category.ParentCategory);
@@ -194,6 +195,33 @@ namespace SHIVAM_ECommerce.Controllers
 
             return View(category);
         }
+
+
+        [HttpPost]
+        public ActionResult UniqueCategory(string CategoryName)
+        {
+            try
+            {
+
+                var _user = db.Cateogries.Where(a => a.CategoryName == CategoryName).FirstOrDefault();
+                if (_user != null)
+                {
+
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
+        }
+
+
+
+
+
+
 
 
 

@@ -72,7 +72,7 @@
 
 
                 <!-- Modal -->
-                <div id="myModal" class="modal fade" role="dialog">
+                <div id="myModal" class="modal" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -132,7 +132,7 @@
                     </div>
                 </div>
 
-                <div id="myModalImages" class="modal fade" role="dialog">
+                <div id="myModalImages" class="modal" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -159,7 +159,7 @@
                     </div>
                 </div>
 
-                <div id="myModalProductImages" class="modal fade" role="dialog">
+                <div id="myModalProductImages" class="modal" role="dialog">
                     <div class="modal-dialog">
 
                         <!-- Modal content-->
@@ -260,7 +260,20 @@
         });
     </script>
     <script>
+        function UpdateLoadingImage(){
+            var allimages= document.getElementsByClassName('gridImage');
+            for (var i=0; i<allimages.length; i++) {
+                if (allimages[i].getAttribute('data-src')) {
+                    allimages[i].setAttribute('src', allimages[i].getAttribute('data-src'));
+                }
+            }
+        }
+    </script>
+
+
+    <script>
         var totalColumns =@NewCount;
+        var _supplierID='@_CurrentUser.SupplierID';
         totalColumns=totalColumns;
         var table;
         function LoadAllImages(ProductID)
@@ -320,6 +333,126 @@
 
 
 
+
+            table=$('#products').DataTable({
+                bServerSide: true,
+
+                //"sScrollX": "100%",
+                //"sScrollXInner": "100%",
+                //"bScrollCollapse": true,
+
+                sAjaxSource: '/Handler/GetProducts.ashx',
+                fnServerData: function (sSource, aoData, fnCallback, oSettings) {
+                    aoData.push( { name:"SupplierID",value: $("#SupplierID").attr("alt")} );
+
+                    oSettings.jqXHR = $.ajax({
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    });
+                },
+                "fnDrawCallback": function( oSettings ) {
+                    UpdateLoadingImage();
+                },
+                iDisplayLength: 10,
+                iDisplayStart: 0,
+                columnDefs: [
+                        {
+                            "targets": [0],
+                            "visible": false
+                        },
+                        {
+                            "targets": [1],
+                            "visible": false
+                        },
+
+                         {
+                             "targets": [2],
+                             "visible": false
+                         },
+                            {
+                                "targets": [3],
+                                "visible": false
+                            },
+                        {
+                            "targets": [4],
+                            'searchable': false,
+                            'orderable': false,
+                            'title':'ProductImage',
+
+                        },
+
+                        {
+                            "targets": [9],
+                            "visible": false
+
+                        },
+
+                        {
+                            "targets": [totalColumns],
+                            'searchable': false,
+                            'orderable': false,
+                            'title':'Actions',
+                            'render': function (data, type, full, meta,row) {
+
+
+                                return "";
+                            }
+                        }
+
+                ],
+                //rowGroup: {
+
+                //    dataSrc: 5
+                //},
+                rowCallback: function( row, data, index ) {
+
+                    var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
+                    var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
+                    var html= '<div class="item-action dropdown">  <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
+
+                    html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-tag"></i> Edit Product </a>';
+                    html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Product Details</a>';
+                    html=html+_b+_c+'</div>';
+                    $('td:eq('+(totalColumns-5)+')', row).html(html);
+
+                    var _imageData="";
+
+                    if ($.trim(data[4]) ==='')
+                    {
+                        _imageData= '<div class="avatar d-block" style="background-image: url(/FeaturedImages/no-image.png)"></div>';
+                    } else {
+                        _imageData= '<img class="gridImage" onclick="LoadAllImages('+data[2]+')" src="/images/loading.gif" data-src="/ProductImages/' + data[4] + '">';
+                    }
+                    $('td:eq(0)', row).html(_imageData);
+
+
+                }
+            });
+
+
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+
+
+
+        });
+
+
+        if(_supplierID=='-1'){
+
+
             $("#SupplierID").autocomplete({
                 source: function (request, response) {
                     $.ajax({
@@ -360,106 +493,7 @@
                     event.preventDefault();
                 }
             });
-
-            table=$('#products').DataTable({
-                bServerSide: true,
-                sAjaxSource: '/Handler/GetProducts.ashx',
-                fnServerData: function (sSource, aoData, fnCallback, oSettings) {
-                    aoData.push( { name:"SupplierID",value: $("#SupplierID").attr("alt")} );
-
-                    oSettings.jqXHR = $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                },
-                responsive:true,
-                iDisplayLength: 10,
-                iDisplayStart: 0,
-                columnDefs: [
-                        {
-                            "targets": [0],
-                            "visible": false
-                        },
-                        {
-                            "targets": [1],
-                            "visible": false
-                        },
-
-                         {
-                             "targets": [2],
-                             "visible": false
-                         },
-                            {
-                                "targets": [3],
-                                "visible": false
-                            },
-                        {
-                            "targets": [4],
-                            'searchable': false,
-                            'orderable': false,
-                            'title':'ProductImage',
-
-                        },
-
-                        {
-                            "targets": [totalColumns],
-                            'searchable': false,
-                            'orderable': false,
-                            'title':'Actions',
-                            'render': function (data, type, full, meta,row) {
-
-
-                                return "";
-                            }
-                        }
-
-                ],
-                rowGroup: {
-
-                    dataSrc: 5
-                },
-                rowCallback: function( row, data, index ) {
-
-                    var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
-                    var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
-                    var html= '<div class="item-action dropdown">  <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
-
-                    html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-tag"></i> Edit Product </a>';
-                    html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Product Details</a>';
-                    html=html+_b+_c+'</div>';
-                    $('td:eq('+(totalColumns-4)+')', row).html(html);
-
-                    var _imageData="";
-
-                    if (data[3] == null)
-                    {
-                        _imageData= '<div class="avatar d-block" style="background-image: url(/ProductImages/No-image.jpg)"></div>';
-                    } else {
-                        _imageData= '<div class="avatar d-block" onclick="LoadAllImages('+data[2]+')" style="background-image: url(/ProductImages/' + data[4] + ')"></div>';
-                    }
-                    $('td:eq(0)', row).html(_imageData);
-
-
-                }
-            });
-
-            table.columns().every(function () {
-                var that = this;
-
-                $('input', this.footer()).on('keyup change', function () {
-
-                    if (that.search() !== this.value) {
-                        that.search(this.value).draw();
-                    }
-                });
-            });
-
-
-
-        });
+        }
 
         function nextBarcode(value) {
             var _value = value.toString();
@@ -470,6 +504,12 @@
     </script>
 
     <style>
+        .gridImage {
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+        }
+
         .my-label {
             font-size: 16px;
             background: skyblue;

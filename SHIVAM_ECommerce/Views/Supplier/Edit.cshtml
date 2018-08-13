@@ -34,7 +34,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><i class="fa fa-pencil"></i> Personal Details</h3>
+            <h3 class="card-title"><i class="fa fa-plus"></i> Personal Details</h3>
         </div>
 
         <div class="card-body">
@@ -99,7 +99,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"><i class="fa fa-pencil"></i> Company Details</h3>
+                    <h3 class="card-title"><i class="fa fa-plus"></i> Company Details</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -143,25 +143,28 @@
                         </div>
                         <div class="col-md-6">
 
+                            <div style="text-align:center">
                                 @if (Model.Logo != null)
                                 {
                                     <img style="height:100px; width:120px;" src="@Url.Content("~/SupplierImage/" + Model.Logo)" alt="Alternate Text" />
                                 }
 
-                                <div class="form-group">
-                                    <label class="control-label"> Logo </label>
-                                    <div class="col-md-12">
-                                        @*<input type="file" name="file" id="file" />*@
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input form-control" name="file" id="file" accept="image/*">
-                                            <label class="custom-file-label">Choose file</label>
-                                        </div>
-                                        <div class="gallery"></div>
 
+                                @if (Model.Logo == null)
+                                {
+                                    <img style="height:100px; width:100px;" src="@Url.Content("~/CategoryImage/no-image.png")" alt="Alternate Text" />
+                                }
+
+                                <div class="form-group">
+
+                                    <div class="col-md-12">
+
+                                        <input type="file" name="file" id="file" />
                                     </div>
 
 
                                 </div>
+                            </div>
 
                             <br />
 
@@ -200,8 +203,7 @@
 
     </div>
 
-    <button type="submit" value="Submit" class="btn btn-primary"> <i class="fa fa-check"></i> Update</button>
-    <a class="btn btn-secondary btn-gray" href="/Supplier"> <i class="fa fa-times"></i> Cancel</a>
+    <input type="submit" class="btn btn-default" value="Update">
 
 }
 

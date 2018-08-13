@@ -19,6 +19,7 @@ namespace SHIVAMFaceEcomm.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string Review { get; set; }
+
     
         public virtual Product Product { get; set; }
     }

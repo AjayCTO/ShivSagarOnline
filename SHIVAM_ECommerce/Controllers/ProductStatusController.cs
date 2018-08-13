@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
+using System.Linq.Dynamic;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Repository;
@@ -54,12 +55,12 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.Name.Contains(searchitem));
+                v = v.Where(b => b.Name.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-                // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -67,6 +68,24 @@ namespace SHIVAM_ECommerce.Controllers
             return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.Name, x.IsActive }) }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult UniqueStatus(string Status)
+        {
+            try
+            {
+
+                var _user = db.ProductStatus.Where(a => a.Name == Status).FirstOrDefault();
+                if (_user != null)
+                {
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
+        }
 
 
 

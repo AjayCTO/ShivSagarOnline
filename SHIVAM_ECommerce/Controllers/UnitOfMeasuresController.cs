@@ -14,6 +14,8 @@ namespace SHIVAM_ECommerce.Controllers
 {
     public class UnitOfMeasuresController : Controller
     {
+
+        private ApplicationDbContext db = new ApplicationDbContext();
         private IRepository<UnitOfMeasures> _repository = null;
         public UnitOfMeasuresController()
         {
@@ -54,7 +56,7 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.UnitOfMeasuresName.Contains(searchitem));
+                v = v.Where(b => b.UnitOfMeasuresName.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -121,6 +123,28 @@ namespace SHIVAM_ECommerce.Controllers
             }
             return View(UM);
         }
+
+          [HttpPost]
+        public ActionResult UniqueUOfMName(string UOfMName)
+        {
+            try
+            {
+
+                var _user = db.UnitOfMeasures.Where(a => a.UnitOfMeasuresName == UOfMName).FirstOrDefault();
+                if (_user != null)
+                {
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
+        }
+
+
+
 
         // POST: /Category/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

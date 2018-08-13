@@ -6,14 +6,14 @@
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-        <a href="/UnitOfMeasures">Unit Of Measures</a>
+        <a href="/UnitOfMeasures">Unit of Measures</a>
     </li>
     <li class="breadcrumb-item active">Unit Of Measures Edit</li>
 </ol>
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title"><i class="fa fa-pencil"></i> Edit Unit Of Measures</h3>
+        <h3 class="card-title"><i class="fa fa-pencil"></i> Edit Unit of Measures</h3>
     </div>
     <div class="card-body">
         @using (Html.BeginForm())
@@ -26,9 +26,9 @@
                 @Html.HiddenFor(model => model.Id)
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.UnitOfMeasuresName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2">Unit of Measures Name</label>
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.UnitOfMeasuresName, new { @class = "form-control col-md-5" })
+                        @Html.TextBoxFor(model => model.UnitOfMeasuresName, new { @class = "form-control col-md-5 UOfM" })
                         @Html.ValidationMessageFor(model => model.UnitOfMeasuresName)
                     </div>
                 </div>
@@ -53,3 +53,53 @@
     </div>
 
 </div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+        $(document).ready(function () {
+            var unitofmeasures = '@Model.UnitOfMeasuresName';
+            $.validator.addMethod('UOfM', function (value) {
+                debugger;
+                if (value.toLowerCase() == unitofmeasures.toLowerCase()) {
+                    return true;
+                }
+                if ($.trim(value) != "") {
+                    return CheckUniqueName(value);
+                }
+                else {
+                    return true;
+                }
+
+            }, "Please enter a different Name ! It's already exist");
+
+        });
+
+
+        function CheckUniqueName(value) {
+            var _x = true;
+            $.ajax({
+                url: "/UnitOfMeasures/UniqueUOfMName",
+                data: JSON.stringify({ UOfMName: value }),
+                type: 'POST',
+                async: false,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    _x = !result.IsAlreadyExist;
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+
+            return _x;
+        }
+
+    </script>
+}
+
+
+
+

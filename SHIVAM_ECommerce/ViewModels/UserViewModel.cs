@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,7 +13,27 @@ namespace SHIVAM_ECommerce.ViewModels
         public string UserName { get; set; }
         public List<CustomClaims> Claims { get; set; }
     }
+    public class SupplierVM
+    {
+        [Required]
+        public string Address { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+
+        public int PlanID { get; set; }
+
+        public int ProductCount { get; set; }
+        public int UserCount { get; set; }
+
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        [MinLength(7)]
+        public string Password { get; set; }
+    }
     public class UserRoleViewModel
     {
         public string UserId { get; set; }

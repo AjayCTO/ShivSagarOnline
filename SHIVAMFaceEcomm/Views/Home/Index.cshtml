@@ -37,7 +37,7 @@
 
                         <img ng-show="xyz.CategoryImage == null" src="~/Content/images/nocategory.png" alt="No Image available for category" />
 
-                        <img style="max-width:750px;" ng-show="xyz.CategoryImage != null" src="http://localhost:7080/CategoryImage/{{xyz.CategoryImage}}" alt="" />
+                        <img style="max-width:750px;" ng-show="xyz.CategoryImage != null" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/CategoryImage/{{xyz.CategoryImage}}" alt="" />
                     </div>
                 </div><!-- end slider-content -->
             </div><!-- end swiper-slider -->
@@ -134,9 +134,9 @@
                                     <i class="fa fa-star-half-o"></i>
                                 </span>
                             </div>
-                            <figure class="layer">
+                            <figure>
                                 <a href="/home/productdetail/?productId={{x[8]}}">
-                                    <img ng-show="x[2]!=null" src="http://localhost:7080/ProductImages/{{x[2]}}" alt="">
+                                    <img ng-show="x[2]!=null" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/ProductImages{{x[2]}}" alt="">
 
                                     <img ng-show="x[2]==null" src="~/Content/images/default-no-image.png" alt="Alternate Text" />
 
@@ -159,13 +159,6 @@
 
             </div><!-- end row -->
 
-            <div class="row">
-                <div class="col-sm-12">
-                    <nav class="text-center">
-                        <button class="btn btn-success"  ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
-                    </nav>
-                </div><!-- end col -->
-            </div><!-- end row -->
         </div><!-- end container -->
     </section>
     <!-- end section -->
@@ -197,7 +190,8 @@
                                 </figure>
                             </div>
                         </div><!-- end owl carousel -->
-        </div><!-- end container -->
+        </div>
+        <!-- end container -->
     </section>
 
     <!-- start section -->

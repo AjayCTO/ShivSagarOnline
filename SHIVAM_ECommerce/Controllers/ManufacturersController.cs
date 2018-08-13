@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Linq.Dynamic;
 using System.Web.Mvc;
 using SHIVAM_ECommerce.Models;
 using SHIVAM_ECommerce.Repository;
@@ -55,12 +56,12 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.Name.Contains(searchitem));
+                v = v.Where(b => b.Name.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
-                // v = v.OrderBy(sortColumn + " " + sortColumnDir);
+                v = v.OrderBy(sortColumn + " " + sortColumnDir);
             }
 
             recordsTotal = v.Count();
@@ -123,6 +124,29 @@ namespace SHIVAM_ECommerce.Controllers
             }
             return View(Manufacturer);
         }
+
+        [HttpPost]
+        public ActionResult UniqueManufacture(string ManufactureName)
+       {
+            try
+            {
+
+                var _user = db.Manufacturers.Where(a => a.Name == ManufactureName).FirstOrDefault();
+                if (_user != null)
+                {
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
+        }
+
+
+
+
 
         // POST: /Category/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

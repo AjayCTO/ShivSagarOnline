@@ -6,10 +6,16 @@
 }
 
 <div class="card">
-    <div class="card-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-header">
 
-        <h3 class="card-title"><i class="fa fa-list"></i> Orders </h3>
-        <div class="flex-fill text-right">
+                    <h3 class="card-title"><i class="fa fa-list"></i> Orders </h3>
+                    <div class="flex-fill text-right">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="card-body">
@@ -94,7 +100,14 @@
                     "type": "POST",
                     "datatype": "json",
                     "data": function (d) {
-                        d.SupplierID = $("#SupplierID").attr("alt");
+
+                        if ($.trim($("#SupplierID").attr("alt")) != "") {
+                            d.SupplierID = $("#SupplierID").attr("alt");
+
+                        }
+                        else {
+                            d.SupplierID = -1;
+                        }
 
                     }
 
@@ -158,15 +171,29 @@
                 ]
             });
 
-            $("#SupplierID").blur(function () {
-                if ($.trim($(this).attr("alt")) != "") {
-                    _myTableData.clear().draw();
+            $("#SupplierID").change(function () {
+                debugger;
+                if ($(this).val() == "") {
+                    $(this).attr("alt", -1);
                 }
+
+            });
+  
+            $("#SupplierID").blur(function () {
+                _myTableData.clear().draw();
+                //if ($.trim($(this).attr("alt")) != "") {
+                   
+                //}
             });
 
             $("#SupplierID").autocomplete({
+              
                 source: function (request, response) {
+                    debugger;
+                    $(this).attr("alt", "");
+
                     $.ajax({
+                       
                         url: "/Order/SearchSupplier" + "/?SearchValue=" + this.element.val(),
                         type: "GET",
                         dataType: "json",
@@ -175,7 +202,6 @@
                             alert('There is a problem with the service!');
                         },
                         success: function (data) {
-                            $(this).attr("alt", "");
                             try {
 
                                 $(this).attr("alt", 0);
@@ -193,6 +219,7 @@
                 },
                 select: function (event, ui) {
                     event.preventDefault();
+               
                     $(this).val(ui.item.label);
                     $(this).attr("alt", ui.item.value);
                     $(this).trigger('change');

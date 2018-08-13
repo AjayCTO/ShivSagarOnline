@@ -65,6 +65,8 @@ namespace SHIVAMFaceEcomm.Models
         public Decimal Cost { get; set; }
 
         public decimal discount { get; set; }
+
+        public int SupplierID { get; set; }
     }
 
 

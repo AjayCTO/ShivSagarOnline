@@ -36,8 +36,8 @@ namespace SHIVAM_ECommerce.ViewModels
         public int UnitOfMeasureID { get; set; }
 
 
-        [Required(ErrorMessage = "Product Supplier is Required")]
-        [Display(Name = "Product Supplier")]
+        
+        
         public int SupplierID { get; set; }
 
         [Required(ErrorMessage = "Product Category is Required")]

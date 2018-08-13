@@ -96,7 +96,7 @@ namespace SHIVAM_ECommerce.Controllers
                     Crop(150, 150, file.InputStream, Path.Combine(Server.MapPath("~/ProductImages/thumb/") + fileName));
 
                     allproductimages.ImageName = fileName;
-                    allproductimages.ImagePath = fileName;
+                    allproductimages.ImagePath = Guid.NewGuid().ToString() + Path.GetExtension(path);
                     allproductimages.CreatedDate = DateTime.Now;
                     allproductimages.UpdatedDate = DateTime.Now;
                     allproductimages.UserID = curentUserID;
@@ -244,6 +244,18 @@ namespace SHIVAM_ECommerce.Controllers
             return RedirectToAction("Index");
         }
 
+        //public ActionResult DeleteImageID(int ImageIDs)
+        //{
+        //    try
+        //    {
+
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
 
 
         public ActionResult DeleteAll(int[] ImageIDs)

@@ -50,8 +50,8 @@
                             <ul class="items">
                                 <li ng-repeat="item in CartItems track by $index">
                                     <a href="shop-single-product-v1.html" class="product-image">
-                                        <img ng-hide="item.Image==null" src="http://localhost:7080/ProductImages/{{item.Image}}" alt="Sample Product ">
-                                        <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
+                                        <img ng-hide="item.Image==null" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/ProductImages/{{item.Image}}" alt="Sample Product ">
+                                        <img ng-show="item.Image==null" src="~/Content/images/nocategory.png" width="70" alt="..." class="thumbnail img-responsive" />
                                     </a>
                                     <div class="product-details">
                                         <p class="product-name">
@@ -133,15 +133,15 @@
                                                         <th style="width:10%"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbody">
                                                     <tr ng-repeat="item in CartItems track by $index">
                                                         <td data-th="Product">
                                                             <div class="row">
                                                                 <div class="col-sm-2 hidden-xs">
 
-                                                                    <img ng-hide="item.Image==null" src="http://localhost:7080/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
+                                                                    <img ng-hide="item.Image==null" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
 
-                                                                    <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
+                                                                    <img ng-show="item.Image==null" src="~/Content/images/nocategory.png" width="70" alt="..." class="thumbnail img-responsive" />
 
                                                                 </div>
                                                                 <div class="col-sm-10">
@@ -152,12 +152,12 @@
                                                         </td>
                                                         <td data-th="Price">${{item.Cost}}</td>
                                                         <td data-th="Quantity">
-                                                            <input type="number" min="1" ng-model="item.Quantity" class="form-control text-center" ng-change="updateQuantityOfCartItem(item)" value="{{item.Quantity}}">
+                                                            <input type="number" min="1" data-max="{{item.ProductQuantity}}" ng-model="item.Quantity" class="form-control text-center quantityFigure" ng-change="updateQuantityOfCartItem(item,$index)" value="{{item.Quantity}}">
                                                         </td>
-                                                        <td data-th="Subtotal" class="text-center">${{item.Cost * item.Quantity}}</td>
+                                                        <td data-th="Subtotal" class="text-center"><span ng-if="item.Quantity!=undefined"> ${{item.Cost * item.Quantity}}</span> <span ng-if="item.Quantity==undefined">0</span></td>
                                                         <td class="actions" data-th="">
                                                             <button style="margin-right:5px;" class="close" ng-click="DeleteCartItem(item)"><i class="fa fa-trash-o"></i></button>
-                                                            <button style="margin-right:5px;" class="close" ng-click="updateQuantityOfCartItem(item)"><i class="fa fa-refresh"></i></button>
+                                                            <button style="margin-right:5px;" class="close" ng-click="updateQuantityOfCartItem(item,$index)"><i class="fa fa-refresh"></i></button>
 
                                                         </td>
                                                     </tr>
@@ -234,12 +234,80 @@
     @section scripts
 {
         <script>
-       
+           
             var a = '@Html.Raw((customerinfo))';
             var  _CustomerInfo= JSON.parse(a);
             console.log(_CustomerInfo);
             console.log(a);
        
+
+            // Listen for input event on numInput.
+            
+
+            $(document).on("keydown", ".quantityFigure", function (e) {
+                debugger;
+                    if (!((e.keyCode > 95 && e.keyCode < 106)
+                      || (e.keyCode > 47 && e.keyCode < 58)
+                      || e.keyCode == 8)) {
+                        return false;
+                       
+                    }
+                 
+
+            });
+            $(document).on("focusout", ".quantityFigure", (function () {
+              
+                debugger;
+                var _Value = parseFloat($(this).val());
+                if ($.trim(_Value) == null || $.trim(_Value)=='NaN' || $.trim(_Value) == 0) {
+
+                    $(this).val(1);
+                    $(this).trigger("input");
+                    $(this).trigger("change");
+                }
+                else {
+                    return true;
+                }
+            }));
+
+          
+
+            $(document).on("keypress", ".quantityFigure", (function () {
+                debugger
+                var _maxValue = parseFloat($(this).attr("data-max"));
+                var _Value = parseFloat($(this).val());
+                Qvalue = parseFloat($(this).val());
+                if($.trim(_Value)!="")
+                {
+                    if(_Value>_maxValue){
+                        toastr.error("Don't have that much quantity");
+                        $(this).val(1);
+                        $(this).trigger("input");
+                        $(this).trigger("change");
+                    }
+                }
+               
+            }));
+            $(document).on("change", ".quantityFigure", (function () {
+                var _maxValue = parseFloat($(this).attr("data-max"));
+                debugger;
+                var _Value = parseFloat($(this).val());
+              
+                
+                if ($.trim(_Value) != ""&& $.trim(_Value<1)) {
+                    if (_Value > _maxValue) {
+                        toastr.error("Don't have that much quantity");
+                        $(this).val(1);
+                        $(this).trigger("input");
+                        $(this).trigger("change");
+                    }
+                }
+
+            }));
+
+
+
+      
         </script>
 
         <script src="~/Scripts/AngularData/ShoppingCart.js"></script>

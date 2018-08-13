@@ -1,0 +1,64 @@
+﻿@model  SHIVAM_ECommerce.ViewModels.SupplierVM
+@{
+    ViewBag.Title = "Create New Account";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<div class="page">
+    <div class="page-single">
+        <div class="container">
+            <div class="row">
+                <div class="col col-login mx-auto">
+
+                    @using (Html.BeginForm("CreateNew", "Supplier", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="card-body p-6">
+                            <div class="card-title">Create new account</div>
+                            <div class="form-group">
+                                <label class="form-label">Name</label>
+
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control requiredfield" })
+                                @Html.ValidationMessageFor(model => model.Name)
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email address</label>
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Email)
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address)
+
+                            </div>
+                            <div class="form-group">
+                                <label class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">Agree the <a href="terms.html">terms and policy</a></span>
+                                </label>
+                            </div>
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary btn-block">Create new account</button>
+                            </div>
+                        </div>
+                    }
+                    <div class="text-center text-muted">
+                        Already have account? <a href="/Account/login">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

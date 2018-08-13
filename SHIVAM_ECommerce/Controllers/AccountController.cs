@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using SHIVAM_ECommerce.Models;
+using System.Web.Caching;
+using System.Collections;
 
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -233,7 +235,7 @@ namespace SHIVAM_ECommerce.Controllers
                     ViewBag.message = "Error";
                     return View();
                 }
-               
+
             }
             else
             {
@@ -440,9 +442,24 @@ namespace SHIVAM_ECommerce.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
+           // RemoveCache();
+            HttpContext.Cache.Remove("UserClaims");
+      
             return RedirectToAction("Index", "Home");
         }
+        private void RemoveCache()
+        {
+            List<string> keys = new List<string>();
 
+            Cache cache = new Cache();
+            IDictionaryEnumerator enumerator = cache.GetEnumerator();
+
+            while (enumerator.MoveNext())
+                keys.Add(enumerator.Key.ToString());
+
+            for (int i = 0; i < keys.Count; i++)
+                cache.Remove(keys[i]);
+        }
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]

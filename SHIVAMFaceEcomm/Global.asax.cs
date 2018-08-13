@@ -12,9 +12,11 @@ namespace SHIVAMFaceEcomm
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static string GlobalImageAssetUrl;
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            GlobalImageAssetUrl = System.Configuration.ConfigurationManager.AppSettings["AssetsImageURL"];
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

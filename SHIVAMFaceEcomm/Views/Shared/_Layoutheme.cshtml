@@ -19,8 +19,7 @@
     <link rel="stylesheet" type="text/css" href="~/Content/css/owl.theme.default.min.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/css/animate.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/css/swiper.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/css/toastr.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" rel="stylesheet" />
+    <link href="~/Content/css/toastr.css" rel="stylesheet" />
     @*@Styles.Render("~/bundle/css")*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -31,15 +30,20 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800&amp;subset=latin-ext" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-    <link href="https://cdn.datatables.net/responsive/2.2.0/css/responsive.bootstrap4.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/rowgroup/1.0.2/css/rowGroup.dataTables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/css/dataTables.bootstrap4.min.css">
+    <link href="~/Content/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/css/rowGroup.dataTables.min.css" rel="stylesheet" />
 
-    <link href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/css/responsive.dataTables.min.css" rel="stylesheet" />
     <style>
     </style>
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x- ng-cloak {
+            display: none !important;
+        }
+    </style>
 </head>
-<body ng-app="MyApp" ng-controller="layoutCtrl">
+<body  ng-app="MyApp" ng-controller="layoutCtrl">
 
 
     <div class="topBar">
@@ -64,9 +68,6 @@
                     <div class="col-sm-7 vertical-align text-center">
                         <form>
 
-
-
-
                             <div class="row grid-space-1">
                                 <div class="col-sm-3">
 
@@ -78,7 +79,7 @@
                                                     <li ng-repeat="cat in searchcategories" class="dropdown-submenu">
                                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}} sdf asdf </a>
                                                         <ul class="dropdown-menu" ng-if="cat.Categories1.length>0">
-                                                            <li ng-repeat="subcat in cat.Categories1"><a href="#">{{cat.CategoryName}}</a></li>
+                                                            <li ng-repeat="subcat in cat.Categories1"><a href="/Home/products?CategoryID={{cat.Id}}">{{cat.CategoryName}}</a></li>
                                                         </ul>
                                                     </li>
                                                     @*<li ng-if="cat.Categories1.length==0" ng-repeat="cat in searchcategories"><a href="#">{{cat.CategoryName}}</a></li>*@
@@ -149,6 +150,7 @@
 
                         </li>
                         <li><a href="/Home/products">Products</a></li>
+                        <li><a href="/Home/Contact">Contact Us</a></li>
 
                     </ul><!-- end navbar-nav -->
                     @if (User.Identity.IsAuthenticated)
@@ -181,9 +183,9 @@
                             <ul class="dropdown-menu">
                                 <li ng-repeat="cat in searchcategories" ng-class="{'dropdown-submenu':cat.Categories1.length!=0}">
                                     <a href="javascript:void(0);" ng-if="cat.Categories1.length>0" class="dropdown-toggle" data-toggle="dropdown">{{cat.CategoryName}}  </a>
-                                    <a href="javascript:void(0);" ng-if="cat.Categories1.length==0">{{cat.CategoryName}}  </a>
+                                    <a href="/Home/products?CategoryID={{cat.Id}}" ng-if="cat.Categories1.length==0">{{cat.CategoryName}}  </a>
                                     <ul class="dropdown-menu" ng-if="cat.Categories1.length>0">
-                                        <li ng-repeat="subcat in cat.Categories1"><a href="#">{{subcat.CategoryName}}</a></li>
+                                        <li ng-repeat="subcat in cat.Categories1"><a href="/Home/products?CategoryID={{subcat.Id}}">{{subcat.CategoryName}}</a></li>
                                     </ul>
                                 </li>
 
@@ -313,13 +315,14 @@
     <script type="text/javascript" src="~/Content/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/angular.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/1.3.1/js/toastr.js"></script>
+    <script src="~/Scripts/js.cookie.min.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/dataTables.rowGroup.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.min.js"></script>
+    <link href="~/Scripts/bootbox.min.js" rel="stylesheet" />
 
     <script src="~/Scripts/AngularData/App.js"></script>
     <script type="text/javascript" src="~/Content/js/bootstrap.min.js"></script>

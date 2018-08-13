@@ -63,7 +63,7 @@
                 }
 
 
-                toaster.pop('success', "Supplier", "Supplier loaded successfully");
+              //  toaster.pop('success', "Supplier", "Supplier loaded successfully");
 
             }, function myError(response) {
                 toaster.pop('error', "Supplier", response.statusText);
@@ -82,7 +82,7 @@
 
                 $scope.ResetDefaults();
 
-                toaster.pop('success', "Units of meausre", "Units of meausre loaded successfully");
+               // toaster.pop('success', "Units of meausre", "Units of meausre loaded successfully");
 
             }, function myError(response) {
                 $scope.ResetDefaults();
@@ -101,7 +101,7 @@
                 }
 
 
-                toaster.pop('success', "Categories", "Categories loaded successfully");
+               // toaster.pop('success', "Categories", "Categories loaded successfully");
 
             }, function myError(response) {
                 toaster.pop('error', "Categories", response.statusText);
@@ -120,7 +120,7 @@
                 }
 
 
-                toaster.pop('success', "Manufacturers", "Manufacturers loaded successfully");
+             //   toaster.pop('success', "Manufacturers", "Manufacturers loaded successfully");
 
             }, function myError(response) {
                 toaster.pop('error', "Manufacturers", response.statusText);
@@ -142,7 +142,7 @@
                     }
 
 
-                    toaster.pop('success', "Product Attributes", "Product Attributes loaded successfully");
+                  //  toaster.pop('success', "Product Attributes", "Product Attributes loaded successfully");
 
                 }, function myError(response) {
                     toaster.pop('error', "Product Attributes", response.statusText);
@@ -204,7 +204,7 @@
 
         $scope.IsValidProduct = function () {
             if ($.trim($scope.ProductObject.ProductName) == "" || $.trim($scope.ProductObject.SKU) == ""
-                || $.trim($scope.ProductObject.UnitOfMeasureID) == "" || $.trim($scope.ProductObject.SupplierID) == "" || $.trim($scope.ProductObject.CategoryID) == "" || $.trim($scope.ProductObject.ManufacturerID) == "") {
+                || $.trim($scope.ProductObject.UnitOfMeasureID) == "" || $.trim($scope.ProductObject.CategoryID) == "" || $.trim($scope.ProductObject.ManufacturerID) == "") {
 
                 return false;
 
@@ -322,6 +322,7 @@
                 contentType: 'application/json',
                 success: function (result) {
 
+                    debugger;
                     if (result.Success == true) {
                         window.location.href = "/Product/ProductDetails?productID=" + result.id;
                     }

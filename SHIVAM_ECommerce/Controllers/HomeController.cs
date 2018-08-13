@@ -173,11 +173,11 @@ namespace SHIVAM_ECommerce.Controllers
         {
 
 
-            RemoveCache();
+            //RemoveCache();
 
-            ManageCache();
+            //ManageCache();
 
-            ManageSession();
+            //ManageSession();
 
             return View();
         }

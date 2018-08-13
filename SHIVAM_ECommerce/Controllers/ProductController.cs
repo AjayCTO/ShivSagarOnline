@@ -404,8 +404,8 @@ namespace SHIVAM_ECommerce.Controllers
                 if (_ValidObj.ErrorString.Length > 0)
                 {
                     _ValidObj.IsValid = false;
-                        var TempIndex=_Index + 1;
-                        _ValidObj.ErrorString = "<b>Row " + TempIndex.ToString() + "</b>" + _ValidObj.ErrorString;
+                    var TempIndex = _Index + 1;
+                    _ValidObj.ErrorString = "<b>Row " + TempIndex.ToString() + "</b>" + _ValidObj.ErrorString;
 
                 }
                 return _ValidObj;
@@ -434,40 +434,37 @@ namespace SHIVAM_ECommerce.Controllers
         [HttpPost]
         public ActionResult Create(ProductViewmodel Model)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    #region Product Save
-                    var _product = new Product();
-                    _product.ManuFacturerID = Model.ManufacturerID;
-                    _product.ProductCode = Model.ProductCode;
-                    _product.ProductName = Model.ProductName;
-                    _product.CateogryID = Model.CategoryID;
-                    _product.SupplierID = Model.SupplierID;
-                    _product.ManuFacturerID = Model.ManufacturerID;
-                    _product.SKU = Model.SKU;
-                    _product.CreatedDate = DateTime.Now;
-                    _product.UpdatedDate = DateTime.Now;
-                    _product.UnitOfMeasuresId = Model.UnitOfMeasureID;
-                    _product.Description = Model.Description;
-                    _repository.Insert(_product);
-                    _repository.Save();
-                    #endregion
+                #region Product Save
+                var _product = new Product();
+                _product.ManuFacturerID = Model.ManufacturerID;
+                _product.ProductCode = Model.ProductCode;
+                _product.ProductName = Model.ProductName;
+                _product.CateogryID = Model.CategoryID;
+                _product.SupplierID = CurrentUserData.SupplierID;
+                _product.ManuFacturerID = Model.ManufacturerID;
+                _product.SKU = Model.SKU;
+                _product.CreatedDate = DateTime.Now;
+                _product.UpdatedDate = DateTime.Now;
+                _product.UnitOfMeasuresId = Model.UnitOfMeasureID;
+                _product.Description = Model.Description;
+                _repository.Insert(_product);
+                _repository.Save();
+                #endregion
 
 
-                    return Json(new { Success = true, ex = "", data = "", id = _product.Id });
-                }
-                catch (Exception ex)
-                {
+                return Json(new { Success = true, ex = "", data = "", id = _product.Id });
+            }
+            catch (Exception ex)
+            {
 
-                    return Json(new { Success = false, ex = ex.Message.ToString(), data = "" });
-
-                }
+                return Json(new { Success = false, ex = ex.Message.ToString(), data = "", id = 0 });
 
             }
 
-            return Json(new { Success = true, ex = "", data = "" });
+
         }
         public ActionResult Edit(int productID)
         {
@@ -647,6 +644,7 @@ namespace SHIVAM_ECommerce.Controllers
                         _productRel.ProductQuantity = _item.Quantity;
                         _productRel.ProductId = Model.ProductID;
                         _productRel.UnitInStock = _item.Quantity;
+                        _productRel.Weight = _item.weight;
                         _productRel.UnitWeight = _item.weight;
                         _productRel.StatusId = _item.StatusId;
                         _productRel.IsFeatured = _item.IsFeatured;

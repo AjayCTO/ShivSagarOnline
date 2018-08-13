@@ -1,12 +1,13 @@
 ﻿
 @{
     ViewBag.Title = "Checkout";
+
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
 }
 
 
-<section class="section">
 
-    <div class="container" ng-app="MyApp" ng-controller="ShoppingCartCtrl">
+    <div  ng-app="MyApp" ng-controller="ShoppingCartCtrl">
         <div class="row">
             <div class="col-sm-12 text-left">
                 <h2 class="title">Checkout</h2>
@@ -34,7 +35,7 @@
                                 <div class="row">
                                     <div class="col-sm-2 hidden-xs">
                                   
-                                        <img ng-hide="item.Image==null" src="http://localhost:7080/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
+                                        <img ng-hide="item.Image==null" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/ProductImages/{{item.Image}}" width="70" alt="..." class="thumbnail img-responsive" />
 
                                         <img ng-show="item.Image==null" src="/Content/images/no-image.png" width="70" alt="..." class="thumbnail img-responsive" />
                                     
@@ -93,7 +94,7 @@
             </div><!-- end col -->
         </div><!-- end row -->
     </div><!-- end col -->
-</section>
+
 
 @section scripts
 {

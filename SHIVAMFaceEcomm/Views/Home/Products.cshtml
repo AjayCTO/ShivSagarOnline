@@ -9,6 +9,23 @@
 <style>
     .active .fa {
         color: #0cd4d2 !important;
+      
+       
+    }
+
+    .pull-center {
+        text-align: left;
+        text-decoration: underline;
+        color: #069;
+        font-size: 13px;
+    
+    }
+    #loadingmessage {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        vertical-align: middle;
+        background: transparent;
     }
 </style>
 
@@ -26,7 +43,7 @@
     </div><!-- end container -->
 </div><!-- end breadcrumbs -->
 <!-- start section -->
-<section class="section white-backgorund" ng-app="MyApp" ng-controller="PaginationCtrl">
+<section class="section white-backgorund" ng-cloak ng-app="MyApp" ng-controller="PaginationCtrl">
 
     @Html.Partial("shoppingcart")
     <div class="container">
@@ -73,26 +90,26 @@
                                         </ul>
                                     </script>
                                     @*<div ng-repeat="category in categoriesarraySelect" class="selected-item">
-                                        {{category}}
-                                    </div>*@
+                                            {{category}}
+                                        </div>*@
                                     <input type="hidden" id="lowpricevalue" class="_slider">
                                     <input type="hidden" id="highpricevalue" class="_slider">
-                             
+
                                 </div><!-- end panel-body -->
                             </div><!-- end panel-collapse -->
                         </div><!-- end panel -->
                     </div><!-- end accordion -->
                 </div>
-              
+
                 <div class="widget">
                     <h6 class="subtitle">Prices</h6>
                     <form method="post" class="price-range" data-start-min="250" data-start-max="650" data-min="0" data-max="1000" data-step="1">
                         <div class="ui-range-values">
-                            <div class="ui-range-value-min" >
+                            <div class="ui-range-value-min">
                                 $<span></span>
                                 <input type="hidden">
                             </div> -
-                            <div class="ui-range-value-max" >
+                            <div class="ui-range-value-max">
                                 $<span></span>
                                 <input type="hidden">
                             </div>
@@ -105,8 +122,8 @@
                 <div class="widget" ng-repeat="item in Attributes">
                     <h6 class="subtitle">{{item.AttributeName}}</h6>
 
-                    <ul class="list list-unstyled">
-                        <li ng-repeat="itemvalue in AttributesValue | filter:{AttributeId:item.Id}|unique:AttributeValue">
+                    <ul class="{{item.AttributeName}} list list-unstyled">
+                        <li ng-repeat="itemvalue in AttributesValue | filter:{AttributeId:item.Id}|unique:AttributeValue |limitTo:limit">
                             <div ng-if="itemvalue.AttributeValue !=null" class="checkbox-input">
                                 <input id="red-color{{itemvalue.AttributeValue}}" ng-checked="IsFilterChecked(item.AttributeName,itemvalue.AttributeValue)" ng-model="selectedAttribute" ng-true-value="1" ng-false-value="0" ng-click="AddAttrToFilter(selectedAttribute,item.AttributeName,itemvalue.AttributeValue)" class="styled" type="checkbox">
                                 <label for="red-color{{itemvalue.AttributeValue}}">
@@ -115,26 +132,32 @@
 
                                 </label>
                             </div>
-                        </li>
 
+                        </li>
                     </ul>
+
+
+                    @*<a href="" class="btn-md" ng-click='loadMoreattribute(item.Id)'> Loadmore</a>*@
+                    @*<a href=""  ng-click='loadMoreattribute()'><p class="pull-center">{{iconclass}}</p></a>*@
+                    <a href="" ng-click='loadMoreattribute(item.AttributeName)'><p class="pull-center">{{iconclass}}</p></a>
                 </div>
-            {{AllAttributeFilters.value}}
-                <button type="submit"  class="btn btn-default btn-block btn-md"> <i class="fa fa-search"></i> Filter</button>
-             
+
+                @*{{AllAttributeFilters.value}}*@
+                <button type="submit" class="btn btn-default btn-block btn-md"> <i class="fa fa-search"></i> Filter</button>
+
 
             </div><!-- end col -->
             <!-- end sidebar -->
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-sm-12 text-left">
-                        <h2 class="title">Products</h2> 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span> <button type="button" ng-click="Clearfilter()" class="btn btn-default btn-md">Clear Filter</button></span><span style="" class="pull-right">showing {{pagedItems.length}} of {{total}} Products</span> 
+                        <h2 class="title">Products</h2>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span> <button type="button" ng-click="Clearfilter()" class="btn btn-default btn-md">Clear Filter</button></span><span style="" class="pull-right">showing {{pagedItems.length}} of {{total}} Products</span>
+                            </div>
                         </div>
-                    </div>
-                     
+
                     </div><!-- end col -->
 
                 </div><!-- end row -->
@@ -145,7 +168,7 @@
                     <div class="container-fluid">
 
 
-                         
+
 
                         <div class="row column-3">
                             <div class="col-sm-6 col-md-4" ng-repeat="x in pagedItems">
@@ -161,16 +184,18 @@
                                                 <i class="fa fa-star-half-o"></i>
                                             </span>
                                         </div>
-                                        <figure class="layer">
-                                            <a href="javascript:void(0);">
-                                                <img ng-show="x[2]!=null" src="http://localhost:7080/ProductImages/{{x[2]}}" alt="">
 
-                                                <img ng-show="x[2]==null" src="~/Content/images/default-no-image.png" alt="Alternate Text" />
+                                        <figure>
+                                            <a href="/home/productdetail/?productId={{x[8]}}">
+                                                <img ng-show="TrimString(x[2])==''" src="~/Content/images/default-no-image.png" alt="Alternate Text" />
+
+                                                <img ng-show="TrimString(x[2])!=''" style="display:none" src="@SHIVAMFaceEcomm.MvcApplication.GlobalImageAssetUrl/ProductImages/{{x[2]}}" imageonload alt="">
+                                                <img ng-if="TrimString(x[2])!=''" src="~/images/loading.gif" class="loadingImage" alt="loading.." />
 
                                             </a>
                                         </figure>
                                         <div class="icons">
-                                            <a class="icon {{CheckisInWishList(x[8])}}" ng-click="addTowishList(x[8],'@_CurrentUserID')"><i class="fa fa-heart-o"></i></a>
+                                            <a class="icon {{CheckisInWishList(x[8])}}" ng-click="addTowishList(x[8],'@_CurrentUserID')"><i class="fa fa-heart"></i></a>
                                             @*<a class="icon" href="javascript:void(0);"><i class="fa fa-gift"></i></a>*@
                                             <a class="icon" href="/home/productdetail/?productId={{x[8]}}"><i class="fa fa-search"></i></a>
                                             <a class="icon" href="javascript:void(0);" id="pid{{x[3]}}" ng-click="AddToCart(x[3],this)"><i class="fa fa-cart-plus mr-5"></i>Add to cart</a>
@@ -190,14 +215,34 @@
 
                         <hr class="spacer-10 no-border" />
                         @*<div class="card-footer text-muted">
-                            <button class="btn btn-success" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
-                        </div>*@
+                                <button class="btn btn-success" href="#" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More</button>
+                            </div>*@
 
 
 
                     </div><!-- end container -->
                 </section>
             </div><!-- end col -->
+            @*<div id='loadingmessage' class="modal fade" role="dialog" data-backdrop="false">
+                <div class="modal-dialog">*@
+
+            <!-- Modal content-->
+            @*<div class="modal-content">
+
+                            <div class="modal-body">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>*@
+            <div id='loadingmessage'>
+
+                <img src="~/images/loading.gif" width="200" />
+                <p>Please Wait</p>
+            </div>
+
         </div><!-- end row -->
         <!-- Modal Product Quick View -->
         <div class="modal fade productQuickView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -326,7 +371,10 @@
     <script>
         var _customerID = '@_CurrentUserID';
          _GlobalSearchText = "@ViewBag.ProductName";
-         _GlobalCatID = "@ViewBag.CategoryID";
+        _GlobalCatID = "@ViewBag.CategoryID";
+
+ 
+
     </script>
    <script src="~/Scripts/AngularData/Products.js"></script>
 

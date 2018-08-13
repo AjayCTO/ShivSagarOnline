@@ -824,6 +824,35 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\loading.gif" />
+    <Content Include="images\loading_io.gif" />
+    <Content Include="Newtheme\CSS\animate.css" />
+    <Content Include="Newtheme\CSS\bootstrap.min.css" />
+    <Content Include="Newtheme\CSS\helper.css" />
+    <Content Include="Newtheme\CSS\owl.carousel.min.css" />
+    <Content Include="Newtheme\CSS\owl.theme.default.min.css" />
+    <Content Include="Newtheme\CSS\pignose.calendar.min.css" />
+    <Content Include="Newtheme\CSS\semantic.ui.min.css" />
+    <Content Include="Newtheme\CSS\spinners.css" />
+    <Content Include="Newtheme\CSS\style.css" />
+    <Content Include="Newtheme\JS\bootstrap.min.js" />
+    <Content Include="Newtheme\JS\custom.min.js" />
+    <Content Include="Newtheme\JS\dashboard1-init.js" />
+    <Content Include="Newtheme\JS\jquery.min.js" />
+    <Content Include="Newtheme\JS\jquery.slimscroll.js" />
+    <Content Include="Newtheme\JS\moment.latest.min.js" />
+    <Content Include="Newtheme\JS\morris.js" />
+    <Content Include="Newtheme\JS\owl.carousel-init.js" />
+    <Content Include="Newtheme\JS\owl.carousel.min.js" />
+    <Content Include="Newtheme\JS\pignose.calendar.min.js" />
+    <Content Include="Newtheme\JS\pignose.init.js" />
+    <Content Include="Newtheme\JS\popper.min.js" />
+    <Content Include="Newtheme\JS\prism.min.js" />
+    <Content Include="Newtheme\JS\raphael-min.js" />
+    <Content Include="Newtheme\JS\scripts.js" />
+    <Content Include="Newtheme\JS\semantic.ui.min.js" />
+    <Content Include="Newtheme\JS\sidebarmenu.js" />
+    <Content Include="Newtheme\JS\sticky-kit.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -855,6 +884,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Scripts\angular.min.js.map" />
+    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\controllers\AssignProductImages.js" />
     <Content Include="Scripts\controllers\ProductDetails.js" />
@@ -1029,6 +1059,9 @@
     <Content Include="Views\UserClaims\Details.cshtml" />
     <Content Include="Views\UserClaims\Edit.cshtml" />
     <Content Include="Views\UserClaims\Index.cshtml" />
+    <Content Include="Views\Supplier\CreateNew.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

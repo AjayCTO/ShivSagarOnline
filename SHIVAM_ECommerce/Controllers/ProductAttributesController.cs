@@ -107,7 +107,7 @@ namespace SHIVAM_ECommerce.Controllers
             if (!string.IsNullOrEmpty(searchitem))
             {
 
-                v = v.Where(b => b.AttributeName.Contains(searchitem));
+                v = v.Where(b => b.AttributeName.ToLower().Contains(searchitem.ToLower()));
             }
             //SORT
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
@@ -118,6 +118,26 @@ namespace SHIVAM_ECommerce.Controllers
             recordsTotal = v.Count();
             var data = v.Skip(skip).Take(pageSize).ToList();
             return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.AttributeName }) }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult UniqueAttributes(string Attributes)
+        {
+            try
+            {
+
+                var _user = db.ProductAttributes.Where(a => a.AttributeName == Attributes).FirstOrDefault();
+                if (_user != null)
+                {
+                    return Json(new { Success = true, ex = "", IsAlreadyExist = true });
+                }
+                return Json(new { Success = true, ex = "", IsAlreadyExist = false });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, ex = ex.Message.ToString(), IsAlreadyExist = false });
+            }
         }
 
 
@@ -183,7 +203,7 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AttributeName")] ProductAttributes PA)
+        public ActionResult Edit([Bind(Include = "Id,AttributeName,AttributeDescription")] ProductAttributes PA)
         {
 
             if (ModelState.IsValid)

@@ -26,7 +26,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5 ManufactureName" })
                         @Html.ValidationMessageFor(model => model.Name)
                     </div>
                 </div>
@@ -66,4 +66,45 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+           $.validator.addMethod('ManufactureName', function (value) {
+            debugger;
+
+             if ($.trim(value) != "") {
+                return CheckUniqueUserName(value);
+                }
+            else {
+                return true;
+            }
+
+        }, "Please enter a different Name ! It's already exist");
+
+        });
+
+
+        function CheckUniqueUserName(value) {
+            var _x = true;
+            $.ajax({
+                url: "/Manufacturers/UniqueManufacture",
+                data: JSON.stringify({ ManufactureName: value }),
+                type: 'POST',
+                async: false,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    _x = !result.IsAlreadyExist;
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+
+            return _x;
+        }
+
+    </script>
+
 }

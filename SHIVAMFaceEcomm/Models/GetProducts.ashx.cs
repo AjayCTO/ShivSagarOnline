@@ -30,6 +30,7 @@ namespace SHIVAMFaceEcomm.Models
             string categories = context.Request["Categories"];
             string Lowprice = context.Request["lowprice"];
             string Highprice = context.Request["highprice"];
+            string IsFeatured = context.Request["isFeatured"];
        
             string cs = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             var allProducts = new List<object[]>();
@@ -94,6 +95,7 @@ namespace SHIVAMFaceEcomm.Models
                     Value = string.IsNullOrEmpty(Lowprice) ? "" : Lowprice
                 };
                 cmd.Parameters.Add(paramlowpriceText);
+
                 SqlParameter paramhighpriceText = new SqlParameter()
                 {
                     ParameterName = "@HighPrice",
@@ -101,6 +103,17 @@ namespace SHIVAMFaceEcomm.Models
                     Value = string.IsNullOrEmpty(Highprice) ? "" : Highprice
                 };
                 cmd.Parameters.Add(paramhighpriceText);
+
+
+
+                SqlParameter paramIsFeaturedText = new SqlParameter()
+                {
+                    ParameterName = "@IsFeatured",
+
+                    Value = string.IsNullOrEmpty(IsFeatured) ? "0" : IsFeatured
+                };
+                cmd.Parameters.Add(paramIsFeaturedText);
+               
                
 
                 con.Open();

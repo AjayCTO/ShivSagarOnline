@@ -26,15 +26,15 @@
                 @Html.ValidationSummary(true)
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2">Category Name</label>
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control col-md-5" })
+                        @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control col-md-5 UniqueCategory" })
                         @Html.ValidationMessageFor(model => model.CategoryName)
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ParentCategory, "ParentCategory", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2">Parent Category</label>
                     <div class="col-md-10">
 
                         @Html.DropDownList("ParentCategory", String.Empty)
@@ -130,4 +130,48 @@
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")
+
+
+
+<script>
+    $(document).ready(function () {
+
+
+        $.validator.addMethod('UniqueCategory', function (value) {
+
+
+            if ($.trim(value) != "") {
+                return UniqeCategories(value);
+            }
+            else {
+                return true;
+            }
+
+        }, "Please enter a unique Category value");
+
+    });
+    function UniqeCategories(value) {
+        var _x = true;
+        $.ajax({
+            url: "/Category/UniqueCategory",
+            data: JSON.stringify({ CategoryName: value }),
+            type: 'POST',
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (result) {
+                _x = !result.IsAlreadyExist;
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+
+        return _x;
+    }
+
+</script>
+
+
+
 }

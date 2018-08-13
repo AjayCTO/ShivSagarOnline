@@ -171,9 +171,9 @@
 
 
                         <div class="custom-control custom-radio">
-                            <input id="credit" value="0" ng-model="CustomerDetails.cardType" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                            <input id="credit" value="0" ng-model="CustomerDetails.cardType" name="paymentMethod" type="radio" class="custom-control-input" required checked="checked">
 
-                            <label class="custom-control-label" for="credit">Credit card</label>
+                            <label class=" custom-control-label" for="credit">Credit card</label>
 
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="custom-control custom-radio">
-                            <input id="cashond" name="paymentMethod" ng-model="CustomerDetails.cardType" value="3" type="radio" class="custom-control-input" required>
+                            <input id="cashond" name="paymentMethod" ng-model="CustomerDetails.cardType" value="3" type="radio" class="custom-control-input"  required>
                             <label class="custom-control-label" for="cashond">Cash On Delivery</label>
                         </div>
                     </div>
@@ -214,9 +214,9 @@
                         <div class="col-md-6 mb-3">
 
                             <div class="form-group">
-                                <label for="cc-name">Name on card <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cc-name" name="Cname" placeholder="" required>
-                                <span ng-show="form1.Cname.$error.required">The Name on Card is required!</span>
+                                <label for="cc-name">Name on card <span class="text-danger"></span></label>
+                                <input type="text" class="form-control" id="cc-name" name="cnumber1" placeholder="Enter Name on Card"/>
+                              
                             </div>
 
 
@@ -227,13 +227,22 @@
                         <div class="col-md-6 mb-3">
                             <div class="form-group">
                                 <label for="cc-number">Credit card number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cc-number" name="cnumber" ng-model="CustomerDetails.CreditCard" placeholder=""     data-ng-pattern="/^[0-9]+$/ "   data-ng-minlength="15"  maxlength="19" required>
-                              
-                                <span ng-show="form1.cnumber.$error.pattern">Credit card must consist of only numbers</span>
-                            
-                                <span ng-show="form1.cnumber.$error.minlength">Credit card must be 15-19 digits</span>
-                                <span ng-show="form1.cnumber.$error.required">Credit card required</span>
-    
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <span><i style="font-size:30px;color:green;" class="{{ccinfo.type}}"></i></span>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <input type="text" class="form-control " id="cc-number" name="cnumber" ng-model="CustomerDetails.CreditCard" placeholder="Ender Card Number" data-credit-card-type
+                                               data-ng-pattern="/^[0-9]+$/"
+                                               data-ng-minlength="15"
+                                               maxlength="19" required />
+
+                                        <span ng-show="form1.cnumber.$error.pattern">Credit card must consist of only numbers</span>
+                                        <span ng-show="form1.cnumber.$error.invalid">Credit card must be a valid</span>
+                                        <span ng-show="form1.cnumber.$error.minlength">Credit card must be 15-19 digits</span>
+                                        <span ng-show="form1.cnumber.$error.required">Credit card required</span>
+                                    </div>
+                                </div>
                                 </div>
                             
 
@@ -268,7 +277,7 @@
                             <div class="form-group">
                                 <label for="cc-expiration">Expiration year <span class="text-danger">*</span></label>
                                 <select ng-init='loadyear()' id="selectedYear" name="selectedYear" ng-model="CustomerDetails.CardExpYr" ng-options="year for year in years" class="form-control" required>
-                                    <option selected value=''>--Select Year--</option>
+                                  
                                 </select>
                                 <span ng-show="form1.selectedYear.$error.required">Select Expiration Year</span>
                             </div>
@@ -278,7 +287,7 @@
 
                             <div class="form-group">
                                 <label for="cc-expiration">CVV <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cc-cvv" name="cvv" placeholder="" required>
+                                <input type="text" class="form-control" id="cc-cvv" name="cvv" placeholder="" required/>
 
                                 <span ng-show="form1.cvv.$error.required">Please Enter CVV Code</span>
                             </div>

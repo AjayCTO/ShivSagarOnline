@@ -31,8 +31,8 @@ namespace SHIVAMFaceEcomm.Models
         public string CardExpMo { get; set; }
         public string CardExpYr { get; set; }
         public string UserID { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public System.DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public int Sort { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }

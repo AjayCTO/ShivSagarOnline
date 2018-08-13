@@ -37,6 +37,23 @@ namespace SHIVAM_ECommerce.Migrations
                 var role = new IdentityRole { Name = "Supplier" };
 
                 manager.Create(role);
+
+
+                var listOfClaims = new List<Claims>
+                {                     
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Manufacturers",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Manufacturer",Role = "Supplier",Title="Manufacturer",ClaimGroup="Manufacturer" },                    
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Product/GetAllProducts",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Products",Role = "Supplier",Title="Products",ClaimGroup="Products"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Customer",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Customer",Role = "Supplier",Title="Customer",ClaimGroup="Customer"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes/AddAttributesForSupplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Product Attr For Supplier",Role = "Supplier",Title="Products",ClaimGroup="Products"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Order",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Orders",Role = "Supplier",Title="Orders",ClaimGroup="Customer"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/AllImages",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "Supplier",Notes= "Can See Images",Role = "Supplier",Title="Images",ClaimGroup="Other"}
+
+                };
+
+                listOfClaims.ForEach(u => context.Claims.Add(u));
+                context.SaveChanges();
+
+
             }
 
             if (!context.Roles.Any(r => r.Name == "SupplierUser"))
@@ -46,6 +63,21 @@ namespace SHIVAM_ECommerce.Migrations
                 var role = new IdentityRole { Name = "SupplierUser" };
 
                 manager.Create(role);
+
+                var listOfClaims = new List<Claims>
+                {                     
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Manufacturers",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Manufacturer",Role = "SupplierUser",Title="Manufacturer",ClaimGroup="Manufacturer"  },                    
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Product/GetAllProducts",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Products",Role = "SupplierUser",Title="Products",ClaimGroup="Products"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Customer",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Customer",Role = "SupplierUser",Title="Customer",ClaimGroup="Customer"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes/AddAttributesForSupplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Product Attr For Supplier",Role = "SupplierUser",Title="Products",ClaimGroup="Products"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Order",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Orders",Role = "SupplierUser",Title="Customer",ClaimGroup="Customer"  },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/AllImages",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SupplierUser",Notes= "Can See Images",Role = "SupplierUser",Title="Images",ClaimGroup="Other"}
+
+                };
+
+                listOfClaims.ForEach(u => context.Claims.Add(u));
+                context.SaveChanges();
+
             }
 
             if (!context.Roles.Any(r => r.Name == "Customer"))
@@ -69,21 +101,26 @@ namespace SHIVAM_ECommerce.Migrations
 
                 var listOfClaims = new List<Claims>
                 {
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Category",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Category",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Supplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Supplier",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Plan",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Plan",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Manufacturers",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Manufacturer",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Product/GetAllProducts",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Products",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductStatus",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Status",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/UnitOfMeasures",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See UOM",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can see Product Attribute",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes/AddAttributesForSupplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Attr For Supplier",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Customer",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Customer",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Order",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Orders",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/EmailRecords",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See EmailRecords",Role = "SuperAdmin" },
-                    new Claims{ClaimType = "URL",ClaimValue = "URL:/SupplierUser",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Settings",Role = "SuperAdmin" }
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Category",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Category",Role = "SuperAdmin",Title="Category",ClaimGroup="Category" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Supplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Supplier",Role = "SuperAdmin",Title="Supplier",ClaimGroup="Supplier" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Plan",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Plan",Role = "SuperAdmin",Title="Plan",ClaimGroup="Plan" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Manufacturers",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Manufacturer",Role = "SuperAdmin",Title="Manufacturer",ClaimGroup="Manufacturer"},
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Product/GetAllProducts",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Products",Role = "SuperAdmin",Title="Products",ClaimGroup="Products"},
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductStatus",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Status",Role = "SuperAdmin",Title="Products",ClaimGroup="Products" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/UnitOfMeasures",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See UOM",Role = "SuperAdmin",Title="Unit of Measure",ClaimGroup="Products" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can see Product Attribute",Role = "SuperAdmin",Title="Products",ClaimGroup="Products" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ProductAttributes/AddAttributesForSupplier",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Product Attr For Supplier",Role = "SuperAdmin",Title="Products",ClaimGroup="Products" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Customer",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Customer",Role = "SuperAdmin",Title="Customer",ClaimGroup="Customer" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Order",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Orders",Role = "SuperAdmin",Title="Customer",ClaimGroup="Customer"},
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/EmailRecords",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See EmailRecords",Role = "SuperAdmin",Title="EmailRecords",ClaimGroup="Other" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/SupplierUser",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See SupplierUser",Role = "SuperAdmin",Title="Supplier User",ClaimGroup="Manage Users" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/Account/Manage",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Settings",Role = "SuperAdmin",Title="Settings",ClaimGroup="Settings" },
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/ManageClaims",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Claims",Role = "SuperAdmin",Title="Customer",ClaimGroup="Customer"},
+                    new Claims{ClaimType = "URL",ClaimValue = "URL:/AllImages",IsActive=true,CreatedDate = DateTime.Now,UpdatedDate = DateTime.Now,Sort = 0,Description = "SuperAdmin",Notes= "Can See Images",Role = "SuperAdmin",Title="Images",ClaimGroup="Other"}
                 };
 
+                listOfClaims.ForEach(u => context.Claims.Add(u));
+                context.SaveChanges();   
             }
 
             //if (!context.Users.Any(u => u.UserName == "Test"))

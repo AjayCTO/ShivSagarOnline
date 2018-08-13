@@ -9,6 +9,7 @@ namespace SHIVAM_ECommerce.Models
 {
     public class Supplier : BaseClass
     {
+
         public string CompanyName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -36,7 +37,7 @@ namespace SHIVAM_ECommerce.Models
 
         public int ProductCount { get; set; }
         public int UserCount { get; set; }
-        
+
 
         [NotMapped]
         [Required]
@@ -58,4 +59,6 @@ namespace SHIVAM_ECommerce.Models
         public virtual List<Category> Categories { get; set; }
         public virtual List<Product> Products { get; set; }
     }
+
+    
 }

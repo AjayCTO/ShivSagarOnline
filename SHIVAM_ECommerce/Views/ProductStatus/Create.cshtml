@@ -28,7 +28,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5" })
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-5 UniqueStatus" })
                         @Html.ValidationMessageFor(model => model.Name)
                     </div>
                 </div>
@@ -67,10 +67,51 @@
 
 @section Scripts {
 
-
+@Scripts.Render("~/bundles/jqueryval")
     <script>
         $("#ParentCategory").addClass("form-control col-md-5")
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script>
+        $(document).ready(function () {
+
+
+            $.validator.addMethod('UniqueStatus', function (value) {
+
+
+                if ($.trim(value) != "") {
+                    return UniqeProductStatus(value);
+                }
+                else {
+                    return true;
+                }
+
+            }, "Please enter a different Status Name ! It's already exist");
+
+        });
+        function UniqeProductStatus(value) {
+            var _x = true;
+            $.ajax({
+                url: "/ProductStatus/UniqueStatus",
+                data: JSON.stringify({ Status: value }),
+                type: 'POST',
+                async: false,
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    _x = !result.IsAlreadyExist;
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+
+            return _x;
+        }
+
+    </script>
+
+
 }

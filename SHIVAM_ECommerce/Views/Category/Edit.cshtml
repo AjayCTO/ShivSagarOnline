@@ -29,16 +29,16 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="form-group">
-                            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-3" })
+                            <label class="control-label col-md-3">Category Name</label>
                             <div class="col-md-10">
-                                @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control col-md-10" })
+                                @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control col-md-10 UniqueCategory" })
                                 @Html.ValidationMessageFor(model => model.CategoryName)
                             </div>
                         </div>
 
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.ParentCategory, "ParentCategory", new { @class = "control-label col-md-3" })
+                            <label class="control-label col-md-3"> Parent Category</label>
                             <div class="col-md-10">
                                 @Html.DropDownList("ParentCategory", String.Empty)
                                 @Html.ValidationMessageFor(model => model.ParentCategory)
@@ -139,6 +139,48 @@
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $(document).ready(function () {
+
+        var Category = '@Model.CategoryName';
+        $.validator.addMethod('UniqueCategory', function (value) {
+            if (value.toLowerCase() == Category.toLowerCase()) {
+                return true;
+            }
+
+            if ($.trim(value) != "") {
+                return UniqeCategories(value);
+            }
+            else {
+                return true;
+            }
+
+        }, "Please enter a unique Category value");
+
+    });
+    function UniqeCategories(value) {
+        var _x = true;
+        $.ajax({
+            url: "/Category/UniqueCategory",
+            data: JSON.stringify({ CategoryName: value }),
+            type: 'POST',
+            async: false,
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (result) {
+                _x = !result.IsAlreadyExist;
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+
+        return _x;
+    }
+
+</script>
+
 }
 
 

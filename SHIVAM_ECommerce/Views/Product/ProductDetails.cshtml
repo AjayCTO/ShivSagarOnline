@@ -26,7 +26,7 @@
 
 
 
-                    <div class="form-label">Enter Product Attributes <input type="button" class="btn btn-success btn-sm pull-right" id="AddNew" ng-click="addNew()" name="AddNew" value="Add New Row" /></div>
+                    <div class="form-label">Enter Product Attributes <button class="btn btn-success pull-right" id="AddNew" ng-click="addNew()" name="AddNew"><i class="fa fa-plus"></i> Add New Row</button></div>
                     <div class="table-responsive">
                         <table class="table attributes">
                             <thead>
@@ -79,8 +79,8 @@
                                         <input type="number" class="form-control number" placeholder="Enter High Quantity Threshold" ng-model="obj.highQuantityThreshold">
                                     </td>
                                     <td class="pr-0" width="200">
-                                        <button type="button" class="btn btn-primary btn-sm Remove" ng-click="UploadImages($index)">UploadImages</button>
-                                        <button type="button" class="btn btn-success btn-sm Remove" id="Remove" name="Remove" ng-click="RemoveIt($index)">Remove</button>
+                                        @*<button type="button" class="btn btn-primary btn-sm Remove" ng-click="UploadImages($index)">UploadImages</button>*@
+                                        <button type="button" class="btn btn-danger  Remove" id="Remove" name="Remove" ng-click="RemoveIt($index)"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
                                 </tr>
 

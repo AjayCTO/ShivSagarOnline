@@ -83,19 +83,19 @@ namespace SHIVAMFaceEcomm.Controllers
         }
         public ActionResult Index()
         {
-            var CustomerInfolist =new SHIVAMFaceEcomm.Models.Customer();
+            var CustomerInfolist = new SHIVAMFaceEcomm.Models.Customer();
             var Cust_Info = new CustomerInfoViewModel();
             if (User.Identity.IsAuthenticated)
             {
-          
-              
+
+
                 var Userid = User.Identity.GetUserId();
                 CustomerInfolist = context.Customers.Where(x => x.UserID == Userid).FirstOrDefault();
                 Cust_Info.FirstName = CustomerInfolist.FirstName;
                 Cust_Info.LastName = CustomerInfolist.LastName;
-                Cust_Info.Email= CustomerInfolist.Email;
+                Cust_Info.Email = CustomerInfolist.Email;
                 Cust_Info.Phone = CustomerInfolist.Phone;
-           
+
             }
 
             ViewBag.Customer = Cust_Info;
@@ -233,6 +233,7 @@ namespace SHIVAMFaceEcomm.Controllers
                         orderitem.ProductID = p.ProductId;
                         orderitem.Quantity = p.Quantity;
                         orderitem.TotalPrice = p.Cost;
+                        orderitem.SupplierID = p.SupplierID;
                         orderitem.UnitPrice = p.Cost / p.Quantity;
                         orderitem.UpdatedDate = DateTime.Now;
                         context.OrderItems.Add(orderitem);
@@ -265,13 +266,16 @@ namespace SHIVAMFaceEcomm.Controllers
                 //create user as customer and make him login
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("SHIVAMFaceEcomm");
-                UserManager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-                var token = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
-                string code = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
+                
+                
+                //var provider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("SHIVAMFaceEcomm");
+                //UserManager.UserTokenProvider = new Microsoft.AspNet.Identity.Owin.DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+                //var token = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
+                //string code = await UserManager.GenerateEmailConfirmationTokenAsync(_GlobaluserID);
 
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = _GlobaluserID, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(_GlobaluserID, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = _GlobaluserID, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(_GlobaluserID, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
                 if (!User.Identity.IsAuthenticated)
                 {
                     await SignInAsync(user, isPersistent: false);
@@ -279,14 +283,22 @@ namespace SHIVAMFaceEcomm.Controllers
                 // WebSecurity.Login(CartDetails.CustomerData.userName, CartDetails.CustomerData.password);\
                 TempData["orderId"] = order.Id;
                 TempData["CartItems"] = CartDetails.CartItems;
-                return Json("ok");
+                //return Json("ok");
+                return Json(new { Success = true, ex = "", stacktrace = "" });
             }
             catch (Exception e)
             {
+                var st = new System.Diagnostics.StackTrace(e, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame.GetFileLineNumber();
+
+                return Json(new { Success = false, ex = e.InnerException.Message.ToString(), stacktrace = "Line no.:" + line + "Stack Trace::" + e.ToString() });
                 //ModelState.AddModelError("", ErrorCodeToString(e.StatusCode));
             }
 
-            return View(CartDetails);
+            return View("Index",CartDetails);
         }
 
 

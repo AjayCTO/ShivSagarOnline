@@ -7,6 +7,8 @@ namespace SHIVAMFaceEcomm.Models
 {
     public class ProductDetail
     {
+
+        public int ProductQuantityID { get; set; }
         public Product Product { get; set; }
         public List<ProductDetailAttributes> Attributes { get; set; }
         //public List<ProductImage> Images { get; set; }
