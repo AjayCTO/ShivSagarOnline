@@ -9,24 +9,42 @@
 
 }
 
-<div class="card">
-    <div class="card-header">
 
-        <h3 class="card-title"><i class="fa fa-list"></i> Product Details</h3>
+<div class="row page-titles">
+
+
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-primary">Product Details</h3>
     </div>
-    <div class="card-body">
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Product/GetAllProducts">Products</a></li>
+            <li class="breadcrumb-item active">Product Details</li>
+        </ol>
+    </div>
+</div>
 
 
-        <div ng-app="myFormApp" >
-            <toaster-container></toaster-container>
-            <div ng-controller="ProductController">
+<div class="container-fluid">
+    <div class="card">
+
+        <div class="card-body">
+
+
+            <div ng-app="myFormApp">
+                <toaster-container></toaster-container>
+                <div ng-controller="ProductController">
 
 
 
 
 
 
-                    <div class="form-label">Enter Product Attributes <button class="btn btn-success pull-right" id="AddNew" ng-click="addNew()" name="AddNew"><i class="fa fa-plus"></i> Add New Row</button></div>
+                    <h3 class="form-label">Enter Product Attributes <button class="btn btn-success pull-right" id="AddNew" ng-click="addNew()" name="AddNew"><i class="fa fa-plus"></i> Add New Row</button></h3>
+
+                
+
+
                     <div class="table-responsive">
                         <table class="table attributes">
                             <thead>
@@ -49,10 +67,10 @@
                                     </td>
                                     <td>
                                         <label class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" placeholder="Is Featured Product" ng-model="obj.IsFeatured"/>
+                                            <input type="checkbox" class="custom-control-input" placeholder="Is Featured Product" ng-model="obj.IsFeatured" />
                                             <span class="custom-control-label"></span>
                                         </label>
-                                    </td>                                  
+                                    </td>
                                     <td>
                                         <input type="text" class="form-control number" placeholder="Enter Quantity" ng-model="obj.Quantity">
                                     </td>
@@ -69,8 +87,8 @@
                                             <option value="">None</option>
                                             <option ng-repeat="x in productstatuslist track by x.Id" value="{{x.Id}}">{{x.Name}}</option>
                                         </select>
-                                      
-                                      
+
+
                                     </td>
                                     <td>
                                         <input type="number" class="form-control number" placeholder="Enter Low Quantity Threshold" ng-model="obj.lowQuantityThreshold">
@@ -92,71 +110,75 @@
 
 
 
-                <div id="myModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
+                    <div id="myModal" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Product Images</h4>
-                                <button type="button" class="close" data-dismiss="modal"></button>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Product Images</h4>
+                                    <button type="button" class="close" data-dismiss="modal"></button>
 
-                            </div>
-                            <div class="modal-body">
-                              
+                                </div>
+                                <div class="modal-body">
 
-                                        <button type="button" class="btn btn-dark iamgebtn" ng-click="triggerFileClick()">
-                                            <i class="fa fa-picture-o"></i> <span ng-if="ProductAttributesList[TempIndex].Images.length==0"> Add </span><span ng-if="ImageList.length>0"> More </span>
-                                        </button>
-                                <input type="file" style="visibility:hidden" name="files" multiple id="files" accept="image/*" />
 
-                                <br />
-                                <br />
-                                        <div class="form-group">
+                                    <button type="button" class="btn btn-dark iamgebtn" ng-click="triggerFileClick()">
+                                        <i class="fa fa-picture-o"></i> <span ng-if="ProductAttributesList[TempIndex].Images.length==0"> Add </span><span ng-if="ImageList.length>0"> More </span>
+                                    </button>
+                                    <input type="file" style="visibility:hidden" name="files" multiple id="files" accept="image/*" />
 
-                                            <div class="row gutters-sm">
-                                                <div class="col-sm-3" style="margin-right: 15px;" ng-repeat="_obj in ProductAttributesList[TempIndex].Images track by $index" ng-if="ProductAttributesList[TempIndex].Images.length>0">
-                                                    <label class="imagecheck mb-4">
-                                                        <input name="imagecheck" type="checkbox" value="1" class="imagecheck-input" />
-                                                        <figure class="imagecheck-figure">
-                                                            <img src="{{_obj.bytestring}}" class="imagecheck-image">
-                                                        </figure>
-                                                    </label>
+                                    <br />
+                                    <br />
+                                    <div class="form-group">
 
-                                                    <button type="button" class="btn btn-danger removeImage" altid="{{_obj.ImageID}}" ng-click="RemoveFromImageList(_obj.ImageID)"><i class="fa fa-times"></i></button>
-                                                </div>
+                                        <div class="row gutters-sm">
+                                            <div class="col-sm-3" style="margin-right: 15px;" ng-repeat="_obj in ProductAttributesList[TempIndex].Images track by $index" ng-if="ProductAttributesList[TempIndex].Images.length>0">
+                                                <label class="imagecheck mb-4">
+                                                    <input name="imagecheck" type="checkbox" value="1" class="imagecheck-input" />
+                                                    <figure class="imagecheck-figure">
+                                                        <img src="{{_obj.bytestring}}" class="imagecheck-image">
+                                                    </figure>
+                                                </label>
 
+                                                <button type="button" class="btn btn-danger removeImage" altid="{{_obj.ImageID}}" ng-click="RemoveFromImageList(_obj.ImageID)"><i class="fa fa-times"></i></button>
                                             </div>
+
                                         </div>
-                                
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
+
+                        </div>
+                    </div>
+
+
+                
+                        <div style="margin-top:15px;" class="btn-list text-left">
+
+                            <button type="button" ng-disabled="!IsValidProduct()" ng-click="SaveProductDetails()" class="btn btn-primary">
+                                <i class="fa fa-check"></i>
+                                Save changes
+                            </button>
+
+
+                            <a href="/Product/GetAllProducts" class="btn btn-secondary btn-gray"> <i class="fa fa-times"></i> Cancel</a>
                         </div>
 
-                    </div>
-                </div>
-
-
-                <div class="card-footer">
-                    <div class="btn-list text-left">
-                       
-                        <button type="button" ng-disabled="!IsValidProduct()" ng-click="SaveProductDetails()" class="btn btn-primary">
-                            <i class="fa fa-check"></i>
-                            Save changes
-                        </button>
-
-
-                        <a href="/Product/GetAllProducts" class="btn btn-gray"> <i class="fa fa-times"></i> Cancel</a>
-                    </div>
-
+                    
                 </div>
             </div>
-        </div>
 
         </div>
     </div>
+</div>
+
+
+
         @section scripts
 {
             <style>

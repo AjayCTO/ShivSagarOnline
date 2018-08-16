@@ -104,7 +104,7 @@
                 success: function (result) {
 
                     if (result.Success == true) {
-                        window.location.href = "/Product/GetAllProducts";
+                        window.location.reload();
                     }
                     else {
                         toastr.error(result.ex);
@@ -130,6 +130,7 @@
                     $scope.ProductAttributes.push({ Id: response.data[i].Id, Name: response.data[i].Name, Descp: response.data[i].Descp, Checked: false })
                 }
 
+                console.log($scope.ProductAttributes);
 
                 toaster.pop('success', "Product Attributes", "Product Attributes loaded successfully");
 

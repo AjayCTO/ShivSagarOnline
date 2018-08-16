@@ -96,7 +96,7 @@
 
     <script>
         var _myTableData;
-
+        var _supplierID = '@_CurrentUser.SupplierID';
         $(document).ready(function () {
 
 
@@ -118,7 +118,7 @@
 
                         }
                         else {
-                            d.SupplierID = -1;
+                            d.SupplierID = _supplierID;
                         }
 
                     }

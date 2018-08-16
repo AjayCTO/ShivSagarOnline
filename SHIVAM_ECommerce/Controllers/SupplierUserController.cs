@@ -15,6 +15,8 @@ using System.Linq.Dynamic;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Security.Claims;
 using SHIVAM_ECommerce.Extensions;
+using System.Data.SqlClient;
+using System.Configuration;
 namespace SHIVAM_ECommerce.Controllers
 {
     //[CustomAuthorize(Roles="superadmin,Admin,Supplier")]
@@ -23,7 +25,7 @@ namespace SHIVAM_ECommerce.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
-         private IRepository<Supplier> _repository = null;
+        private IRepository<Supplier> _repository = null;
         public SupplierUserController()
         {
             this._repository = new Repository<Supplier>();
@@ -71,7 +73,7 @@ namespace SHIVAM_ECommerce.Controllers
 
             recordsTotal = v.Count();
             var data = v.Skip(skip).Take(pageSize).ToList();
-            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.CompanyName, x.FirstName, x.LastName, x.Logo, x.Phone, x.City,Address= x.Address1+" "+x.Address2 }) }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.CompanyName, x.FirstName, x.LastName, x.Logo, x.Phone, x.City, Address = x.Address1 + " " + x.Address2 }) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -159,10 +161,38 @@ namespace SHIVAM_ECommerce.Controllers
                     var Claims = db.Claims.Where(x => x.Description == "SupplierUser").ToList();
 
                     var listOfUserClaims = new List<IdentityUserClaim>();
+                    var _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString.ToString();
 
-                    foreach (var claim in Claims)
+
+                    // _controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue));
+                    using (SqlConnection connection = new SqlConnection(_connectionString))
                     {
-                        _controller.UserManager.AddClaim(user.Id, new Claim(claim.ClaimType, claim.ClaimValue));
+                        connection.Open();
+
+                        foreach (var claim in Claims)
+                        {
+                            String query = "INSERT INTO [dbo].[AspNetUserClaims]([ClaimType],[ClaimValue],[UserId],[ClaimID],[IsActive],[DisplayLabel],[Discriminator],[User_Id]) VALUES(@ClaimType,@ClaimValue,@UserId,@ClaimID,@IsActive,@DisplayLabel,@Discriminator,@User_Id)";
+                            using (SqlCommand command = new SqlCommand(query, connection))
+                            {
+                                command.Parameters.AddWithValue("@ClaimType", claim.ClaimType);
+                                command.Parameters.AddWithValue("@ClaimValue", claim.ClaimValue);
+                                command.Parameters.AddWithValue("@UserId", user.Id);
+                                command.Parameters.AddWithValue("@ClaimID", claim.Id);
+
+                                command.Parameters.AddWithValue("@IsActive", "True");
+                                command.Parameters.AddWithValue("@DisplayLabel", claim.Notes);
+                                command.Parameters.AddWithValue("@Discriminator", "ApplicationUserClaim");
+                                command.Parameters.AddWithValue("@User_Id", user.Id);
+
+                                int _result = command.ExecuteNonQuery();
+
+                                // Check Error
+                                if (_result < 0)
+                                    Console.WriteLine("Error inserting data into Database!");
+                            }
+                        }
+                        connection.Close();
+
                     }
                     db.SaveChanges();
                     this.AddNotification("User Created successfully.", NotificationType.SUCCESS);

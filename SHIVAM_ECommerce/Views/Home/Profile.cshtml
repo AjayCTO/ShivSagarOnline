@@ -32,9 +32,9 @@
             <div class="col-md-6">
 
                 <div class="card">
-                    <div class="card-header">
+                    @*<div class="card-header">
                         <h3 class="card-title">Company Information</h3>
-                    </div>
+                    </div>*@
                     <div class="card-body">
 
                         <div style="text-align:center">
@@ -99,9 +99,10 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.PlanID, "PlanID", new { @class = "control-label " })
+                            @Html.LabelFor(model => model.PlanID, "Plan", new { @class = "control-label " })
                             <div class="">
-                                @Html.DropDownList("PlanID", String.Empty)
+                                @*@Html.DropDownList("PlanID", String.Empty)*@
+                                @Html.DropDownList("PlanID", (IEnumerable<SelectListItem>)ViewBag.PlanID, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.PlanID)
                             </div>
                         </div>
@@ -116,9 +117,9 @@
 
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
+                    @*<div class="card-header">
                         <h3 class="card-title">Personal Information</h3>
-                    </div>
+                    </div>*@
 
                     <div class="card-body">
                         <div class="form-group">
@@ -191,11 +192,7 @@
 </script>
 
 <style>
-    .col-md-6 .card-header
-    {
-        background:#069;
-        color:#fff;
-    }
+  
 
     textarea
     {

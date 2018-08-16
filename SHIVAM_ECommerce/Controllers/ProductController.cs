@@ -20,6 +20,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using SHIVAM_ECommerce.Attributes;
 using Syncfusion.XlsIO;
+using SHIVAM_ECommerce.Extensions;
 namespace SHIVAM_ECommerce.Controllers
 {
     [CustomAuthorize]
@@ -97,6 +98,8 @@ namespace SHIVAM_ECommerce.Controllers
             var _supplierdata = ctx.Suppliers.FirstOrDefault();
             SupplierId = SupplierId == -1 ? (_supplierdata != null ? _supplierdata.Id : -1) : SupplierId;
             ViewBag.SupplierID = SupplierId;
+            var _productAttributes = db.ProductAttributesRelation.Where(x => x.SupplierID == CurrentUserData.SupplierID).ToList();
+
             using (var cmd = ctx.Database.Connection.CreateCommand())
             {
                 ctx.Database.Connection.Open();
@@ -110,10 +113,22 @@ namespace SHIVAM_ECommerce.Controllers
                     {
                         var model = Read(reader).ToList();
                         TempData["cols"] = newcolumns;
-                        return View(model);
+                        if (CurrentUserData.SupplierID != -1 && _productAttributes.Count() == 0)
+                        {
+                            this.AddNotification("Please add product attribute before adding product.", NotificationType.WARNING);
+                            return RedirectToAction("AddAttributesForSupplier", "ProductAttributes");
+                        }
+                        else
+                        {
+                            return View(model);
+
+                        }
                     }
                 }
             }
+
+
+
 
             return View(new List<object>());
         }
@@ -431,6 +446,38 @@ namespace SHIVAM_ECommerce.Controllers
             return View(new ProductViewmodel());
         }
 
+        public void SaveProductDetail(Product _Product)
+        {
+            var _listAttributes = new List<ProductAttributeModelInner>();
+            var _productAttributes = db.ProductAttributesRelation.Where(x => x.SupplierID == CurrentUserData.SupplierID).ToList();
+
+            foreach (var _item in _productAttributes)
+            {
+                var _productAttr = new ProductAttributeModelInner();
+                _productAttr.AttributeID = _item.ProductAttributesId;
+                _productAttr.Value = " ";
+                _listAttributes.Add(_productAttr);
+            }
+
+            var _productRel = new ProductAttributeWithQuantity();
+            _productRel.IsAvailable = true;
+            _productRel.AttributeValues = GetAttributeValues(_listAttributes);
+            _productRel.ProductPrice = 0;
+            _productRel.ProductQuantity = 1;
+            _productRel.ProductId = _Product.Id;
+            _productRel.UnitInStock = 1;
+            _productRel.Weight = 0;
+            _productRel.UnitWeight = 0;
+            _productRel.IsFeatured = false;
+            _productRel.lowQuantityThreshold = 1;
+            _productRel.highQuantityThreshold = 10;
+            _productRel.IsActive = true;
+
+            _Attributerepository.Insert(_productRel);
+
+            _Attributerepository.Save();
+        }
+
         [HttpPost]
         public ActionResult Create(ProductViewmodel Model)
         {
@@ -452,6 +499,7 @@ namespace SHIVAM_ECommerce.Controllers
                 _product.Description = Model.Description;
                 _repository.Insert(_product);
                 _repository.Save();
+                SaveProductDetail(_product);
                 #endregion
 
 

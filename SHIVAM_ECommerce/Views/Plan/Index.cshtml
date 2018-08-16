@@ -198,6 +198,7 @@
                         success: function (result) {
                             if (result.Success === true) {
                                 _datatable.clear().draw();
+                                toastr.success("Status changed Successfully");
                             } else {
                                 bootbox.alert("error occurred during operation." + result.ex);
                             }
@@ -229,6 +230,7 @@
                         success: function (result) {
                             if (result.Success === true) {
                                 _datatable.clear().draw();
+                                toastr.success("Deleted Successfully");
                             } else {
                                 bootbox.alert("error occurred during operation." + result.ex);
                             }

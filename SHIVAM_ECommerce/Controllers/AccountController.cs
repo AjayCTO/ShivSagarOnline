@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using SHIVAM_ECommerce.Models;
 using System.Web.Caching;
 using System.Collections;
+using SHIVAM_ECommerce.Extensions;
 
 namespace SHIVAM_ECommerce.Controllers
 {
@@ -297,6 +298,7 @@ namespace SHIVAM_ECommerce.Controllers
                     IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
+                        this.AddNotification("Successfully Change Password", NotificationType.SUCCESS);
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
                     else

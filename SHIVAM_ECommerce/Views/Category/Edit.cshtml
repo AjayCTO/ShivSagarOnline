@@ -158,6 +158,52 @@
                 @Scripts.Render("~/bundles/jqueryval")
 
                 <script>
+    var current = location.pathname;
+    $('.nav li a').each(function () {
+        var $this = $(this);
+        // if the current path is like this link, make it active
+        if ($this.attr('href').indexOf(current) !== -1) {
+            if (current != "/") {
+                $this.addClass('active');
+
+            }
+        }
+    })
+    var imagesPreview = function (input, placeToInsertImagePreview) {
+
+        if (input.files) {
+            var filesAmount = input.files.length;
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    var _multiple = $.trim($(input).attr("multiple"));
+                    if (_multiple == "") { $(placeToInsertImagePreview).html(""); }
+                    $($.parseHTML('<img style="height:50px; width:50px; margin-right:10px; margin-top:5px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                }
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+
+    };
+    $('.custom-file-input').on('change', function () {
+        imagesPreview(this, 'div.gallery');
+    });
+
+    $(document).on("keypress", ".customColumnData", function (evt) {
+
+        var keycode = evt.charCode || evt.keyCode;
+        if (keycode == 35 || keycode == 64) { //Enter key's keycode
+            return false;
+        }
+    });
+</script>
+
+
+
+                <script>
                     $(document).ready(function () {
 
                         var Category = '@Model.CategoryName';

@@ -12,20 +12,22 @@ using SHIVAM_ECommerce.Extensions;
 using SHIVAM_ECommerce.Repository;
 using System.Security.Claims;
 using System.Linq.Dynamic;
+using SHIVAM_ECommerce.Attributes;
 
 namespace SHIVAM_ECommerce.Controllers
 {
+    [CustomAuthorize]
     public class ManageClaimsController : BaseController
     {
-       private ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
-         private IRepository<Claims> _repository = null;
-         public ManageClaimsController()
+        private IRepository<Claims> _repository = null;
+        public ManageClaimsController()
         {
             this._repository = new Repository<Claims>();
         }
 
-        
+
 
         // GET: /UserClaims/
         public async Task<ActionResult> Index()
@@ -36,20 +38,20 @@ namespace SHIVAM_ECommerce.Controllers
                 ViewBag.UserName = db.Users.ToList();
             }
             else
-            {             
+            {
 
                 var supplierUsers = db.Suppliers.Where(x => x.ParentSupplierID == CurrentUserData.SupplierID);
 
                 List<ApplicationUser> UserNames = new List<ApplicationUser>();
 
-                foreach(var SUser in supplierUsers)
+                foreach (var SUser in supplierUsers)
                 {
                     var UserName = db.Users.FirstOrDefault(x => x.Id == SUser.UserID);
-                    UserNames.Add(UserName);     
+                    UserNames.Add(UserName);
 
                 }
                 ViewBag.UserName = UserNames;
-            }            
+            }
 
             return View(await db.Claims.ToListAsync());
         }
@@ -71,7 +73,7 @@ namespace SHIVAM_ECommerce.Controllers
 
             if (User != null)
             {
-                 UserID = User.Id;
+                UserID = User.Id;
             }
 
             //Find Order Column
@@ -104,7 +106,7 @@ namespace SHIVAM_ECommerce.Controllers
 
             recordsTotal = v.Count();
             var data = v.Skip(skip).Take(pageSize).ToList();
-            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.ClaimType, x.ClaimValue,x.IsActive,x.DisplayLabel}) }, JsonRequestBehavior.AllowGet);
+            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data.Select(x => new { x.Id, x.ClaimType, x.ClaimValue, x.IsActive, x.DisplayLabel }) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -138,7 +140,7 @@ namespace SHIVAM_ECommerce.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,ClaimType,ClaimValue,IsActive")] ApplicationUserClaim claims)
-        {           
+        {
             if (ModelState.IsValid)
             {
                 db.AspNetUserClaims.Add(claims);
@@ -152,7 +154,7 @@ namespace SHIVAM_ECommerce.Controllers
 
         // GET: /UserClaims/Edit/5
         public async Task<ActionResult> Edit(int? id)
-        {           
+        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -214,13 +216,13 @@ namespace SHIVAM_ECommerce.Controllers
         }
 
         // POST: /UserClaims/Delete/5
-        [HttpGet, ActionName("DeleteConfirmed")]       
+        [HttpGet, ActionName("DeleteConfirmed")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Claims claims = await db.Claims.FindAsync(id);
             db.Claims.Remove(claims);
             await db.SaveChangesAsync();
-            return Json(new {Success =  true},JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

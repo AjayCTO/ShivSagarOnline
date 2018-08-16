@@ -91,7 +91,7 @@
             <li class="nav-label">Home</li>
 
             <li>
-                <a class="has-arrow" href="/" aria-expanded="false"><i class="fa fa-home"></i><span class="hide-menu">Dashboard </span> </a>
+                <a  href="/" aria-expanded="false"><i class="fa fa-home"></i><span class="hide-menu">Dashboard </span> </a>
              
             </li>
 
@@ -107,7 +107,7 @@
                         {
                             <li>
 
-                                <a class="has-arrow" href="/@_item.AllClaims[0].ClaimValue" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.AllClaims[0].Title </span> </a>
+                                <a href="/@_item.AllClaims[0].ClaimValue" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.AllClaims[0].Title </span> </a>
 
                               
                             </li>
@@ -129,7 +129,7 @@
                                     @foreach (var _childitem in _item.AllClaims.ToList())
                                     {
                                         
-                                          <li><a href="/@_childitem.ClaimValue"> <i class="fa fa-dot-circle"></i> @_childitem.Title </a></li>
+                                          <li><a href="/@_childitem.ClaimValue"> <i class="fa fa-dot-circle-o"></i> @_childitem.Title </a></li>
                                         
                                       
                                     }

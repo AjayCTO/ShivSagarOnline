@@ -4,84 +4,98 @@
     ViewBag.Title = "Index";
 }
 
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="#">Upload Images</a>
-    </li>
-    <li class="breadcrumb-item active">All Image </li>
-</ol>
 
-<div class="card">
-    <div class="card-body">
-        <form action="/AllImages/Index" method="post" enctype="multipart/form-data">
+<div class="row page-titles">
 
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="custom-file">
-                        <input type="file" multiple class="custom-file-input" name="files" id="file1" accept="image/*">
-                        <label class="custom-file-label">Choose file</label>
+
+    <div class="col-md-5 align-self-center">
+        <h3 class="text-primary">All Images</h3>
+    </div>
+    <div class="col-md-7 align-self-center">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Home">Home</a></li>
+            <li class="breadcrumb-item active">All Images</li>
+        </ol>
+    </div>
+</div>
+<div class="container-fluid">
+
+    <div class="card">
+        <div class="card-body">
+            <form action="/AllImages/Index" id="UploadImageForm" method="post" enctype="multipart/form-data">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="custom-file">
+                            <input type="file" multiple class="custom-file-input" name="files" id="file1" accept="image/*">
+                            <label class="custom-file-label">Choose file</label>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <button class="btn btn-primary" type="submit" id="uploadImages" value="Upload" disabled>
+                            <i class="fa fa-upload"></i>
+                            Upload
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete"> <i class="fa fa-trash"></i> Delete </button>
+
                     </div>
                 </div>
-                <div class="col-md-5">
-                    <button class="btn btn-primary" type="submit" value="Upload" disabled>
-                        <i class="fa fa-upload"></i>
-                        Upload
-                        </button>
-                    <button type="button" class="btn btn-danger" id="delete"> <i class="fa fa-trash"></i> Delete </button>
 
-                </div>
-            </div>
-        
-            <div class="gallery"></div>
-        </form>
-    </div>
-</div>
-
-
-<div class="row row-cards">
-
-    @foreach (var item in Model)
-    {
-
-        @*<img src="~/ProductImages/thumb/@item.ImagePath" />*@
-
-
-   
-
-    <div class="col-sm-6 col-lg-2">
-        <div class="card p-3">
-            <a style="text-align:center;" href="javascript:void(0)" class="mb-3">
-                <img src="~/ProductImages/thumb/@item.ImagePath" alt="Photo by Nathan Guerrero" class="rounded">
-            </a>
-            <div class="d-flex align-items-center px-2">
-                <label class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="example-inline-checkbox1" value="@item.Id">
-                    <span class="custom-control-label">Select</span>
-                </label>
-            </div>
+                <div class="gallery"></div>
+            </form>
         </div>
     </div>
-        
+
+
+    <div class="row row-cards">
+
+        @foreach (var item in Model)
+    {
+
+            @*<img src="~/ProductImages/thumb/@item.ImagePath" />*@
+
+
+
+
+            <div class="col-sm-6 col-lg-2">
+                <div class="card p-3">
+                    <a style="text-align:center;" href="javascript:void(0)" class="mb-3">
+                        <img src="~/ProductImages/thumb/@item.ImagePath" alt="Photo by Nathan Guerrero" class="rounded">
+                    </a>
+                    <div class="d-flex align-items-center px-2">
+                        <label class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" name="example-inline-checkbox1" value="@item.Id">
+                            <span class="custom-control-label">Select</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
     }
+    </div>
+
 </div>
 
 
 
-
+@section scripts{
 
 <script>
-    $(document).ready(
-    function () {
-        $('input:file').change(
-            function () {
+    $(document).ready(function () {
+        $('input:file').change(function () {
                 if ($(this).val()) {
                     $('button:submit').attr('disabled', false);
                     //$('input:submit').removeAttr('disabled'); 
                 }
-            }
-            );
+            });
 
+        $("#uploadImages").click(function () {
+         
 
+                $("#uploadImages").attr("disabled", "disabled")
+                $("#uploadImages").find("i").addClass("fa-spin");
+                $("#UploadImageForm").submit();
+        });
 
 
     });
@@ -116,7 +130,7 @@
 
     });
 
-
+   
     $("#delete").click(function () {
 
       
@@ -152,34 +166,35 @@
 
     $(function () {
         // Multiple images preview in browser
-        //var imagesPreview = function (input, placeToInsertImagePreview) {
+        var imagesPreview = function (input, placeToInsertImagePreview) {
 
 
-        //    var files = $('#file1')[0].files;
+            var files = $('#file1')[0].files;
 
 
 
-        //    if (input.files) {
-        //        var filesAmount = input.files.length;
+            if (input.files) {
+                var filesAmount = input.files.length;
 
-        //        for (i = 0; i < filesAmount; i++) {
-        //            var reader = new FileReader();
+                for (i = 0; i < filesAmount; i++) {
+                    var reader = new FileReader();
 
-        //            reader.onload = function (event) {
-        //                $($.parseHTML('<img style="height:50px; width:50px; margin-right:10px; margin-top:5px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
-        //            }
+                    reader.onload = function (event) {
+                        $($.parseHTML('<img style="height:50px; width:50px; margin-right:10px; margin-top:5px;">')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                    }
 
-        //            reader.readAsDataURL(input.files[i]);
-        //        }
-        //    }
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
 
-        //};
+        };
 
-        //$('#file1').on('change', function () {
-        //    imagesPreview(this, 'div.gallery');
-        //});
+        $('#file1').on('change', function () {
+            imagesPreview(this, 'div.gallery');
+        });
     });
 </script>
+}
 
 <style>
     #delete {

@@ -141,6 +141,8 @@
                             if (result.Success === true) {
                                 // $("#myTable").DataTable().fnDraw();
                                 _dataTable.clear().draw();
+                                toastr.success("Deleted Successfully");
+                                
                             } else {
                                 bootbox.alert("error occurred during operation. " + result.ex);
                             }

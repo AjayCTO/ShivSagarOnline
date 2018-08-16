@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-7 align-self-center">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active">Supplier</li>
         </ol>
     </div>
@@ -126,6 +126,7 @@
                             if (result.Success === true) {
 
                                 _DataTable.clear().draw();
+                                toastr.success("Deleted Successfully");
                             } else {
                                 bootbox.alert("error occurred during operation." + result.ex);
                             }

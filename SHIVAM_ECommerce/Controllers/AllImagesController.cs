@@ -93,10 +93,13 @@ namespace SHIVAM_ECommerce.Controllers
                     var fileName = Path.GetFileName(file.FileName);
                     var path = Path.Combine(Server.MapPath("~/ProductImages/large"), fileName);
                     file.SaveAs(path);
-                    Crop(150, 150, file.InputStream, Path.Combine(Server.MapPath("~/ProductImages/thumb/") + fileName));
+                    var _filePathData = Guid.NewGuid().ToString() + Path.GetExtension(path);
+                    path = Path.Combine(Server.MapPath("~/ProductImages/large"), _filePathData);
+                    file.SaveAs(path);
+                    Crop(150, 150, file.InputStream, Path.Combine(Server.MapPath("~/ProductImages/thumb/") + _filePathData));
 
                     allproductimages.ImageName = fileName;
-                    allproductimages.ImagePath = Guid.NewGuid().ToString() + Path.GetExtension(path);
+                    allproductimages.ImagePath = _filePathData;
                     allproductimages.CreatedDate = DateTime.Now;
                     allproductimages.UpdatedDate = DateTime.Now;
                     allproductimages.UserID = curentUserID;

@@ -70,8 +70,34 @@ namespace SHIVAM_ECommerce.Attributes
 
         private void ManageCache(string UserID)
         {
-            if (HttpContext.Current.Cache["UserClaims"] == null)
+            var _isNull = false;
+            if (HttpContext.Current.Cache["UserClaims"] == null && HttpContext.Current.Session["UserClaims"] == null)
             {
+                _isNull = true;
+            }
+            else if (HttpContext.Current.Cache["UserClaims"] != null && HttpContext.Current.Session["UserClaims"] == null)
+            {
+                _isNull = true;
+            }
+            else if (HttpContext.Current.Cache["UserClaims"] == null && HttpContext.Current.Session["UserClaims"] != null)
+            {
+                _isNull = true;
+            }
+            else
+            {
+                var _cacheData = HttpContext.Current.Cache["UserClaims"] as List<ClaimsViewModel>;
+                var _SessionData = HttpContext.Current.Session["UserClaims"] as List<ClaimsViewModel>;
+                if (_cacheData == null || _SessionData == null || _cacheData.Count() == 0 || _SessionData.Count() == 0)
+                {
+                    _isNull = true;
+                }
+
+            }
+
+            if (_isNull == true)
+            {
+                // if (HttpContext.Current.Cache["UserClaims"] == null || HttpContext.Current.Session["UserClaims"] == null)
+
                 ApplicationDbContext db = new ApplicationDbContext();
                 var userClaims = db.AspNetUserClaims.Include(x => x.claims).Where(x => x.User.Id == UserID).ToList();
 
@@ -170,7 +196,10 @@ namespace SHIVAM_ECommerce.Attributes
                         var _stringArray = _childitem.ClaimValue.Split('/');
                         if (_stringArray != null)
                         {
-                            _childitem.ClaimValue = _stringArray[1];
+
+                            if (_stringArray.Length > 2)
+                            { _childitem.ClaimValue = _stringArray[1] + "/" + _stringArray[2]; }
+                            else { _childitem.ClaimValue = _stringArray[1]; }
 
                         }
                     }

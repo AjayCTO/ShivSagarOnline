@@ -61,6 +61,8 @@ namespace SHIVAM_ECommerce.Controllers
                     v = v.Where(b => b.FirstName.Contains(searchitem) || b.LastName.Contains(searchitem) || b.Phone.Contains(searchitem) || b.Email.Contains(searchitem));
                 }
                 sortColumn = sortColumn == "UserName" ? "FirstName" : sortColumn;
+                sortColumn = sortColumn == "FullName" ? "FirstName" : sortColumn;
+
                 //SORT
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
                 {
@@ -106,6 +108,7 @@ namespace SHIVAM_ECommerce.Controllers
             v = v.OrderBy(x => x.OrderDate);
             //SORT
             sortColumn = sortColumn == "Paid" ? "IsPaid" : sortColumn;
+
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
             {
                 v = v.OrderBy(sortColumn + " " + sortColumnDir);
@@ -187,7 +190,7 @@ namespace SHIVAM_ECommerce.Controllers
                     var sendemail = new EmailService.Service.EmailService();
                     sendemail.SendEmail(email, "addcustomer.html", "verfication", username);
                     sendemail.SendEmail(adminemail, admintemple, subject, AdminUserName);
-                        
+
                     this.AddNotification("Customer Created successfully.", NotificationType.SUCCESS);
                     #region Saveinemailrecord
                     var emailrecord = new emailrecord();

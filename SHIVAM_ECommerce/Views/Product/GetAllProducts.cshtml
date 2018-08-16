@@ -23,13 +23,13 @@
                     @if (_CurrentUser.SupplierID != -1)
                     {
 
-                        <div class="item-action dropdown">
-                            <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>
+                        <div class="item-action dropdown pull-right" style="margin-top: -26px;">
+                            <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fa fa-ellipsis-v"></i></a>
                             <div class="dropdown-menu dropdown-menu-right">
 
-                                <a href="/Product/ExportProducts" class="dropdown-item"> <i class="dropdown-icon fe fe-file-plus"></i> Export As Excel</a>
-                                <a href="/Product/Create" class="dropdown-item"><i class="dropdown-icon fe fe-plus"></i> Add New</a>
-                                <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Upload Products</a>
+                                <a href="/Product/ExportProducts" class="dropdown-item"> <i class="dropdown-icon fa fa-download"></i> Export As Excel</a>
+                                <a href="/Product/Create" class="dropdown-item"><i class="dropdown-icon fa fa-plus"></i> Add New</a>
+                                <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class="dropdown-item"><i class="dropdown-icon fa fa-upload"></i> Upload Products</a>
                             </div>
                         </div>
                     }
@@ -83,7 +83,7 @@
                                 <button type="button" class="close" data-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="alert alert-danger" id="ErrorString" style="display:none;">
+                                <div class="alert alert-danger" id="ErrorString" style="display: none; max-height: 150px; overflow: auto;">
 
                                 </div>
 
@@ -123,9 +123,11 @@
 
                             </div>
                             <div class="modal-footer">
-                                <input type="button" value="Upload" id="btnSubmit" class="btn btn-primary" />
+                                
 
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" disabled id="btnSubmit"> <i class="fa fa-check"></i> Upload</button>
+
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>Close</button>
                             </div>
                         </div>
 
@@ -206,6 +208,7 @@
         $('#btnSubmit').on('click', function () {
             $("#ErrorString").hide();
             $("#btnSubmit").attr("disabled", "disbled");
+            $("#btnSubmit").find("i").addClass("fa-spin");
             $.ajax({
                 url: "/Product/UploadExcel",
                 type: "POST",
@@ -216,11 +219,13 @@
             }).done(function (data) {
                 $("#btnSubmit").removeAttr("disabled");
                 $("#btnSubmit").val("Upload file");
+                $("#btnSubmit").find("i").removeClass("fa-spin");
                 if (data.Success == true) {
                     alert("uploaded Successfully");
                     window.location.reload();
                 }
                 else {
+                    $(".clearFile").trigger("click");
                     $("#ErrorString").show("slow");
                     $("#ErrorString").html(data.ErrorString);
 
@@ -262,8 +267,10 @@
             }
             else{
 
+                
                 $('#btnSubmit').attr("disabled","disabled");
                 $('#btnSubmit').attr("disabled",true);
+
             }
         });
     </script>
@@ -353,111 +360,124 @@
             });
 
 
+            if(totalColumns!='0'){
+                table=$('#productlist').DataTable({
+                    bServerSide: true,
 
-            table=$('#productlist').DataTable({
-                bServerSide: true,
+                    "sScrollX": "100%",
+                    "sScrollXInner": "100%",
+                    "bScrollCollapse": true,
+                    //oLanguage: {
+                    //    sProcessing: '<div class="preloader" style="display:block !important;"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /></svg></div>'
+                    //},
+                    "processing": true, // for show progress bar
+                    "serverSide": true,
 
-                "sScrollX": "100%",
-                "sScrollXInner": "100%",
-                "bScrollCollapse": true,
-                //oLanguage: {
-                //    sProcessing: '<div class="preloader" style="display:block !important;"><svg class="circular" viewBox="25 25 50 50"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /></svg></div>'
-                //},
-                "processing": true, // for show progress bar
-                "serverSide": true,
+                    sAjaxSource: '/Handler/GetProducts.ashx',
+                    fnServerData: function (sSource, aoData, fnCallback, oSettings) {
+                        aoData.push( { name:"SupplierID",value: $("#SupplierAuto").attr("alt")} );
 
-                sAjaxSource: '/Handler/GetProducts.ashx',
-                fnServerData: function (sSource, aoData, fnCallback, oSettings) {
-                    aoData.push( { name:"SupplierID",value: $("#SupplierAuto").attr("alt")} );
+                        oSettings.jqXHR = $.ajax({
+                            "dataType": 'json',
+                            "type": "POST",
+                            "url": sSource,
+                            "data": aoData,
+                            "success": fnCallback
+                        });
+                    },
+                    "fnDrawCallback": function( oSettings ) {
+                        UpdateLoadingImage();
+                        $("#productlist").find(".dropdown").on("shown.bs.dropdown", function() {
 
-                    oSettings.jqXHR = $.ajax({
-                        "dataType": 'json',
-                        "type": "POST",
-                        "url": sSource,
-                        "data": aoData,
-                        "success": fnCallback
-                    });
-                },
-                "fnDrawCallback": function( oSettings ) {
-                    UpdateLoadingImage();
-                },
-                iDisplayLength: 10,
-                iDisplayStart: 0,
-                columnDefs: [
-                        {
-                            "targets": [0],
-                            "visible": false
-                        },
-                        {
-                            "targets": [1],
-                            "visible": false
-                        },
+                            $(".dataTables_scrollBody").css("overflow","visible");
+                        });
+                        $("#productlist").find(".dropdown").on("hidden.bs.dropdown", function() {
 
-                         {
-                             "targets": [2],
-                             "visible": false
-                         },
+                            //$("#productlist").css("overflow","auto");
+                            $(".dataTables_scrollBody").css("overflow","hidden");
+                        });
+                    },
+                    iDisplayLength: 10,
+                    iDisplayStart: 0,
+                    columnDefs: [
                             {
-                                "targets": [3],
+                                "targets": [0],
                                 "visible": false
                             },
-                        {
-                            "targets": [4],
-                            'searchable': false,
-                            'orderable': false,
-                            'title':'ProductImage',
+                            {
+                                "targets": [1],
+                                "visible": false
+                            },
 
-                        },
+                             {
+                                 "targets": [2],
+                                 "visible": false
+                             },
+                                {
+                                    "targets": [3],
+                                    "visible": false
+                                },
+                            {
+                                "targets": [4],
+                                'searchable': false,
+                                'orderable': false,
+                                'title':'ProductImage',
 
-                        {
-                            "targets": [9],
-                            "visible": false
+                            },
 
-                        },
+                            {
+                                "targets": [9],
+                                "visible": false
 
-                        {
-                            "targets": [totalColumns],
-                            'searchable': false,
-                            'orderable': false,
-                            'title':'Actions',
-                            'render': function (data, type, full, meta,row) {
+                            },
+
+                            {
+                                "targets": [totalColumns],
+                                'searchable': false,
+                                'orderable': false,
+                                'title':'Actions',
+                                'render': function (data, type, full, meta,row) {
 
 
-                                return "";
+                                    return "";
+                                }
                             }
+
+                    ],
+                    //rowGroup: {
+
+                    //    dataSrc: 5
+                    //},
+                    rowCallback: function( row, data, index ) {
+                        var html="";
+                        if(data[2]!=null){
+
+                            var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
+                            var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
+                            html= '<div class="item-action dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fa fa-ellipsis-v"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
+
+                            html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-pencil"></i> Edit Product </a>';
+                            html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-list"></i> Product Details</a>';
+                            html=html+_b+_c+'</div>';
                         }
 
-                ],
-                //rowGroup: {
+                        $('td:eq('+(totalColumns-5)+')', row).html(html);
 
-                //    dataSrc: 5
-                //},
-                rowCallback: function( row, data, index ) {
+                        var _imageData="";
 
-                    var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
-                    var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
-                    var html= '<div class="item-action dropdown">  <a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fe fe-more-vertical"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
+                        if ($.trim(data[4]) ==='')
+                        {
+                            _imageData= '<div class="avatar d-block" style="background-image: url(/FeaturedImages/no-image.png)"></div>';
+                        } else {
+                            _imageData= '<img class="gridImage" onclick="LoadAllImages('+data[2]+')" src="/images/loading.gif" data-src="/ProductImages/' + data[4] + '">';
+                        }
+                        $('td:eq(0)', row).html(_imageData);
 
-                    html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-tag"></i> Edit Product </a>';
-                    html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fe fe-message-square"></i> Product Details</a>';
-                    html=html+_b+_c+'</div>';
-                    $('td:eq('+(totalColumns-5)+')', row).html(html);
 
-                    var _imageData="";
-
-                    if ($.trim(data[4]) ==='')
-                    {
-                        _imageData= '<div class="avatar d-block" style="background-image: url(/FeaturedImages/no-image.png)"></div>';
-                    } else {
-                        _imageData= '<img class="gridImage" onclick="LoadAllImages('+data[2]+')" src="/images/loading.gif" data-src="/ProductImages/' + data[4] + '">';
                     }
-                    $('td:eq(0)', row).html(_imageData);
+                });
 
-
-                }
-            });
-
-
+            }
 
             //table.columns().every(function () {
             //    var that = this;
@@ -526,6 +546,14 @@
 
             window.print();
         }
+    </script>
+
+    <script>
+
+        $(function() {
+
+
+        });
     </script>
 
     <style>

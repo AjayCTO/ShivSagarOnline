@@ -117,7 +117,7 @@ namespace SHIVAM_ECommerce.Controllers
 
         public ActionResult CreateNew()
         {
-            var allplans = db.Plans.Include(x => x.Features).ToList();
+            var allplans = db.Plans.Where(x=>x.IsActive==true).Include(x => x.Features).ToList();
             ViewBag.allplans = allplans;
             return View(new SupplierVM());
 
@@ -178,7 +178,7 @@ namespace SHIVAM_ECommerce.Controllers
                                     command.Parameters.AddWithValue("@ClaimID", claim.Id);
 
                                     command.Parameters.AddWithValue("@IsActive", "True");
-                                    command.Parameters.AddWithValue("@DisplayLabel", "abc");
+                                    command.Parameters.AddWithValue("@DisplayLabel", claim.Notes);
                                     command.Parameters.AddWithValue("@Discriminator", "ApplicationUserClaim");
                                     command.Parameters.AddWithValue("@User_Id", user.Id);
 
@@ -218,7 +218,7 @@ namespace SHIVAM_ECommerce.Controllers
 
                 }
                 ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
-                var allplans = db.Plans.ToList();
+                var allplans = db.Plans.Where(x => x.IsActive == true).Include(x => x.Features).ToList();
                 ViewBag.allplans = allplans;
                 return View(supplier);
             }
@@ -236,7 +236,7 @@ namespace SHIVAM_ECommerce.Controllers
                 }
                 throw;
                 ViewBag.PlanID = new SelectList(db.Plans, "Id", "PlanName", supplier.PlanID);
-                var allplans = db.Plans.ToList();
+                var allplans = db.Plans.Where(x => x.IsActive == true).Include(x => x.Features).ToList();
                 ViewBag.allplans = allplans;
                 return View(supplier);
             }

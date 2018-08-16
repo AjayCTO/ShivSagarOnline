@@ -997,7 +997,6 @@
     <Content Include="Views\Manufacturers\Index.cshtml" />
     <Content Include="Views\Product\ImportExport.cshtml" />
     <Content Include="Views\ProductAttributes\AddAttributesForSupplier.cshtml" />
-    <Content Include="Views\Product\ProductDetails.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Customer\Create.cshtml" />
     <Content Include="Views\Customer\Delete.cshtml" />
@@ -1062,6 +1061,7 @@
     <Content Include="Views\Supplier\CreateNew.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel - Copy.cshtml" />
+    <Content Include="Views\Product\ProductDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
