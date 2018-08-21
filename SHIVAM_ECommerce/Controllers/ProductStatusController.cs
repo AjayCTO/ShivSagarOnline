@@ -148,7 +148,8 @@ namespace SHIVAM_ECommerce.Controllers
             ProductStatus productstatus = await db.ProductStatus.FindAsync(id);
             if (productstatus == null)
             {
-                return HttpNotFound();
+               // return HttpNotFound();
+                return View(productstatus);
             }
             return View(productstatus);
         }

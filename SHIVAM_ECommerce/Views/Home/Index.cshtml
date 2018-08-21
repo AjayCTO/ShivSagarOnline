@@ -44,8 +44,18 @@
                         <span><i class="fa fa-archive f-s-40 color-warning"></i></span>
                     </div>
                     <div class="media-body media-text-right">
-                        <h2>@ViewBag.SupplierCount</h2>
-                        <p class="m-b-0">Suppliers</p>
+                        @if (_CurrentUser.IsSuperAdmin == true)
+                        {
+                        <h2>@ViewBag.SupplierCount</h2>    
+                            <p class="m-b-0">Suppliers</p>
+                        }
+                        else
+                        {
+                        <h2>@ViewBag.ProductCount</h2>    
+                            <p class="m-b-0">Products</p>    
+                        }
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -74,8 +84,7 @@
                     <h4 class="card-title">Recent Customers</h4>
 @if (Request.IsAuthenticated)
      {
- if (_CurrentUser.IsSuperAdmin)
-{
+
                     <table id="myTable" class="table table-striped table-bordered dt-responsive">
                         <thead>
                             <tr>
@@ -87,7 +96,6 @@
                             </tr>
                         </thead>
                     </table>
-}
 }
                 </div>
             </div>

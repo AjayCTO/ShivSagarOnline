@@ -3,6 +3,7 @@
     ViewBag.Title = "GetAllProducts";
     var NewCount = (TempData["cols"] as List<object>).Count();
     var _CurrentUser = Session["CurrentUserContext"] as SHIVAM_ECommerce.ViewModels.CurrentUserContext;
+    var _suppliers = ViewBag.Suppliers as List<SHIVAM_ECommerce.Models.Supplier>;
 }
 <div class="barcode-container" style="text-align:center;">
 
@@ -45,8 +46,15 @@
 
                         </div>
                         <div class="col-md-4">
+                            <select class="form-control" style="position: absolute;top:10px;z-index:10;" id="SupplierData">
+                                <option value="">Select Supplier</option>
+                                @foreach (var _item in _suppliers)
+                                {
+                                    <option value="@_item.Id">@_item.FirstName  @_item.LastName</option>
 
-                            <input type="text" class="form-control" style="position: absolute;top:10px;z-index:10;" name="name" id="SupplierAuto" placeholder="Search By Supplier" />
+                                }
+                            </select>
+                            @*<input type="text" class="form-control" style="position: absolute;top:10px;z-index:10;" name="name" id="SupplierAuto" placeholder="Search By Supplier" />*@
                         </div>
                     </div>
                 }
@@ -123,7 +131,7 @@
 
                             </div>
                             <div class="modal-footer">
-                                
+
 
                                 <button type="button" class="btn btn-primary" disabled id="btnSubmit"> <i class="fa fa-check"></i> Upload</button>
 
@@ -267,7 +275,7 @@
             }
             else{
 
-                
+
                 $('#btnSubmit').attr("disabled","disabled");
                 $('#btnSubmit').attr("disabled",true);
 
@@ -316,22 +324,25 @@
                 if(data.Data.length>0)
                 {
                     var _columns="";
+                    var _CounterColumn=0;
                     for (var i = 0; i < data.Data.length; i++) {
                         if(i!=0 && i!=1 && i!=2 && i!=3 && i!=9){
                             _columns+='<th class="sorting" tabindex="'+i+'" aria-controls="productlist" rowspan="1" colspan="1" aria-label="'+data.Data[i]+'": activate to sort column ascending">'+data.Data[i]+'</th>"';
 
 
-
                         }
+                        _CounterColumn+=1;
+
                     }
 
                     $("#Columns").html(_columns+"<th>Actions</th>");
 
                     table.clear().draw();
-
+                    
+                    totalColumns=_CounterColumn;
                 }
                 else{
-                    alert("The data returned from query stored procedure is zero.");
+                    toastr.warning("This supplier doesn't have any product attributes that's why it doesn't have any products.");
                 }
 
             });
@@ -347,6 +358,8 @@
             //    }
             //});
 
+            $("#SupplierData").val(_supplierID);
+
             $("#SupplierAuto").change(function () {
                 if ($.trim($(this).attr("alt")) == "") {
                     $(this).attr("alt", -1);
@@ -354,9 +367,11 @@
 
             });
 
-            $("#SupplierAuto").blur(function () {
-                GetColumns($(this).attr("alt"));
+            $("#SupplierData").change(function () {
+                if($.trim($(this).val())!=""){
 
+                    GetColumns($(this).val());
+                }
             });
 
 
@@ -375,7 +390,7 @@
 
                     sAjaxSource: '/Handler/GetProducts.ashx',
                     fnServerData: function (sSource, aoData, fnCallback, oSettings) {
-                        aoData.push( { name:"SupplierID",value: $("#SupplierAuto").attr("alt")} );
+                        aoData.push( { name:"SupplierID",value: $("#SupplierData").val()} );
 
                         oSettings.jqXHR = $.ajax({
                             "dataType": 'json',
@@ -449,30 +464,33 @@
                     //    dataSrc: 5
                     //},
                     rowCallback: function( row, data, index ) {
-                        var html="";
-                        if(data[2]!=null){
 
-                            var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
-                            var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
-                            html= '<div class="item-action dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fa fa-ellipsis-v"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
+                        if(data[12]!=null){
 
-                            html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-pencil"></i> Edit Product </a>';
-                            html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-list"></i> Product Details</a>';
-                            html=html+_b+_c+'</div>';
+                            var html="";
+                            if(data[2]!=null){
+
+                                var _b = ' <a onclick="nextBarcode(&#34;' + data[5] + '&#34;)" class="dropdown-item" ><i class="dropdown-icon fa fa-print"></i> Product Barcode</a>';
+                                var _c = ' <a href="/Product/AssignProductImages?ProductID='+data[3]+'" class="dropdown-item" ><i class="dropdown-icon fa fa-image"></i> Assign Images</a>';
+                                html= '<div class="item-action dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="icon"><i class="fa fa-ellipsis-v"></i></a>   <div class="dropdown-menu dropdown-menu-right">';
+
+                                html=html+'<a href="/Product/Edit?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-pencil"></i> Edit Product </a>';
+                                html=html+'<a href="/Product/ProductDetails?productID='+data[2]+'" class="dropdown-item"><i class="dropdown-icon fa fa-list"></i> Product Details</a>';
+                                html=html+_b+_c+'</div>';
+                            }
+
+                            $('td:eq('+(totalColumns-5)+')', row).html(html);
+
+                            var _imageData="";
+
+                            if ($.trim(data[4]) ==='')
+                            {
+                                _imageData= '<div class="avatar d-block" style="background-image: url(/FeaturedImages/no-image.png)"></div>';
+                            } else {
+                                _imageData= '<img class="gridImage" onclick="LoadAllImages('+data[2]+')" src="/images/loading.gif" data-src="/ProductImages/' + data[4] + '">';
+                            }
+                            $('td:eq(0)', row).html(_imageData);
                         }
-
-                        $('td:eq('+(totalColumns-5)+')', row).html(html);
-
-                        var _imageData="";
-
-                        if ($.trim(data[4]) ==='')
-                        {
-                            _imageData= '<div class="avatar d-block" style="background-image: url(/FeaturedImages/no-image.png)"></div>';
-                        } else {
-                            _imageData= '<img class="gridImage" onclick="LoadAllImages('+data[2]+')" src="/images/loading.gif" data-src="/ProductImages/' + data[4] + '">';
-                        }
-                        $('td:eq(0)', row).html(_imageData);
-
 
                     }
                 });

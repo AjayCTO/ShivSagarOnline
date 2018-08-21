@@ -24,16 +24,16 @@
 
 }
 
-@*<div class="header-nav d-none d-lg-flex">
+<div class="header-nav d-none d-lg-flex">
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
-                <ul class="nav nav-tabs">
+                <ul class="navbar-nav my-lg-0">
 
 
 
 
-                    @if (Request.IsAuthenticated)
+    @if (Request.IsAuthenticated)
                     {
                         if (_AllClaims != null)
                         {
@@ -43,22 +43,28 @@
                                 if (_item.AllClaims.Count() == 1)
                                 {
                                     <li class="nav-item">
-                                        <a href="/@_item.AllClaims[0].ClaimValue" class="nav-link"><i class="fe fe-box"></i> @_item.AllClaims[0].Title</a>
+                                        <a href="/@_item.AllClaims[0].ClaimValue" class="nav-link"> @_item.AllClaims[0].Title</a>
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="nav-item dropdown">
-                                        <a href="javascript:void(0)" class="nav-link"><i class="fe fe-box"></i> @_item.Group</a>
-                                        <div class="nav-submenu nav dropdown-menu dropdown-menu-arrow">
-                                            <div></div>
-                                            @foreach (var _childitem in _item.AllClaims.ToList())
-                                        {
-                                        <a href="/@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
-                                        }
+                                        <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle"> @_item.Group <i class="fa fa-caret-down"></i></a>
+                                        <div class="dropdown-menu">
+                                            <ul>
+                                                @foreach (var _childitem in _item.AllClaims.ToList())
+{
+    <li>
+        <a href="/@_childitem.ClaimValue" class="nav-item ">@_childitem.Title</a>
+    </li>
 
+}
+
+                                                </ul>
 
                                         </div>
+
+
 
                                     </li>
 
@@ -67,7 +73,7 @@
                             }
                         }
 
-                   
+
 
 
 
@@ -75,90 +81,10 @@
 
                     }
                 </ul>
-            </div>
-            <div class="col-3 ml-auto">
 
             </div>
+        
         </div>
     </div>
-</div>*@
-
-<div class="scroll-sidebar">
-    <!-- Sidebar navigation-->
-    <nav class="sidebar-nav">
-        <ul id="sidebarnav">
-            <li class="nav-devider"></li>
-            <li class="nav-label">Home</li>
-
-            <li>
-                <a  href="/" aria-expanded="false"><i class="fa fa-home"></i><span class="hide-menu">Dashboard </span> </a>
-             
-            </li>
-
-
-            @if (Request.IsAuthenticated)
-            {
-                if (_AllClaims != null)
-                {
-
-                    foreach (var _item in _AllClaims.ToList())
-                    {
-                        if (_item.AllClaims.Count() == 1)
-                        {
-                            <li>
-
-                                <a href="/@_item.AllClaims[0].ClaimValue" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.AllClaims[0].Title </span> </a>
-
-                              
-                            </li>
-                        }
-                        else
-                        {
-                            
-                            
-                               <li class="nav-label">All @_item.Group</li>
-                            
-                            <li>
-                            
-
-
-                                <a class="has-arrow" href="#" aria-expanded="false"><i class="fa fa-list"></i><span class="hide-menu">@_item.Group </span> </a>
-
-                                <ul aria-expanded="false" class="collapse">
-
-                                    @foreach (var _childitem in _item.AllClaims.ToList())
-                                    {
-                                        
-                                          <li><a href="/@_childitem.ClaimValue"> <i class="fa fa-dot-circle-o"></i> @_childitem.Title </a></li>
-                                        
-                                      
-                                    }
-
-                                  
-                                 
-                                </ul>
-
-                                
-
-                            </li>
-
-                        }
-
-                    }
-                }
-
-
-
-
-
-
-
-            }
-
-
-          
-          
-        </ul>
-    </nav>
-    <!-- End Sidebar navigation -->
 </div>
+

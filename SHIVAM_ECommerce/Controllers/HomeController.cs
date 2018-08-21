@@ -37,9 +37,20 @@ namespace SHIVAM_ECommerce.Controllers
             }
             else
             {
-                ViewBag.SupplierCount = 0;
-                ViewBag.CustomerCount = 0;
-                ViewBag.OrdersCount = 0;
+
+                var _orderIds = db.OrderItems.Where(x => x.SupplierID == CurrentUserData.SupplierID).Select(x => x.Orders_Id);
+                var _customerIds = _orderIds != null ? db.Orders.Include(o => o.customer).Where(x => _orderIds.Contains(x.Id)).Select(x => x.CustomerID) : null;
+
+                var customers = _orderIds != null ? db.Customers.Where(x => _customerIds.Contains(x.Id)).Count() : 0;
+
+                var _orderIdss = db.OrderItems.Where(x => x.SupplierID == CurrentUserData.SupplierID).Select(x => x.Orders_Id);
+                var orders = _orderIdss != null ? db.Orders.Include(o => o.customer).Where(x => _orderIds.Contains(x.Id)).Count() : 0;
+                var _productids = db.Products.Where(x => x.SupplierID == CurrentUserData.SupplierID).Select(x => x.Id);
+
+
+                ViewBag.ProductCount = _productids != null ? db.ProductAttributeWithQuantity.Where(x => _productids.Contains(x.ProductId)).Count() : 0;
+                ViewBag.CustomerCount = customers;
+                ViewBag.OrdersCount = orders;
 
             }
 
@@ -54,10 +65,17 @@ namespace SHIVAM_ECommerce.Controllers
         }
 
 
+        //public ActionResult Error()
+        //{
+        //    ViewBag.Message = "You are not authorized to access this page, please contact administrator.";
+
+        //    return View();
+        //}
+
+        [CustomAuthorize]
         public ActionResult Error()
         {
-            ViewBag.Message = "You are not authorized to access this page, please contact administrator.";
-
+            ViewBag.Message = Session["LastException"] as Exception;
             return View();
         }
 

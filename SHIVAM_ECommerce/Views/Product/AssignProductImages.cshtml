@@ -19,9 +19,8 @@
 
                 <div class="row row-cards">
 
-                    <div ng-repeat="obj in Images" ng-click="AddToArray(obj.ImagePath)" class="{{DisableCursor(obj.ImageName)}} col-sm-6 col-lg-2">
+                    <div ng-repeat="obj in Images" ng-click="AddToArray(obj.ImagePath)" class="{{DisableCursor(obj.ImagePath)}} col-sm-6 col-lg-2">
                         <div class="card p-3 {{IsSelected(obj.ImagePath)}}">
-                            @*{{obj.ImagePath}}*@
 
                             <div style="display:none;" class="assiglabel">Assigned</div>
 

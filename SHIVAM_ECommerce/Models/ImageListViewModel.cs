@@ -9,7 +9,7 @@ namespace SHIVAM_ECommerce.Controllers
     {
         public int pageSize { get; set; }
         public int page { get; set; }
-
+        public int ProductID { get; set; }
         public string SearchString { get; set; }
     }
 }

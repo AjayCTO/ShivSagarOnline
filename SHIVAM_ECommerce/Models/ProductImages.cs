@@ -16,12 +16,20 @@ namespace SHIVAM_ECommerce.Models
         public string Title { get; set; }
         //public int ProductId { get; set; }
         public int ProductQuantityId { get; set; }
-        
 
+        public int? SupplierID { get; set; }
+
+        public int? ImageID { get; set; }
         //[ForeignKey("ProductId")]
         //public virtual Product Product { get; set; }
 
         [ForeignKey("ProductQuantityId")]
         public virtual ProductAttributeWithQuantity ProductWithQuantity { get; set; }
+
+        [ForeignKey("SupplierID")]
+        public virtual Supplier Supplier { get; set; }
+
+        [ForeignKey("ImageID")]
+        public virtual AllProductImages Image { get; set; }
     }
 }

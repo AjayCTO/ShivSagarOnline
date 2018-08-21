@@ -131,6 +131,7 @@ namespace SHIVAM_ECommerce.Controllers
         // GET: /UserClaims/Create
         public ActionResult Create()
         {
+            ViewBag.Roles = db.Roles;
             return View();
         }
 
@@ -139,16 +140,27 @@ namespace SHIVAM_ECommerce.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,ClaimType,ClaimValue,IsActive")] ApplicationUserClaim claims)
+        public async Task<ActionResult> Create([Bind(Include = "Id,ClaimType,ClaimValue,IsActive,CreatedDate,UpdatedDate,Sort,Title,ClaimGroup,Description,Notes,Role")] Claims claims)
         {
             if (ModelState.IsValid)
             {
-                db.AspNetUserClaims.Add(claims);
+                Claims claim = new Claims();
+                claim.ClaimType=claims.ClaimType;
+                claim.ClaimValue=claims.ClaimValue;
+                claim.IsActive=claims.IsActive;
+                claim.CreatedDate=DateTime.Now;
+                claim.UpdatedDate = DateTime.Now;
+                claim.Role = claims.Role;
+                claim.Notes = claims.Notes;
+                claim.Title = claims.Title;
+                claim.Description = claims.Description;
+                claim.ClaimGroup = claims.ClaimGroup; 
+                db.Claims.Add(claim);
                 await db.SaveChangesAsync();
                 this.AddNotification("Claims created successfully.", NotificationType.SUCCESS);
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Roles = db.Roles;
             return View(claims);
         }
 

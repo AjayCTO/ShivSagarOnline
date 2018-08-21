@@ -203,6 +203,7 @@
             if ($("#SupplierForm").valid()) {
                 $("#createNewAccount").attr("disabled","disabled")
                 $("#createNewAccount").find("i").addClass("fa-spin");
+                $("#SupplierForm").submit();
             }
         });
         

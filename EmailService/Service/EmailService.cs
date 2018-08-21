@@ -12,7 +12,7 @@ namespace EmailService.Service
     public class EmailService
     {
 
-        public void SendEmail(string sendTo, string TemplateName, string Emailsubject, string username)
+        public void SendEmail(string sendTo, string TemplateName, string Emailsubject, string textToReplace)
         { 
             //Fetching Settings from WEB.CONFIG file.  
             string emailSender = ConfigurationManager.AppSettings["username"].ToString();
@@ -30,7 +30,7 @@ namespace EmailService.Service
             str.Close();
 
             //Repalce [newusername] = signup user name   
-            MailText = MailText.Replace("[newusername]", username.Trim());
+            MailText = MailText.Replace("[textToReplace]", textToReplace.Trim());
 
 
             string subject = Emailsubject;
@@ -89,7 +89,7 @@ namespace EmailService.Service
 
             //Fetching Email Body Text from EmailTemplate File.  
             //string FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/EmailService/EmailTemplates/") + TemplateName;
-            string FilePath = "D:\\ECommerce\\SHIVAMECommerce_28April\\EmailService\\EmailTemplates\\" + TemplateName;
+            string FilePath = System.Web.Hosting.HostingEnvironment.MapPath("~/EmailTemplates/" + TemplateName);
             StreamReader str = new StreamReader(FilePath);
             string MailText = str.ReadToEnd();
             str.Close();

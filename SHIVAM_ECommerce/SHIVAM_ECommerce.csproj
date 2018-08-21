@@ -291,6 +291,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\EmailRecordsController.cs" />
+    <Compile Include="Controllers\EmailSendersController.cs" />
     <Compile Include="Controllers\FeaturedSupplierController.cs" />
     <Compile Include="Controllers\FeaturesController.cs" />
     <Compile Include="Controllers\ManageClaimsController.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Controllers\ThresholdController.cs" />
     <Compile Include="Controllers\UserClaimsController.cs" />
     <Compile Include="Models\emailrecord.cs" />
+    <Compile Include="Models\EmailSender.cs" />
     <Compile Include="Models\FeaturedSupplier.cs" />
     <Compile Include="Models\Features.cs" />
     <Compile Include="Models\ImageListViewModel.cs" />
@@ -354,6 +356,7 @@
     <Compile Include="ViewModels\CurrentUserContext.cs" />
     <Compile Include="ViewModels\CustomClaims.cs" />
     <Compile Include="ViewModels\CustomRoles.cs" />
+    <Compile Include="ViewModels\EmailDetail.cs" />
     <Compile Include="ViewModels\PlanViewModel.cs" />
     <Compile Include="ViewModels\ProductImageModel.cs" />
     <Compile Include="ViewModels\ProductAttributeModel.cs" />
@@ -369,6 +372,7 @@
     <Content Include="CategoryImage\Shivam_21.jpg" />
     <Content Include="CategoryImage\Shivam_29.jpg" />
     <Content Include="CategoryImage\Shivam_46.jpg" />
+    <Content Include="Content\AdminLTE.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\buttons.dataTables.min.css" />
@@ -1062,6 +1066,16 @@
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\MenuHelperModel - Copy.cshtml" />
     <Content Include="Views\Product\ProductDetails.cshtml" />
+    <Content Include="Views\EmailSenders\Create.cshtml" />
+    <Content Include="Views\EmailSenders\Delete.cshtml" />
+    <Content Include="Views\EmailSenders\Details.cshtml" />
+    <Content Include="Views\EmailSenders\Edit.cshtml" />
+    <Content Include="Views\EmailSenders\Forward.cshtml" />
+    <Content Include="Views\EmailSenders\Index.cshtml" />
+    <Content Include="Views\EmailSenders\parital.cshtml" />
+    <Content Include="Views\EmailSenders\Reply.cshtml" />
+    <Content Include="Views\EmailSenders\UniqueDetailView.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\MenuHelperModelMobile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

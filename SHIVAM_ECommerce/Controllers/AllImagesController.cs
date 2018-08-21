@@ -60,6 +60,27 @@ namespace SHIVAM_ECommerce.Controllers
             }
         }
 
+
+        [HttpPost]
+        public ActionResult AllImageDataSelected(ImageListViewModel model)
+        {
+            try
+            {
+
+                var _data = db.AllProductImages.Where(a => a.SupplierID == CurrentUserData.SupplierID);
+                int _TotalCount = _data.Count();
+                _data = !string.IsNullOrEmpty(model.SearchString) ? _data.Where(x => x.ImageName.Contains(model.SearchString)) : _data;
+                int _rowsSkip = model.pageSize * (model.page - 1);
+                var _Results = _data.OrderBy(x => x.Sort).Skip(_rowsSkip).Take(model.pageSize).ToList();
+
+                return Json(new { Success = true, data = _Results.Select(x => new { x.Id, x.ImageName, x.ImagePath, x.Sort, x.Description }), ex = "", TotalCount = _TotalCount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, data = "", ex = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public static void Crop(int Width, int Height, Stream streamImg, string saveFilePath)
         {
             Bitmap sourceImage = new Bitmap(streamImg);

@@ -90,6 +90,9 @@ namespace SHIVAM_ECommerce.Models
 
         public System.Data.Entity.DbSet<SHIVAM_ECommerce.Models.ThreshHold> ThreshHolds { get; set; }
 
+
+        public DbSet<EmailSender> EmailSenders { get; set; }
+
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
         //{
    

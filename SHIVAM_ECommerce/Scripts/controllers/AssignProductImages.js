@@ -93,9 +93,9 @@
             }
         };
         function GetImages() {
-            var _model = { pageSize: $scope.itemsPerPage, page: $scope.currentPage, SearchString: $scope.SearchString };
+            var _model = { ProductID: _ProductID, pageSize: $scope.itemsPerPage, page: $scope.currentPage, SearchString: $scope.SearchString };
             $.ajax({
-                url: "/AllImages/AllImageData",
+                url: "/AllImages/AllImageDataSelected",
                 type: "POST",
                 dataType: "json",
                 data: JSON.stringify({ "Model": _model }),
@@ -109,6 +109,8 @@
                         debugger;
                         if (data.Success==true) {
                             $scope.Images = data.data;
+
+                            console.log($scope.Images);
                             $scope.TotalItems = data.TotalCount;
                             CheckScopeBeforeApply();
                         }
@@ -182,6 +184,7 @@
             }
             if (!_CheckVar) { $scope.Paths.push(Path) } else { $scope.Paths = _TempImageData };
             CheckScopeBeforeApply();
+
         }
 
 

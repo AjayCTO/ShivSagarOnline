@@ -19,6 +19,8 @@ namespace SHIVAM_ECommerce.ViewModels
     public class ProductImagesAssignViewModel
     {
         public int ProductID { get; set; }
+
+        public int ImageID { get; set; }
         public List<string> Path { get; set; }
     }
 }

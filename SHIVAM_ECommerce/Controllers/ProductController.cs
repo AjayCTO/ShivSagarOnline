@@ -98,6 +98,7 @@ namespace SHIVAM_ECommerce.Controllers
             var _supplierdata = ctx.Suppliers.FirstOrDefault();
             SupplierId = SupplierId == -1 ? (_supplierdata != null ? _supplierdata.Id : -1) : SupplierId;
             ViewBag.SupplierID = SupplierId;
+            ViewBag.Suppliers = CurrentUserData.SupplierID == -1 ? db.Suppliers.ToList() : new List<Supplier>();
             var _productAttributes = db.ProductAttributesRelation.Where(x => x.SupplierID == CurrentUserData.SupplierID).ToList();
 
             using (var cmd = ctx.Database.Connection.CreateCommand())
@@ -435,8 +436,9 @@ namespace SHIVAM_ECommerce.Controllers
         {
             ViewBag.ProductID = ProductID;
             var _db = new ApplicationDbContext();
-            var _Data = _db.ProductImages.Where(x => x.ProductQuantityId == ProductID).Select(x => x.ImageName).ToList();
-            ViewBag.AlreadySelected = _Data;
+            var _Data = _db.ProductImages.Where(x => x.ProductQuantityId == ProductID).ToList();
+            ViewBag.AlreadySelected = _Data.Select(x => x.ImageName).ToList();
+            ViewBag.ImageData = _Data;
             return View();
         }
 

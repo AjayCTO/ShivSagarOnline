@@ -14,10 +14,17 @@ namespace SHIVAM_ECommerce
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            
+
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Bootstrapper.Initialise();
+        }
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var _exception = Server.GetLastError();
+            Session["LastException"] = _exception;
+            Response.Redirect("/Home/Error");
+
         }
     }
 }
