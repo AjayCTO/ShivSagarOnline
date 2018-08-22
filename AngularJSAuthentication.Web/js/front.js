@@ -171,29 +171,6 @@ $(function () {
 
   
 
-    // ------------------------------------------------------- //
-    // Brands Slider
-    // ------------------------------------------------------ //
-    $('.brands-slider').owlCarousel({
-        loop: true,
-        margin: 20,
-        dots: true,
-        nav: false,
-        smartSpeed: 400,
-        responsiveClass: true,
-        responsive: {
-            0: {
-                items: 2
-            },
-            600: {
-                items: 3
-            },
-            1000: {
-                items: 6,
-                loop: false
-            }
-        }
-    });
 
     // ------------------------------------------------------- //
     // Google Maps

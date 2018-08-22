@@ -22,5 +22,9 @@ namespace AngularJSAuthentication.API.Models
 
         public string isFeatured { get; set; }
 
+        public string isMostSale { get; set; }
+
+        public string TopRated { get; set; }
+
     }
 }

@@ -61,6 +61,7 @@
     <Content Include="app\controllers\indexController.js" />
     <Content Include="app\controllers\loginController.js" />
     <Content Include="app\controllers\ordersController.js" />
+    <Content Include="app\controllers\productController.js" />
     <Content Include="app\controllers\refreshController.js" />
     <Content Include="app\controllers\signupController.js" />
     <Content Include="app\controllers\tokensManagerController.js" />
@@ -76,6 +77,7 @@
     <Content Include="app\views\Merchant.html" />
     <Content Include="app\views\MerchantList.html" />
     <Content Include="app\views\orders.html" />
+    <Content Include="app\views\product.html" />
     <Content Include="app\views\refresh.html" />
     <Content Include="app\views\Service.html" />
     <Content Include="app\views\signup.html" />
@@ -114,9 +116,10 @@
     <Content Include="css\custom.css" />
     <Content Include="css\style.default.css" />
     <Content Include="html5shiv\3.7.3\html5shiv.min.js" />
-    <Content Include="img\logo.png" />
+    <Content Include="img\logo-.png" />
     <Content Include="img\no-image.png" />
     <Content Include="img\nocategory.png" />
+    <Content Include="img\logo.png" />
     <Content Include="index.html" />
     <Content Include="js\front.js" />
     <Content Include="js\modernizr.custom.79639.js" />

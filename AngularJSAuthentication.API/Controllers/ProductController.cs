@@ -17,8 +17,8 @@ namespace AngularJSAuthentication.API.Controllers
     {
         public List<object> newcolumns = null;
         private int filteredRows = 0;
-       private string cs = ConfigurationManager.ConnectionStrings["AuthContext"].ConnectionString;
-
+        private string cs = ConfigurationManager.ConnectionStrings["AuthContext"].ConnectionString;
+        SHIVAMEcommerceDBEntities db = new SHIVAMEcommerceDBEntities();
         // GET api/featuedproduct
 
         [HttpPost]
@@ -34,6 +34,28 @@ namespace AngularJSAuthentication.API.Controllers
             string Lowprice = model.lowprice;
             string Highprice = model.highprice;
             string IsFeatured = model.isFeatured;
+            string _ProductIds = "";
+
+            if (model.isMostSale == "1")
+            {
+                var _orders = db.Orders.Include("OrderStatu").Where(x => x.OrderStatu.Status == "Completed").Select(x => x.Id);
+                var _products = _orders != null && _orders.Count() != 0 ? db.OrderItems.Where(x => _orders.Contains(x.Orders_Id)).GroupBy(x => x.ProductID).Select(groupByRange => new { ProductID = groupByRange.Key, Total = groupByRange.Count() }) : null;
+
+                var _productIDList = _products != null ? _products.OrderByDescending(x => x.Total).Take(10).Select(x => x.ProductID) : null;
+
+                _ProductIds = _productIDList != null ? string.Join(",", Array.ConvertAll(_productIDList.ToArray(), i => i.ToString())) : "";
+            }
+
+
+            if (model.TopRated == "1")
+            {
+                var TopProducts = db.CustomerReviews.Where(x => x.Rating != null).GroupBy(x => x.ProductId).Select(x => x.FirstOrDefault())
+                    .OrderByDescending(x => x.Rating).Take(5).ToList();
+
+                var TopProductsIds = TopProducts.Select(x => x.ProductId);
+
+                _ProductIds = TopProductsIds != null ? string.Join(",", Array.ConvertAll(TopProductsIds.ToArray(), i => i.ToString())) : "";
+            }
 
 
 
@@ -117,9 +139,17 @@ namespace AngularJSAuthentication.API.Controllers
 
                     Value = string.IsNullOrEmpty(IsFeatured) ? "0" : IsFeatured
                 };
+
                 cmd.Parameters.Add(paramIsFeaturedText);
 
+                      SqlParameter paramProductIDText = new SqlParameter()
+                {
+                    ParameterName = "@ProductIds",
 
+                    Value = string.IsNullOrEmpty(_ProductIds) ? "" : _ProductIds
+                };
+                      cmd.Parameters.Add(paramProductIDText);
+                
 
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -182,6 +212,6 @@ namespace AngularJSAuthentication.API.Controllers
             }
         }
 
-      
+
     }
 }

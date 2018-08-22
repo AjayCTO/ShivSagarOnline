@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('indexController', ['$scope', '$location', 'authService', function ($scope, $location, authService) {
+app.controller('indexController', ['$scope','$rootScope', '$location', 'authService', function ($scope,$rootScope, $location, authService) {
     $scope.searchcategories = [];
     var _localCategories = localStorage.getItem("Categories");
     if (_localCategories != null && _localCategories != undefined) {
@@ -13,6 +13,12 @@ app.controller('indexController', ['$scope', '$location', 'authService', functio
         authService.logOut();
         $location.path('/home');
     }
+
+    $rootScope.$on("GetCategories", function () {
+        $scope.GetCategories();
+    });
+
+
     $scope.GetCategories = function () {
         $.ajax({
             url: serviceBase+'/api/Categories/GetCategories',

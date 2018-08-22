@@ -1,15 +1,28 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', function ($scope) {
+app.controller('homeController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
     $scope.searchcategoriesslider = [];
+    $scope.pagedItems = [];
+    $scope.MostSaledItems = [];
+    $scope.TopRatedItems = [];
+
+    $scope.childmethod = function () {
+        $rootScope.$emit("GetCategories", {});
+    }
     var _localCategories = localStorage.getItem("Categories");
     if (_localCategories != null && _localCategories != undefined) {
+        
         _localCategories = JSON.parse(_localCategories);
 
     }
     else {
-        _localCategories = [];
+         $scope.childmethod();
+        _localCategories = localStorage.getItem("Categories")
+        _localCategories = JSON.parse(_localCategories);
+       
     }
+
+ 
 
     $scope.searchcategoriesslider = _localCategories;
 
@@ -21,11 +34,11 @@ app.controller('homeController', ['$scope', function ($scope) {
     }
 
 
-    function productSlider() {
+    function productSlider(className) {
         // ------------------------------------------------------- //
         // Products Slider
         // ------------------------------------------------------ //
-        $('.products-slider').owlCarousel({
+        $(className).owlCarousel({
             loop: false,
             margin: 20,
             dots: true,
@@ -56,34 +69,130 @@ app.controller('homeController', ['$scope', function ($scope) {
     $scope.pagedItems = [];
     $scope.total = 0;
 
-    function init() {
+    $scope.GetSupplierImage = function (Path) {
+        if ($.trim(Path) != "") {
+            return _GlobalImagePath + "/SupplierImage/" + Path;
+        }
+        return "../img/no-image.png";
+    }
+    $scope.GetSuppliers = function () {
+        $.ajax({
+            url: serviceBase + '/api/Supplier/GetSuppliers',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data, textStatus, xhr) {
 
-        var _model = { displayLength: 1000, displayStart: 0, searchText: "", filtertext: "", Categories: "", lowprice: "", highprice: "", isFeatured: "1" };
+
+                debugger;
+                $scope.Suppliers = data;
+
+
+                console.log($scope.Suppliers);
+
+                $scope.$apply();
+
+                $('.brands-slider').owlCarousel({
+                    loop: true,
+                    margin: 20,
+                    dots: true,
+                    nav: false,
+                    smartSpeed: 800,
+                    responsiveClass: true,
+                    responsive: {
+                        0: {
+                            items: 2
+                        },
+                        600: {
+                            items: 3
+                        },
+                        1000: {
+                            items: 6,
+                            loop: false
+                        }
+                    }
+                });
+
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+
+                debugger;
+            }
+        });
+    }
+
+    $scope.GetFeaturedProducts = function (_Type) {
+
+        var _isFeatured = "";
+        var _MostSale = "";
+        var _topRated = "";
+        var _displaylength = 10;
+        var _ClassName = "";
+        switch (_Type) {
+            case 1:
+                _isFeatured = "1";
+                _displaylength = 100;
+                break;
+            case 2:
+                _MostSale = "1";
+                _displaylength = 100;
+                break;
+            case 3:
+                _topRated = "1";
+                _displaylength = 20;
+                break;
+            default:
+
+        }
+        var _model = { displayLength: _displaylength, displayStart: 0, searchText: "", filtertext: "", Categories: "", lowprice: "", highprice: "", isFeatured: _isFeatured, isMostSale: _MostSale, TopRated: _topRated };
         $.ajax({
             url: serviceBase + 'api/Product/Post',
             type: 'POST',
             dataType: 'json',
-            data:_model,
+            data: _model,
             success: function (data, textStatus, xhr) {
 
                 $scope.total = data.iTotalDisplayRecords;
-                //var featuredProducts = JSON.parse(data.data);
-                // $scope.pagedItems = featuredProducts.aaData;
-                $scope.pagedItems = data.aaData;
+                
 
+                switch (_Type) {
+                    case 1:
+                        $scope.pagedItems = data.aaData;
+                        _ClassName = '.products-slider';
+                        break;
+                    case 2:
+                        $scope.MostSaledItems = data.aaData;
+                        _ClassName = '.mostsaled-slider';
 
-                debugger;
-                console.log("Data");
-                console.log($scope.pagedItems);
+                        break;
+                    case 3:
+                        $scope.TopRatedItems = data.aaData;
+                        _ClassName = '.topRated-slider';
+
+                        break;
+                    default:
+
+                }
+
                 $("#loadingmessage").hide();
                 $scope.$apply();
-                productSlider();
+                productSlider(_ClassName);
+
             },
             error: function (xhr, textStatus, errorThrown) {
 
                 alert(xhr.error);
             }
         });
+    }
+    function init() {
+
+      
+        $scope.GetFeaturedProducts(1);
+        $scope.GetFeaturedProducts(2);
+        $scope.GetFeaturedProducts(3);
+        $scope.GetSuppliers();
     }
 
 
