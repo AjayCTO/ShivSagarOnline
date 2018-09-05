@@ -1,13 +1,17 @@
 ﻿'use strict';
-app.controller('homeController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+app.controller('homeController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 
     $scope.searchcategoriesslider = [];
     $scope.pagedItems = [];
     $scope.MostSaledItems = [];
     $scope.TopRatedItems = [];
-
+    $scope.ProductDetail = {};
     $scope.childmethod = function () {
         $rootScope.$emit("GetCategories", {});
+    }
+
+    $scope.AddToCartGlobal = function (productID,product,ID) {
+        $rootScope.$emit("AddToCart", productID, product, ID);
     }
     var _localCategories = localStorage.getItem("Categories");
     if (_localCategories != null && _localCategories != undefined) {
@@ -33,6 +37,10 @@ app.controller('homeController', ['$scope', '$rootScope', function ($scope, $roo
         return "../img/nocategory.png";
     }
 
+    $scope.SetProduct = function (product) {
+        localStorage.setItem("ProductDetail", JSON.stringify(product));
+        $location.path('/ProductDetail');
+    }
 
     function productSlider(className) {
         // ------------------------------------------------------- //
@@ -185,6 +193,20 @@ app.controller('homeController', ['$scope', '$rootScope', function ($scope, $roo
                 alert(xhr.error);
             }
         });
+    }
+
+    function CheckScopeBeforeApply() {
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    };
+
+    
+    $scope.getProductDetail = function (_Product) {
+
+        $scope.ProductDetail = _Product;
+        CheckScopeBeforeApply();
+        $("#exampleModal").modal("show");
     }
     function init() {
 

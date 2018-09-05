@@ -228,8 +228,10 @@
 
     $scope.IsFilterChecked = function (name, Value) {
 
+        debugger;
         for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {
             if ($scope.AllAttributeFilters[i].Name === name) {
+
                 if (CheckVarFromArray($scope.AllAttributeFilters[i].Values, Value)) {
                     return true;
                 }
@@ -254,6 +256,7 @@
 
     $scope.AddAttrToFilter = function (ischecked, name, value) {
 
+        debugger;
         // if (ischecked == 1)
         {
             for (var i = 0; i < $scope.AllAttributeFilters.length; i++) {

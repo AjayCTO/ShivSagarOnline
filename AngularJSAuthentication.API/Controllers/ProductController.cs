@@ -13,6 +13,8 @@ using System.Web.Script.Serialization;
 
 namespace AngularJSAuthentication.API.Controllers
 {
+
+    [Route("api/Product/{action}")]
     public class ProductController : ApiController
     {
         public List<object> newcolumns = null;
@@ -21,7 +23,34 @@ namespace AngularJSAuthentication.API.Controllers
         SHIVAMEcommerceDBEntities db = new SHIVAMEcommerceDBEntities();
         // GET api/featuedproduct
 
+        [HttpGet]
+        [ActionName("GetAttributes")]
+        public HttpResponseMessage GetAttributes()
+        {
+
+            // Filling the list with data here...
+            var result = db.ProductAttributes.Select(p => new { AttributeName = p.AttributeName, Id = p.Id });
+
+            // Then I return the list
+            return Request.CreateResponse(HttpStatusCode.OK, result.ToList());
+        }
+        [HttpGet]
+        [ActionName("GetAttributesValue")]
+        public HttpResponseMessage GetAttributesValue()
+        {
+
+            // Filling the list with data here...
+            var result = db.ProductAttribute_view.Select(p => new { AttributeId = p.AttributeName, AttributeValue = p.AttributeValue });
+
+            // Then I return the list
+            return Request.CreateResponse(HttpStatusCode.OK, result.ToList());
+        }
+
+
+
+
         [HttpPost]
+        [ActionName("Post")]
         public HttpResponseMessage Post(ProductFilterViewModel model)
         {
             int displayLength = model.displayLength;
@@ -112,14 +141,14 @@ namespace AngularJSAuthentication.API.Controllers
                 {
                     ParameterName = "@Categories",
 
-                    Value = string.IsNullOrEmpty(categories) ? "" : categories
+                    Value = string.IsNullOrEmpty(categories) ? null : categories
                 };
                 cmd.Parameters.Add(paramCategoriesText);
                 SqlParameter paramlowpriceText = new SqlParameter()
                 {
                     ParameterName = "@LowPrice",
 
-                    Value = string.IsNullOrEmpty(Lowprice) ? "" : Lowprice
+                    Value = string.IsNullOrEmpty(Lowprice) ? null : Lowprice
                 };
                 cmd.Parameters.Add(paramlowpriceText);
 
@@ -127,7 +156,7 @@ namespace AngularJSAuthentication.API.Controllers
                 {
                     ParameterName = "@HighPrice",
 
-                    Value = string.IsNullOrEmpty(Highprice) ? "" : Highprice
+                    Value = string.IsNullOrEmpty(Highprice) ? null : Highprice
                 };
                 cmd.Parameters.Add(paramhighpriceText);
 
@@ -142,14 +171,14 @@ namespace AngularJSAuthentication.API.Controllers
 
                 cmd.Parameters.Add(paramIsFeaturedText);
 
-                      SqlParameter paramProductIDText = new SqlParameter()
-                {
-                    ParameterName = "@ProductIds",
+                SqlParameter paramProductIDText = new SqlParameter()
+          {
+              ParameterName = "@ProductIds",
 
-                    Value = string.IsNullOrEmpty(_ProductIds) ? "" : _ProductIds
-                };
-                      cmd.Parameters.Add(paramProductIDText);
-                
+              Value = string.IsNullOrEmpty(_ProductIds) ? null : _ProductIds
+          };
+                cmd.Parameters.Add(paramProductIDText);
+
 
                 con.Open();
                 SqlDataReader rdr = cmd.ExecuteReader();
@@ -212,6 +241,40 @@ namespace AngularJSAuthentication.API.Controllers
             }
         }
 
+
+        [HttpGet]
+        [ActionName("GetProductDetail")]
+        public HttpResponseMessage GetProductDetail(int ProductId)
+        {
+
+            AngularJSAuthentication.API.ProductDetail productDetail = new AngularJSAuthentication.API.ProductDetail();
+            productDetail.Product = new AngularJSAuthentication.API.TempProduct();
+            productDetail.ProductQuantityID = ProductId;
+
+            var _ProductData = db.ProductAttributeWithQuantities.Where(p => p.Id == ProductId).FirstOrDefault();
+            var _product = db.Products.Where(p => p.Id == _ProductData.ProductId).FirstOrDefault();
+            productDetail.Product.CateogryID = _product.CateogryID;
+            productDetail.Product.ProductName = _product.ProductName;
+            productDetail.Product.Description = _product.Description;
+            productDetail.Product.Id = _product.Id;
+            productDetail.Product.IDSKU = _product.IDSKU;
+            productDetail.Product.Notes = _product.Notes;
+            productDetail.Product.SKU = _product.SKU;
+            productDetail.Product.ProductCode = _product.ProductCode;
+
+            productDetail.Attributes = new List<ProductDetailAttributes>();
+            productDetail.Attributes = db.ProductValues_view.Where(p => p.productId == _ProductData.ProductId).Select(p => new ProductDetailAttributes() { AttributeName = p.AttributeName, AttributeValue = p.AttributeValue, Cost = p.Cost, ImageName = p.ImageName, ImagePath = p.ImagePath, Quantity = p.Quantity, ProductQuantityId = p.ProductQuantityID }).ToList();
+
+            var result = new
+            {
+                product = productDetail,
+                allAttributes = productDetail.Attributes.Select(p => p.AttributeName).Distinct().ToList(),
+                _AllProductImages = productDetail.Attributes.GroupBy(test => test.ProductQuantityId)
+                    .Select(grp => grp.First())
+                    .ToList()
+            };
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
 
     }
 }

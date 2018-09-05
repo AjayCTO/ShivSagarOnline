@@ -49,6 +49,7 @@
         </div>
     </div>
 </section>-->
+
 <!-- Men's Collection -->
 <section class="men-collection gray-bg">
     <div class="container">
@@ -60,12 +61,12 @@
             <!-- item-->
             <div class="item" ng-repeat="x in pagedItems">
                 <div class="product">
-                    <div class="image d-flex align-items-center justify-content-center">
+                    <div class="image d-flex align-items-center justify-content-center" id="products-slider-{{x[8]}}">
                         <img src="{{GetProductImage(x[2])}}" alt="product" class="img-fluid">
                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                             <div class="CTA d-flex align-items-center justify-content-center">
-                                <a href="index.html#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a>
-                                <a href="index.html#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
+                                <a ng-click="AddToCartGlobal(x[8],x,'products-slider-')" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a ng-click="SetProduct(x)" class="visit-product active"><i class="icon-search"></i>View</a>
+                                <a ng-click="getProductDetail(x)" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
                             </div>
                         </div>
                     </div>
@@ -90,12 +91,12 @@
         <div class="owl-carousel owl-theme topRated-slider">
             <div class="item" ng-repeat="x in TopRatedItems">
                 <div class="product">
-                    <div class="image d-flex align-items-center justify-content-center">
+                    <div class="image d-flex align-items-center justify-content-center" id="topRated-slider-{{x[8]}}">
                         <img src="{{GetProductImage(x[2])}}" alt="product" class="img-fluid">
                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                             <div class="CTA d-flex align-items-center justify-content-center">
-                                <a href="index.html#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a>
-                                <a href="index.html#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
+                                <a ng-click="AddToCartGlobal(x[8],x,'topRated-slider-')" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a ng-click="SetProduct(x)" class="visit-product active"><i class="icon-search"></i>View</a>
+                                <a ng-click="getProductDetail(x)" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
                             </div>
                         </div>
                     </div>
@@ -121,12 +122,12 @@
 
             <div class="item" ng-repeat="x in MostSaledItems">
                 <div class="product">
-                    <div class="image d-flex align-items-center justify-content-center">
+                    <div class="image d-flex align-items-center justify-content-center" id="mostsaled-slider-{{x[8]}}">
                         <img src="{{GetProductImage(x[2])}}" alt="product" class="img-fluid">
                         <div class="hover-overlay d-flex align-items-center justify-content-center">
                             <div class="CTA d-flex align-items-center justify-content-center">
-                                <a href="index.html#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a>
-                                <a href="index.html#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
+                                <a ng-click="AddToCartGlobal(x[8],x,'mostsaled-slider-')" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a ng-click="SetProduct(x)" class="visit-product active"><i class="icon-search"></i>View</a>
+                                <a ng-click="getProductDetail(x)" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a>
                             </div>
                         </div>
                     </div>
@@ -196,29 +197,16 @@
         <div class="modal-content">
             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="icon-close"></i></span></button>
             <div class="modal-body">
-                <div class="ribbon-primary text-uppercase">Sale</div>
+                
                 <div class="row d-flex align-items-center">
-                    <div class="image col-lg-5"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-0/img/shirt.png" alt="..." class="img-fluid d-block"></div>
+                    <div class="image col-lg-5"><img src="{{GetProductImage(ProductDetail[2])}}" alt="..." class="img-fluid d-block"></div>
                     <div class="details col-lg-7">
-                        <h2>Lose Oversized Shirt</h2>
+                        <h2>{{ProductDetail[3]}}</h2>
                         <ul class="price list-inline">
-                            <li class="list-inline-item current">$65.00</li>
-                            <li class="list-inline-item original">$90.00</li>
+                            <li class="list-inline-item current">${{ProductDetail[8]}}</li>
                         </ul>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-                        <div class="d-flex align-items-center">
-                            <div class="quantity d-flex align-items-center">
-                                <div class="dec-btn">-</div>
-                                <input type="text" value="1" class="quantity-no">
-                                <div class="inc-btn">+</div>
-                            </div>
-                            <select id="size" class="bs-select">
-                                <option value="small">Small</option>
-                                <option value="meduim">Medium</option>
-                                <option value="large">Large</option>
-                                <option value="x-large">X-Large</option>
-                            </select>
-                        </div>
+                        <p>{{ProductDetail[12]}}</p>
+                        
                         <ul class="CTAs list-inline">
                             <li class="list-inline-item"><a href="index.html#" class="btn btn-template wide"> <i class="fa fa-shopping-cart"></i>Add to Cart</a></li>
                             <li class="list-inline-item"><a href="index.html#" class="visit-product active btn btn-template-outlined wide"> <i class="icon-heart"></i>Add to wishlist</a></li>

@@ -70,13 +70,32 @@ app.config(function ($routeProvider) {
         templateUrl: "/app/views/product.html"
     });
 
+    $routeProvider.when("/ShoppingCart", {
+        controller: "shoppingCartController",
+        templateUrl: "/app/views/shoppingCart.html"
+    });
+
+    $routeProvider.when("/checkout", {
+        controller: "checkOutController",
+        templateUrl: "/app/views/checkOut.html"
+    });
+    
+
+    $routeProvider.when("/ProductDetail", {
+        controller: "ProductDetailController",
+        templateUrl: "/app/views/ProductDetails.html"
+    });
 
     $routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
-var serviceBase = 'http://localhost:26264/';
-var _GlobalImagePath = "http://localhost:7080/";
+//var serviceBase = 'http://localhost:26264/';
+//var _GlobalImagePath = "http://localhost:7080/";
+
+var serviceBase = 'http://shivamface.shivamitconsultancy.com/';
+var _GlobalImagePath = "http://shivamonline.shivamitconsultancy.com/";
+
 //var serviceBase = 'http://ngauthenticationapi.azurewebsites.net/';
 app.constant('ngAuthSettings', {
     apiServiceBaseUri: serviceBase,
